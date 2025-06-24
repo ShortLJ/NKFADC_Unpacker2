@@ -1,6 +1,5 @@
 
-#include "HitFV.h"
-#include "HitSeg.h"
+#include "SigAna.h"
 
 #ifndef __HITCRYSTAL__
 #define __HITCRYSTAL__
@@ -10,21 +9,26 @@ using namespace std;
 class HitCrystal
 {
 	public:
-		uint8_t idet;
-		uint8_t iclover;
-		uint8_t icrystal;
-		// double E_seg_sum;
+		uint8_t det;
+		uint8_t clover;
+		uint8_t crystal;
 
-		vector<HitFV> vHitFV;
-		vector<HitSeg> vHitSeg;
+		float E_seg_sum;
+		float E_fv_avg;
+
+		vector<SigAna> vSigAnaFV;
+		vector<SigAna> vSigAnaSeg;
 
 		HitCrystal();
-		HitCrystal(uint8_t idet, vector<Sig> v_sig_fv, vector<Sig> v_sig_seg);
+		HitCrystal(uint8_t det, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
 		~HitCrystal();
 
 	private:
 		bool isValid();
+		void ProcessHit();
 		//void Clear();
+
+		void Process_Esum();
 
 
 }

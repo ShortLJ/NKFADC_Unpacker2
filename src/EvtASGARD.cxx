@@ -35,26 +35,24 @@ EvtASGARD::EvtASGARD(vector<HitCrystal> v_crystal)
 {
 	vCrystal=v_crystal;
 }
-EvtASGARD::EvtASGARD(vector<Sig> v_sig_fv, vector<Sig> v_sig_seg)
+EvtASGARD::EvtASGARD(vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg)
 {
-	vector<Sig>::iterator it_sig;
-	vector<Sig> v_sig_fv_sort[Ndet];
-	for (it_sig=v_sig_fv.begin(); it_sig!=v_sig_fv.end(); it_sig++)
+	vector<SigAna>::iterator it_sigana;
+	vector<SigAna> v_sigana_fv_sort[Ndet];
+	for (it_sigana=v_sigana_fv.begin(); it_sigana!=v_sigana_fv.end(); it_sigana++)
 	{
-		uint8_t idet = map_det[(*it_sig).isid][(*it_sig).imid][(*it_sig).icha];
-		v_sig_fv_sort[idet].push_back(*it_sig);
+		v_sigana_fv_sort[it_sigana->det].push_back(*it_sigana);
 	}
-	vector<Sig> v_sig_seg_sort[Ndet];
-	for (it_sig=v_sig_seg.begin(); it_sig!=v_sig_seg.end(); it_sig++)
+	vector<SigAna> v_sigana_seg_sort[Ndet];
+	for (it_sigana=v_sigana_seg.begin(); it_sigana!=v_sigana_seg.end(); it_sigana++)
 	{
-		uint8_t idet = map_det[(*it_sig).isid][(*it_sig).imid][(*it_sig).icha];
-		v_sig_seg_sort[idet].push_back(*it_sig);
+		v_sigana_seg_sort[it_sigana->det].push_back(*it_sigana);
 	}
 	for (uint8_t idet=0; idet<Ndet; idet++)
 	{
-		if (v_sig_fv_sort[idet].size()+v_sig_seg_sort[idet].size()>0)
+		if (v_sigana_fv_sort[idet].size()+v_sigana_seg_sort[idet].size()>0)
 		{
-			vCrystal.push_back(HitCrystal(idet,v_sig_fv_sort[idet],v_sig_seg_sort[idet]));
+			vCrystal.push_back(HitCrystal(idet,v_sigana_fv_sort[idet],v_sigana_seg_sort[idet]));
 		}
 	}
 }
