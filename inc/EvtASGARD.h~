@@ -15,18 +15,18 @@ class EvtASGARD
 {
 	public:
 #ifdef CLOVERLAYER
-		vector<HitClover> vHitClover;
+		vector<HitClover> vClover;
 #else // CLOVERLAYER
-		vector<HitCrystal> vHitCrystal; 
+		vector<HitCrystal> vCrystal; 
 #endif // CLOVERLAYER
 
 		EvtASGARD();
 #ifdef CLOVERLAYER
-		EvtASGARD(vector<HitClover> v_hit_clover);
-		EvtASGARD(vector<HitCrystal> v_hit_crystal);
+		EvtASGARD(vector<HitClover> v_clover);
+		EvtASGARD(vector<HitCrystal> v_crystal);
 #else // CLOVERLAYER
-		EvtASGARD(vector<HitCrystal> v_hit_crystal);
-		EvtASGARD(vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
+		EvtASGARD(vector<HitCrystal> v_crystal);
+		EvtASGARD(vector<Sig> v_sig_fv, vector<Sig> v_sig_seg);
 #endif // CLOVERLAYER
 		~EvtASGARD();
 

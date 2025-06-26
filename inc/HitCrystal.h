@@ -1,4 +1,5 @@
 
+#include "Hit.h"
 #include "SigAna.h"
 
 #ifndef __HITCRYSTAL__
@@ -6,13 +7,16 @@
 
 using namespace std;
 
-class HitCrystal
+class HitCrystal : public Hit
 {
 	public:
-		uint8_t det;
-		uint8_t clover;
-		uint8_t crystal;
+		//uint8_t idx; // 0,1,2,3
+		//float Energy;
+		//uint64_t coarse_time;
+		//uint16_t fine_time;
 
+		uint8_t detID; // idx+4*cloverID
+		uint8_t cloverID;
 		float E_seg_sum;
 		float E_fv_avg;
 
@@ -20,7 +24,7 @@ class HitCrystal
 		vector<SigAna> vSigAnaSeg;
 
 		HitCrystal();
-		HitCrystal(uint8_t det, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
+		HitCrystal(uint8_t detID, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
 		~HitCrystal();
 
 	private:

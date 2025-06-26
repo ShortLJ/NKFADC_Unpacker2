@@ -6,10 +6,10 @@ HitCrystal::HitCrystal()
 {
 }
 HitCrystal::HitCrystal(uint8_t idet, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg)
-	: det(idet), vSigAnaFV(v_sigana_fv), vSigAnaSeg(v_sigana_seg)
+	: detID(idet), vSigAnaFV(v_sigana_fv), vSigAnaSeg(v_sigana_seg)
 {
-	clover = det>>2;
-	crystal = det&0x03;
+	cloverID = detID>>2;
+	idx = det&0x03;
 
 	ProcessHit();
 }

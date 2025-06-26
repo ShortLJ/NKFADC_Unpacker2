@@ -3,6 +3,7 @@
 #define X6_RAW_SIGANA 1
 
 
+#include "Hit.h"
 #include "SigAna.h"
 
 #ifndef __HITX6__

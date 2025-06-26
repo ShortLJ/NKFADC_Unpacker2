@@ -77,25 +77,25 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 		v_sigana_sort[itype][idet].push_back(SigAna(itype,idet,iidx,*it_sig));
 	}
 	////////// ASGARD //////////
-	vector<HitCrystal> v_crystal;
+	vector<HitCrystal> v_hit_crystal;
 	for (uint8_t idet=0; idet<Ndet; idet++)
 	{
 		if (v_sigana_sort[0][idet].size()+v_sigana_sort[1][idet].size()>0)
 		{
-			v_crystal.push_back(HitCrystal(idet,v_sigana_sort[0][idet],v_sigana_sort[1][idet]));
+			v_hit_crystal.push_back(HitCrystal(idet,v_sigana_sort[0][idet],v_sigana_sort[1][idet]));
 		}
 	}
-	evt.ASGARD=EvtASGARD(v_crystal);
+	evt.ASGARD=EvtASGARD(v_hit_crystal);
 	////////// StarkJr //////////
-	vector<HitX6> v_x6;
+	vector<HitX6> v_hit_x6;
 	for (uint8_t idet=0; idet<Ndet; idet++)
 	{
 		if (v_sigana_sort[2][idet].size()+v_sigana_sort[3][idet].size()+v_sigana_sort[4][idet].size()>0)
 		{
-			v_x6.push_back(HitX6(idet,v_sigana_sort[2][idet],v_sigana_sort[3][idet],v_sigana_sort[4][idet]));
+			v_hit_x6.push_back(HitX6(idet,v_sigana_sort[2][idet],v_sigana_sort[3][idet],v_sigana_sort[4][idet]));
 		}
 	}
-	evt.StarkJr=EvtStarkJr(v_x6);
+	evt.StarkJr=EvtStarkJr(v_hit_x6);
 	return evt;
 }
 
