@@ -10,7 +10,7 @@ using namespace std;
 class HitCrystal : public Hit
 {
 	public:
-		//uint8_t idx; // 0,1,2,3
+		//uint8_t idx; // crystal idx in a clover: 0,1,2,3
 		//float Energy;
 		//uint64_t coarse_time;
 		//uint16_t fine_time;
@@ -25,6 +25,7 @@ class HitCrystal : public Hit
 
 		HitCrystal();
 		HitCrystal(uint8_t detID, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
+		HitCrystal(uint8_t iclover, uint8_t icrystal, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
 		~HitCrystal();
 
 	private:

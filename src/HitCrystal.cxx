@@ -5,11 +5,24 @@
 HitCrystal::HitCrystal()
 {
 }
-HitCrystal::HitCrystal(uint8_t idet, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg)
-	: detID(idet), vSigAnaFV(v_sigana_fv), vSigAnaSeg(v_sigana_seg)
+HitCrystal::HitCrystal(uint8_t icrystal, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg)
+	: idx(icrystal), vSigAnaFV(v_sigana_fv), vSigAnaSeg(v_sigana_seg)
 {
-	cloverID = detID>>2;
-	idx = det&0x03;
+	if(vSigAnaFV.size()) detID = vSigAnaFV.begin()->det;
+	else if (v_sigana_seg.size()) detID = v_sigana_seg.begin()->det;
+	else 
+	{
+		fprintf(stderr,"HitCrystal::HitCrystal(uint8_t, vector<SigAna>,vector<SigAna>) : ?????????\n");
+		exit(-32);
+	}
+	cloverID = detID >> 2;
+
+	ProcessHit();
+}
+HitCrystal::HitCrystal(uint8_t iclover, uint8_t icrystal, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg)
+	: cloverID(iclover), idx(icrystal), vSigAnaFV(v_sigana_fv), vSigAnaSeg(v_sigana_seg)
+{
+	detID = (cloverID<<2) | icrystal ; 
 
 	ProcessHit();
 }
@@ -20,6 +33,7 @@ HitCrystal::~HitCrystal()
 void HitCrystal::ProcessHit()
 {
 	Process_Esum();
+	Energy = E_fv_sum;
 }
 bool HitCrystal::isValid()
 {
