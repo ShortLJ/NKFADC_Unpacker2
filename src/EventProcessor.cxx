@@ -38,13 +38,13 @@ void EventProcessor::Run()
 		if (treewriter)
 		{
 			treewriter->fmutex.lock();
-			treewriter->Enque(event);
+			treewriter->Enque(&event);
 			treewriter->fmutex.unlock();
 		}
 		if (histserver)
 		{
 			histserver->fmutex.lock();
-			histserver->Enque(event);
+			histserver->Enque(&event);
 			histserver->fmutex.unlock();
 		}
 	}

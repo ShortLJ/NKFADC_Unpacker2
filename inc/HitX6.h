@@ -11,30 +11,91 @@
 
 using namespace std;
 
-class HitX6
+class HitX6 : public Hit
 {
 	public:
-		uint8_t det;
+		//uint8_t idx;
+		//float Energy;
+		//uint64_t coarse_time;
+		//uint16_t fine_time;
 		
-#ifdef X6_RAW_SIGANA
-		vector<SigAna> vSigAnaOhmic;
-		vector<SigAna> vSigAnaStripU;
-		vector<SigAna> vSigAnaStripD;
-#endif //X6_RAW_SIGANA
+		vector<HitPad> vHitPad;
+		vector<HitStrip> vHitStrip;
+
+#ifdef HITX6PARTICLE
+		vector<HitX6Particle> vHitX6Particle;
+#endif // HITX6PARTICLE
 
 		HitX6();
-		HitX6(uint8_t det, vector<SigAna> v_sigana_ohmic, vector<SigAna> v_sigana_strpU, vector<SigAna> v_sigana_strpD);
+		HitX6(uint8_t det, vector<SigAna> v_sigana_pad, vector<SigAna> v_sigana_strpU, vector<SigAna> v_sigana_strpD);
 		~HitX6();
 
 	private:
 		bool isValid();
+		bool isValid();
 		void ProcessHit();
 		//void Clear();
 
-		void SetValues(Int_t _X6ID, Int_t _stripID, Int_t _padID, Int_t _stripValU, Int_t _stripValD, Int_t _padVal);
+		uint8_t flag_pad=0;
+		uint16_t flag_strip=0;
 
 }
 
 
 
 #endif //__HITX6__
+
+#ifndef __HITPAD__
+#define __HITPAD__
+
+class HitPad : public Hit
+{
+	public:
+		//uint8_t idx;
+		//float Energy;
+		//uint64_t coarse_time;
+		//uint16_t fine_time;
+
+		SigAna sigPad;
+
+		HitPad(){	}
+		HitPad(SigAna *sigana) : idx(sigana->idx), sigPad(*sigana) {	}
+}
+
+#endif //__HITPAD__
+
+#ifndef __HITSTRIP__
+#define __HITSTRIP__
+
+class HitStrip : public Hit
+{
+	public:
+		//uint8_t idx;
+		//float Energy;
+		//uint64_t coarse_time;
+		//uint16_t fine_time;
+
+		float position;
+
+		SigAna sigStripU;
+		SigAna sigStripD;
+
+		HitStrip(){	}
+		HitStrip(SigAna *siganaU, SigAna *siganaD) : idx(siganaU->idx), sigStripU(*siganaU), sigStripD(*siganaD)
+		{	
+			
+		}
+		void ProcessHit()
+		{
+			Energy = (sigStripU.Energy + sigStripD.Energy)
+			position = (sigStripU.Energy - sigStripD.Energy)/(sigStripU.Energy + sigStripD.Energy)
+			
+		}
+		bool isValid()
+		{
+
+		}
+}
+
+
+#endif //__HITSTRIP__

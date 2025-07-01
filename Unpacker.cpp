@@ -57,7 +57,8 @@ int main(int argc, char *argv[])
 	eventprocessor.RegisterTimeSorter(&timesorter);
 	eventprocessor.RegisterConfig(&config);
 
-	HistServer histserver;
+	HistServer histserver(0);
+	histserver.SetHistFile(histfilename);
 	TreeWriter treewriter(outputfilename);
 	eventprocessor.RegisterHistServer(&histserver);
 	eventprocessor.RegisterTreeWriter(&treewriter);
@@ -107,9 +108,12 @@ int main(int argc, char *argv[])
 				fprintf(stdout,"emptyed timesorter. Finalizing\n");
 				eventprocessor.Stop();
 				histserver.Stop();
+				treewriter.Stop();
 				thread_eventprocessor.join();
 				thread_histserver.join();
-				eventprocessor.Write();
+				thread_treewriter.join();
+				treewriter.Write();
+				treewriter.Close();
 				fprintf(stdout,"Wrote to files\n");
 			}
 		}

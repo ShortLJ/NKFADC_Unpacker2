@@ -1,5 +1,6 @@
 
 
+#include "TreeWriter.h"
 
 
 void TreeWriter::Init()
@@ -17,9 +18,52 @@ void TreeWriter::Init()
 	}
 	outfile = new TFile(OutputFileName,"recreate");
 	tree = new TTree("tree","tree");
-	tree->SetBranch("ASGARD", Event->ASGARD);
-	tree->SetBranch("StarkJr", Event->StarkJr);
+	tree->SetBranch("ASGARD", event.ASGARD);
+	tree->SetBranch("StarkJr", event.StarkJr);
 
+}
+
+void TreeWriter::Run()
+{
+	writerEnd=0;
+	while()
+	{
+		fmutex.lock();
+		if (q_event.size()==0)
+		{
+			if (!writerEnd)	
+			{
+				fmutex.unlock();
+				usleep(100000);
+				continue;
+			}
+			else //if ( writerEnd)
+			{
+				fprintf(stdout,"TreeWriter::Run() : Finished\n");
+				fmutex.unlock();
+				break;
+			}
+		}
+
+		event = q_event.front();
+		q_event.pop();
+		fmutex.unlock();
+
+		tree->Fill();
+	}
+}
+void TreeWriter::Stop()
+{
+	fmutex.lock();
+	writerEnd=1;
+	fmutex.unlock();
+}
+
+void TreeWriter::Enque(Event *evt)
+{
+	fmutex.lock();
+	q_event.push(*evt);
+	fmutex.unlock();
 }
 
 
