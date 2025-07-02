@@ -1,4 +1,7 @@
 
+
+#include "Event.h"
+
 #ifndef __HISTSERVER__
 #define __HISTSERVER__
 
@@ -27,8 +30,9 @@ class HistServer
 	protected: // shall be called in InitUser();
 		void InitFile();
 		void InitHttp();
-		TH1* MakeH1();
-		TH2* MakeH2();
+		TH1* MakeH1(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup)
+		TH2* MakeH2(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup);
+		Event event;
 
 	private:
 		vector<TH1*> v_histograms;
@@ -39,8 +43,8 @@ class HistServer
 
 		uint16_t PortNumber;
 		bool flag_httpServer=0;
+		THttpServer *srv_http;
 
-		Event event;
 		queue<Event> q_event;
 
 		bool histerEnd;
