@@ -60,6 +60,8 @@ void HistServerUser::ProcessToHistUser()
 		}
 
 	}
+	// for clov for cry for x6 for strip
+	// crystal->r/theta/phi, strip->r/theta/phi
 	
 
 
