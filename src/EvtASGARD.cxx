@@ -6,7 +6,6 @@
 EvtASGARD::EvtASGARD()
 {
 }
-#ifdef CLOVERLAYER
 EvtASGARD::EvtASGARD(vector<HitClover> v_hit_clover)
 {
 	vHitClover=v_hit_clover;
@@ -30,31 +29,4 @@ EvtASGARD::EvtASGARD(vector<HitCrystal> v_hit_crystal)
 		}
 	}
 }
-#else // CLOVERLAYER
-EvtASGARD::EvtASGARD(vector<HitCrystal> v_hit_crystal)
-{
-	vHitCrystal=v_hit_crystal;
-}
-EvtASGARD::EvtASGARD(vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg)
-{
-	vector<SigAna>::iterator it_sigana;
-	vector<SigAna> v_sigana_fv_sort[Ndet];
-	for (it_sigana=v_sigana_fv.begin(); it_sigana!=v_sigana_fv.end(); it_sigana++)
-	{
-		v_sigana_fv_sort[it_sigana->det].push_back(*it_sigana);
-	}
-	vector<SigAna> v_sigana_seg_sort[Ndet];
-	for (it_sigana=v_sigana_seg.begin(); it_sigana!=v_sigana_seg.end(); it_sigana++)
-	{
-		v_sigana_seg_sort[it_sigana->det].push_back(*it_sigana);
-	}
-	for (uint8_t idet=0; idet<Ndet; idet++)
-	{
-		if (v_sigana_fv_sort[idet].size()+v_sigana_seg_sort[idet].size()>0)
-		{
-			vHitCrystal.push_back(HitCrystal(idet,v_sigana_fv_sort[idet],v_sigana_seg_sort[idet]));
-		}
-	}
-}
-#endif // CLOVERLAYER
 

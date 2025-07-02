@@ -1,10 +1,5 @@
 
-#ifdef CLOVERLAYER
-	#include "HitClover.h"
-#else // CLOVERLAYER
-	#include "HitCrystal.h"
-#endif // CLOVERLAYER
-
+#include "HitClover.h"
 
 #ifndef __EvtASGARD__
 #define __EvtASGARD__
@@ -14,20 +9,11 @@ using namespace std;
 class EvtASGARD
 {
 	public:
-#ifdef CLOVERLAYER
 		vector<HitClover> vHitClover;
-#else // CLOVERLAYER
-		vector<HitCrystal> vHitCrystal; 
-#endif // CLOVERLAYER
 
 		EvtASGARD();
-#ifdef CLOVERLAYER
 		EvtASGARD(vector<HitClover> v_hit_clover);
 		EvtASGARD(vector<HitCrystal> v_hit_crystal);
-#else // CLOVERLAYER
-		EvtASGARD(vector<HitCrystal> v_hit_crystal);
-		EvtASGARD(vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
-#endif // CLOVERLAYER
 		~EvtASGARD();
 
 		void Clear();
