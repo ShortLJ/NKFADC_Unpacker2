@@ -25,7 +25,7 @@ int DataGetter::ProcessData()
 		else
 		{
 			//Sig sig_tmp(tmp);
-			SigNK nk_tmp(tmp); Sig sig_tmp=nk_tmp.GetSig();
+			NKSig nksig_tmp(tmp); Sig sig_tmp=nksig_tmp.GetSig();
 			timesorter->fmutex_input.lock();
 			timesorter->Push(sig_tmp);
 			timesorter->fmutex_input.unlock();
