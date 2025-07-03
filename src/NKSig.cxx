@@ -1,10 +1,10 @@
 
 
 
-#include "SigNK.h"
+#include "NKSig.h"
 
 
-SigNK::SigNK(uint8_t *data)
+NKSig::NKSig(uint8_t *data)
 {
 	uint64_t ltmp;
 	uint32_t itmp;
@@ -127,7 +127,7 @@ SigNK::SigNK(uint8_t *data)
 }
 
 
-void SigNK::Print(int verbosity=0)
+void NKSig::Print(int verbosity=0)
 {
 	if (verbosity>0)
 	{

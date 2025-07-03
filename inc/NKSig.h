@@ -3,22 +3,22 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#ifndef __SIGNK__
-#define __SIGNK__
+#ifndef __NKSIG__
+#define __NKSIG__
 
-class SigNK : public Sig
+class NKSig : public Sig
 {
 	public: 
-		SigNK() {	}
-		SigNK(uint8_t *data);
-		~SigNK() {	}
+		NKSig() {	}
+		NKSig(uint8_t *data);
+		~NKSig() {	}
 
 		Sig GetSig(){return this.Sig;}
 
 	public: 
 		void Print();
 
-		bool operator<(const SigNK sig) const
+		bool operator<(const NKSig sig) const
 		{
 			return this->local_gate_time > sig.local_gate_time;
 		}
