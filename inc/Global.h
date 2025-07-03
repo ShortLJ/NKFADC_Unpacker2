@@ -28,6 +28,12 @@
 
 
 
+/// global static variables defined in Config.h
+extern uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
+extern uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
+extern uint8_t	map_idx		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
+///
+
 
 
 
