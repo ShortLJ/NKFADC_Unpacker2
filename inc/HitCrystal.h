@@ -1,4 +1,6 @@
 
+#include <vector>
+
 #include "Hit.h"
 #include "SigAna.h"
 
@@ -36,7 +38,7 @@ class HitCrystal : public Hit
 		void Process_Esum();
 
 
-}
+};
 
 
 

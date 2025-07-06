@@ -3,8 +3,65 @@
 #define X6_RAW_SIGANA 1
 
 
+#include <vector>
+
 #include "Hit.h"
 #include "SigAna.h"
+
+#ifndef __HITPAD__
+#define __HITPAD__
+
+class HitPad : public Hit
+{
+	public:
+		//uint8_t idx;
+		//float Energy;
+		//uint64_t coarse_time;
+		//uint16_t fine_time;
+
+		SigAna sigPad;
+
+		HitPad(){	}
+		HitPad(SigAna sigana) : Hit(sigana.idx), sigPad(sigana) {	}
+};
+
+#endif //__HITPAD__
+
+#ifndef __HITSTRIP__
+#define __HITSTRIP__
+
+class HitStrip : public Hit
+{
+	public:
+		//uint8_t idx;
+		//float Energy;
+		//uint64_t coarse_time;
+		//uint16_t fine_time;
+
+		float position;
+
+		SigAna sigStripU;
+		SigAna sigStripD;
+
+		HitStrip(){	}
+		HitStrip(SigAna siganaU, SigAna siganaD) : Hit(siganaU.idx), sigStripU(siganaU), sigStripD(siganaD)
+		{	
+			
+		}
+		void ProcessHit()
+		{
+			Energy = (sigStripU.Energy + sigStripD.Energy);
+			position = (sigStripU.Energy - sigStripD.Energy)/(sigStripU.Energy + sigStripD.Energy);
+			
+		}
+		bool isValid()
+		{
+			return true;
+		}
+};
+
+
+#endif //__HITSTRIP__
 
 #ifndef __HITX6__
 #define __HITX6__
@@ -32,70 +89,16 @@ class HitX6 : public Hit
 
 	private:
 		bool isValid();
-		bool isValid();
 		void ProcessHit();
 		//void Clear();
 
 		uint8_t flag_pad=0;
 		uint16_t flag_strip=0;
 
-}
+};
 
 
 
 #endif //__HITX6__
 
-#ifndef __HITPAD__
-#define __HITPAD__
 
-class HitPad : public Hit
-{
-	public:
-		//uint8_t idx;
-		//float Energy;
-		//uint64_t coarse_time;
-		//uint16_t fine_time;
-
-		SigAna sigPad;
-
-		HitPad(){	}
-		HitPad(SigAna *sigana) : idx(sigana->idx), sigPad(*sigana) {	}
-}
-
-#endif //__HITPAD__
-
-#ifndef __HITSTRIP__
-#define __HITSTRIP__
-
-class HitStrip : public Hit
-{
-	public:
-		//uint8_t idx;
-		//float Energy;
-		//uint64_t coarse_time;
-		//uint16_t fine_time;
-
-		float position;
-
-		SigAna sigStripU;
-		SigAna sigStripD;
-
-		HitStrip(){	}
-		HitStrip(SigAna *siganaU, SigAna *siganaD) : idx(siganaU->idx), sigStripU(*siganaU), sigStripD(*siganaD)
-		{	
-			
-		}
-		void ProcessHit()
-		{
-			Energy = (sigStripU.Energy + sigStripD.Energy)
-			position = (sigStripU.Energy - sigStripD.Energy)/(sigStripU.Energy + sigStripD.Energy)
-			
-		}
-		bool isValid()
-		{
-
-		}
-}
-
-
-#endif //__HITSTRIP__

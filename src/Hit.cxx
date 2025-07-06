@@ -20,10 +20,21 @@ Hit::Hit(uint8_t idx_, float Energy_, uint64_t coarse_time_, uint16_t fine_time_
 	: idx(idx_), Energy(Energy_), coarse_time(coarse_time_), fine_time(fine_time_)
 {
 }
+Hit::Hit(uint8_t idx_)
+	: idx(idx_)
+{
+}
 Hit::~Hit()
 {
 }
 
+void Hit::Clear()
+{
+	idx=-1;
+	Energy=0;
+	coarse_time=-1;
+	fine_time=-1;
+}
 
 void Hit::isValid()
 {

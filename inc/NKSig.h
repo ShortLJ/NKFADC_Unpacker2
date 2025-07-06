@@ -1,7 +1,9 @@
 
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <stdint.h>
+
+#include "Sig.h"
 
 #ifndef __NKSIG__
 #define __NKSIG__
@@ -13,15 +15,15 @@ class NKSig : public Sig
 		NKSig(uint8_t *data);
 		~NKSig() {	}
 
-		Sig GetSig(){return this.Sig;}
+		Sig GetSig(){Sig ret = *this; return ret;}
 
 	public: 
-		void Print();
+		void Print(int verbosity=0);
 
-		bool operator<(const NKSig sig) const
-		{
-			return this->local_gate_time > sig.local_gate_time;
-		}
+		//bool operator<(const NKSig sig) const
+		//{
+		//	return this->local_gate_time > sig.local_gate_time;
+		//}
 	protected:
 
 

@@ -26,28 +26,30 @@ class TimeSorter
 		mutex fmutex_output;
 		void SetTimeWindow(int64_t tw) {timewindow=tw;}
 		uint64_t GetMinLGT();
-		uint64_t GetLGT(uint8_t sid, uint8_t mid, uint8_t cha);
-		vector<Sig> GetCoinSig(uint64_t lgt);
+		uint64_t GetLGT(uint8_t sid, uint8_t brd, uint8_t cha);
+		vector<Sig> GetCoinvSig(uint64_t ct);
 
 
 	private:
 		queue<Sig> q_sig_input;
-		priority_queue<Sig> q_sig[Nsid][Nmid][Ncha];
+		priority_queue<Sig> q_sig[Nsid][Nbrd][Ncha];
 		vector<Sig> v_sig_coin;
 
 		void Sort(Sig sig);
-		Sig Top(uint8_t sid, uint8_t mid, uint8_t cha);
-		void Pop(uint8_t sid, uint8_t mid, uint8_t cha);
+		Sig Top(uint8_t sid, uint8_t brd, uint8_t cha);
+		void Pop(uint8_t sid, uint8_t brd, uint8_t cha);
 
 		bool sorterEnd=0;
 		uint64_t nenque=0;
 		uint64_t nsorted=0;
-		uint8_t isid; uint8_t imid; uint8_t icha;
+		uint8_t isid; uint8_t ibrd; uint8_t icha;
 
 		int64_t timewindow=0;
-		int FindSigWithLGT(uint64_t lgt);
+		int FindSigWithLGT(uint64_t ct);
 
-		bool Empty(uint8_t sid, uint8_t mid, uint8_t cha);
-		bool checker(uint8_t sid, uint8_t mid, uint8_t cha);
+		bool Empty(uint8_t sid, uint8_t brd, uint8_t cha);
+		bool checker(uint8_t sid, uint8_t brd, uint8_t cha);
 
-}
+};
+
+#endif // __TIMESORTER__

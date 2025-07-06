@@ -1,6 +1,14 @@
 
+#include <mutex>
+#include <string>
+#include <vector>
 
 #include "Event.h"
+
+#include "TFile.h"
+#include "TH1I.h"
+#include "TH2I.h"
+#include "THttpServer.h"
 
 #ifndef __HISTSERVER__
 #define __HISTSERVER__
@@ -14,15 +22,15 @@ class HistServer
 		HistServer(uint16_t portnumber);
 		~HistServer();
 
-		void SetHistFile(String filename){ OutputFileName=filename; flag_histfile=1;}
+		void SetHistFile(string filename){ OutputFileName=filename; flag_histfile=1;}
 
 		mutex fmutex;
 		void Run();
 		void Enque(Event *evt);	
 		void Stop();
 
-		void Write(){ tree->Write(); }
-		void Close(){ file->Close(); }
+		void Write();
+		void Close(){ outfile->Close(); }
 
 		virtual void ProcessToHistUser();
 		virtual void InitUser();
@@ -30,14 +38,14 @@ class HistServer
 	protected: // shall be called in InitUser();
 		void InitFile();
 		void InitHttp();
-		TH1* MakeH1(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup)
-		TH2* MakeH2(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup);
+		TH1I* MakeH1(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup);
+		TH2I* MakeH2(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup);
 		Event event;
 
 	private:
-		vector<TH1*> v_histograms;
+		vector<TObject*> v_histograms;
 
-		String OutputFileName=NULL;
+		string OutputFileName=NULL;
 		bool flag_histfile=0;
 		TFile *outfile=0;
 
@@ -48,6 +56,6 @@ class HistServer
 		queue<Event> q_event;
 
 		bool histerEnd;
-}
+};
 
 #endif // __HISTSERVER__

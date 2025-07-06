@@ -16,7 +16,7 @@ HistServer::HistServer(uint16_t portnumber)
 
 HistServer::~HistServer()
 {
-	vector<TH1*>::iterator it_histo;
+	vector<TObject*>::iterator it_histo;
 	for (it_histo=v_histograms.begin(); it_histo!=v_histograms.end(); it_histo++)
 	{
 		srv_http->Unregister(it_histo);
@@ -95,18 +95,35 @@ void HistServer::Enque(Event *evt)
 	fmutex.unlock();
 }
 
-TH1* HistServer::MakeH1(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup)
+TH1I* HistServer::MakeH1(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup)
 {
 	TH1 *ret = new TH1I(name,title, nbinsx,xlow,xup);
 	if (flag_httpServer) srv_http->Register(/*SUBFOLDER*/test, ret); // TODO: How to manage SUBFOLDER? 
 	v_histograms.push_back(ret);
 	return ret;
 }
-TH2* HistServer::MakeH2(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup);
+TH2I* HistServer::MakeH2(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup);
 {
 	TH2 *ret = new TH2I(name,title, nbinsx,xlow,xup, nbinsy,ylow,yup);
 	if (flag_httpServer) srv_http->Register(/*SUBFOLDER*/test, ret); // TODO: How to manage SUBFOLDER? 
 	v_histograms.push_back(ret);
 	return ret;
 }
+
+void HistServer::Write()
+{
+	if (!file->IsOpen())
+	{
+		fprintf(stdout,"Histogram file is not open\n");
+		return;
+	}
+	file->cd();
+	vector<TObject*>::iter it;
+	for (it=v_histograms.begin(); it!=v_histograms; it++)
+	{
+		it->Write();
+	}
+
+}
+
 

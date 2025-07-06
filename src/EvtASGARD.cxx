@@ -12,14 +12,14 @@ EvtASGARD::EvtASGARD(vector<HitClover> v_hit_clover)
 }
 EvtASGARD::EvtASGARD(vector<HitCrystal> v_hit_crystal)
 {
-	vHitClover.Clear();
-	constexpr Nclover = Ndet/4;
+	vHitClover.clear();
+	constexpr uint8_t Nclover = Ndet/4;
 	vector<HitCrystal> v_hit_crystal_sort[Nclover];
 	vector<HitCrystal>::iterator crystal;
 	for (crystal=v_hit_crystal.begin(); crystal!=v_hit_crystal.end(); crystal++)
 	{
-		uint8_t iclover = (crystal->det)>>2;
-		v_hit_crystal_sort[iclover].push_back(crystal);
+		uint8_t iclover = (crystal->detID)>>2;
+		v_hit_crystal_sort[iclover].push_back(*crystal);
 	}
 	for (uint8_t iclover=0; iclover<Nclover; iclover++)
 	{

@@ -1,8 +1,11 @@
 
-#include "HitClover.h"
+#include <vector>
 
-#ifndef __EvtASGARD__
-#define __EvtASGARD__
+#include "HitClover.h"
+#include "HitCrystal.h"
+
+#ifndef __EVTASGARD__
+#define __EVTASGARD__
 
 using namespace std;
 
@@ -22,8 +25,8 @@ class EvtASGARD
 
 	private:
 
-}
+};
 
 
 
-#endif //__EvtASGARD__
+#endif //__EVTASGARD__

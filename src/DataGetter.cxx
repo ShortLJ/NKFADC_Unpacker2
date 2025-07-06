@@ -1,5 +1,6 @@
 
-#include <iostream>
+//#include <iostream>
+#include <unistd.h>
 
 #include "DataGetter.h"
 
@@ -33,6 +34,7 @@ int DataGetter::ProcessData()
 			tmp += 32;
 		}
 	}
+	return sig_processed;
 }
 
 void DataGetter::Loop()
@@ -40,7 +42,7 @@ void DataGetter::Loop()
 	fmutex.lock();
 	getterEnd=0;
 	fmutex.unlock();
-	while ()
+	while (1)
 	{
 		fmutex.lock();
 		if (getterEnd) break;

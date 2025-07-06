@@ -9,23 +9,15 @@
 class Event
 {
 	public: 
+		Event();
+		~Event();
+
 		EvtASGARD ASGARD;
 		EvtStarkJr StarkJr;
 
 		void Clear();
-}
+};
 
 #endif //__EVENT__
 
-Event::Event()
-{
-}
-Event::~Event()
-{
-}
 
-void Event::Clear()
-{
-	ASGARD.Clear();
-	StarkJr.Clear();
-}

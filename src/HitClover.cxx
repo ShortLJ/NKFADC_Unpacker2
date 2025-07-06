@@ -1,4 +1,6 @@
 
+#include <stdlib.h>
+
 #include "HitClover.h"
 
 
@@ -8,13 +10,13 @@ HitClover::HitClover()
 }
 
 HitClover::HitClover(uint8_t iclover, vector<HitCrystal> v_hit_crystal)
-	: idx(iclover), vHitCrystal(v_hit_crystal)
+	: Hit(iclover), vHitCrystal(v_hit_crystal)
 {
 	
 	ProcessHit();
 }
 
-HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
+HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg)
 {
 	vector<SigAna> v_sigana_sort_fv[4], v_sigana_sort_seg[4];
 	vector<SigAna>::iterator it_sigana;
@@ -22,7 +24,7 @@ HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna>
 	{
 		if ((it_sigana->det >> 2) != iclover)
 		{
-			fprintf(stderr,"HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg):\nPut idx for clover number.\n")
+			fprintf(stderr,"HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg):\nPut idx for clover number.\n");
 			continue;
 		}
 		uint8_t icrstl =  (it_sigana->det)&0x3;
@@ -32,7 +34,7 @@ HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna>
 	{
 		if ((it_sigana->det >> 2) != iclover)
 		{
-			fprintf(stderr,"HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg):\nPut idx for clover number.\n")
+			fprintf(stderr,"HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg):\nPut idx for clover number.\n");
 			continue;
 		}
 		uint8_t icrstl =  (it_sigana->det)&0x3;
@@ -46,6 +48,11 @@ HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna>
 
 	ProcessHit();
 
+}
+void HitClover::Clear()
+{
+	Hit::Clear();
+	vHitCrystal.clear();
 }
 
 void HitClover::ProcessHit()
@@ -63,8 +70,8 @@ float HitClover::AddBack()
 	}
 	return ret;
 }
+
 bool HitClover::isValid()
 {
-
-
+	return true;
 }

@@ -127,7 +127,7 @@ NKSig::NKSig(uint8_t *data)
 }
 
 
-void NKSig::Print(int verbosity=0)
+void NKSig::Print(int verbosity)
 {
 	if (verbosity>0)
 	{

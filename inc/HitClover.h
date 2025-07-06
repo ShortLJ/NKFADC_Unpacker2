@@ -1,8 +1,12 @@
 
-#ifndef __HITCLOVER__
-#define __HITCLOVER__
+#include <vector>
 
 #include "Hit.h"
+#include "HitCrystal.h"
+#include "SigAna.h"
+
+#ifndef __HITCLOVER__
+#define __HITCLOVER__
 
 using namespace std;
 
@@ -21,13 +25,14 @@ class HitClover : public Hit
 		HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
 		~HitClover();
 
+	protected:
+		void Clear();
+
 	private:
 		bool isValid();
 		void ProcessHit();
-		//void Clear();
 
 		float AddBack();
-}
-
+};
 
 #endif // __HITCLOVER__

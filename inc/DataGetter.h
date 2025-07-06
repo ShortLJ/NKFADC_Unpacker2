@@ -1,15 +1,11 @@
 
-//#include <stdio.h>
-//#include <stdint.h>
-//#include <stdlib.h>
 #include <mutex>
-
-
-
 
 #include "Global.h"
 #include "TimeSorter.h"
 #include "Config.h"
+
+#include "NKSig.h"
 
 #ifndef __DATAGETTER__
 #define __DATAGETTER__
@@ -24,7 +20,7 @@ class DataGetter
         void RegisterTimeSorter (TimeSorter *ts){timesorter=ts;}
         void RegisterConfig (Config *cfg){config=cfg;}
         void Loop();
-		void Stop()
+		void Stop();
         virtual int GetNextData();
 
         uint32_t sig_processed;

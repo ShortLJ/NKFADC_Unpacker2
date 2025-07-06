@@ -5,22 +5,22 @@
 HitX6::HitX6()
 {
 }
-HitX6::HitX6(uint8_t idet, vector<SigAna> v_sigana_ohmic, vector<SigAna> v_sigana_strpU, vector<SigAna> v_sigana_strpD)
-	: det(idet)
+HitX6::HitX6(uint8_t idet, vector<SigAna> v_sigana_pad, vector<SigAna> v_sigana_strpU, vector<SigAna> v_sigana_strpD)
+	: Hit(idet)
 {
-	vector<SigAna>::iterator pad, strpU, strpD;
-	for (pad=v_sigana_pad.begin(); pad!=v_sigana_pad.end(); pad++)
+	vector<SigAna>::iterator sigpad, sigstrpU, sigstrpD;
+	for (sigpad=v_sigana_pad.begin(); sigpad!=v_sigana_pad.end(); sigpad++)
 	{
-		vHitPad.push_back(HitPad(pad))
+		vHitPad.push_back(HitPad(*sigpad));
 	}
 
-	for (strpU=v_sigana_strpU.begin(); strpU!=v_sigana_strpU.end(); strpU++)
+	for (sigstrpU=v_sigana_strpU.begin(); sigstrpU!=v_sigana_strpU.end(); sigstrpU++)
 	{
-		for (strpD=v_sigana_strpD.begin(); strpD!=v_sigana_strpD.end(); strpD++)
+		for (sigstrpD=v_sigana_strpD.begin(); sigstrpD!=v_sigana_strpD.end(); sigstrpD++)
 		{
-			if (strpU->idx==strpD->idx)
+			if (sigstrpU->idx==sigstrpD->idx)
 			{
-				vHitStrip.push_back(HitStrip(strpU,strpD);
+				vHitStrip.push_back(HitStrip(*sigstrpU,*sigstrpD));
 			}
 		}
 	}
@@ -84,10 +84,5 @@ bool HitX6::isValid()
 		}
 		flag_strip |= 0x1<<(strip->idx);
 	}
-
-
-	
-
-
-
+	return ret;
 }

@@ -7,24 +7,24 @@ Config::Config()
 {
 	InitializeGlobalVariables();
 }
-Config::Config(string configdir_) : Config()
+Config::Config(string configdir_)
 	: configdir(configdir_)
 {
-
+	InitializeGlobalVariables();
 
 }
 
-Config::~Config();
+Config::~Config()
 {
 }
 
-void Config::ReadDetMapFile(string filename="det_map.csv")
+void Config::ReadDetMapFile(string filename)
 {
 	string fullpath = configdir+filename;
 	fprintf(stdout, "Detector Map file: %s\n",fullpath.c_str());
 
 	FILE *fr;
-	fr = fopen(fullpath,"r");
+	fr = fopen(fullpath.c_str(),"r");
 	if(fr==NULL)
 	{
 		fprintf(stderr,"map file is not opened.\n");
@@ -42,12 +42,12 @@ void Config::ReadDetMapFile(string filename="det_map.csv")
 			case 8:
 			{
 				uint8_t chL=icha, chU=param[0], granul=param[1];
-				fprintf(stdout,"program %u %u %u %u %u %u %u %u\n",itype,idet,iidx,isid,ibrd,chL,chU,incre);
-				for (icha=chL; ich<=chU; ich+=granul)
+				fprintf(stdout,"program %u %u %u %u %u %u %u %u\n",itype,idet,iidx,isid,ibrd,chL,chU,granul);
+				for (icha=chL; icha<=chU; icha+=granul)
 				{
-					map_type	[isid][ibrd][ich] = itype;
-					map_det		[isid][ibrd][ich] = idet;
-					map_idx		[isid][ibrd][ich] = iidx++;
+					map_type	[isid][ibrd][icha] = itype;
+					map_det		[isid][ibrd][icha] = idet;
+					map_idx		[isid][ibrd][icha] = iidx++;
 				}
 				break;
 			}
@@ -55,9 +55,9 @@ void Config::ReadDetMapFile(string filename="det_map.csv")
 			{
 				//uint8_t asdf = param[0], aaa=param[1];
 				fprintf(stdout,"brute %u %u %u %u %u %u\n", itype,idet,iidx, isid,ibrd,icha);
-				map_type	[isid][ibrd][ich] = itype;
-				map_det		[isid][ibrd][ich] = idet;
-				map_idx		[isid][ibrd][ich] = iidx;
+				map_type	[isid][ibrd][icha] = itype;
+				map_det		[isid][ibrd][icha] = idet;
+				map_idx		[isid][ibrd][icha] = iidx;
 				break;
 			}
 			default: 

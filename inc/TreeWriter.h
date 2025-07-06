@@ -1,4 +1,14 @@
 
+#include <mutex>
+#include <queue>
+#include <string>
+
+#include "Event.h"
+
+#include "TFile.h"
+#include "TTree.h"
+
+
 #ifndef __TREEWRITER__
 #define __TREEWRITER__
 
@@ -8,6 +18,7 @@ class TreeWriter
 {
 	public:
 		TreeWriter();
+		TreeWriter(string OutputFileName, string TreeName="tree");
 		~TreeWriter();
 
 
@@ -18,10 +29,11 @@ class TreeWriter
 		void Stop();
 
 		void Write(){ tree->Write(); }
-		void Close(){ file->Close(); }
+		void Close(){ outfile->Close(); }
 
 	private:
-		String OutputFileName;
+		string OutputFileName;
+		string TreeName;
 		TFile *outfile=0;
 		TTree *tree=0;
 		Event event;
@@ -29,6 +41,6 @@ class TreeWriter
 		queue<Event> q_event;
 		bool writerEnd;
 
-}
+};
 
 #endif // __TREEWRITER__

@@ -2,31 +2,39 @@
 
 #include "TreeWriter.h"
 
+TreeWriter::TreeWriter()
+{
+}
+
+TreeWriter::TreeWriter(string outfilename, string treename)
+	: OutputFileName(outfilename), TreeName(treename)
+{
+	Init();
+}
+TreeWriter::~TreeWriter()
+{
+	if (outfile->IsOpen()) outfile->Close();
+}
 
 void TreeWriter::Init()
 {
-	if (OutputFileName==NULL)
-	{
-		fprintf(stderr,"TreeWriter::Init(): SetFileName(filename) first\n");
-		exit(-20);
-	}
-	if (outfile!=0)
+	if (outfile->IsOpen())
 	{
 		fprintf(stdout,"TreeWriter::Init(): output file is already open: %s\n",outfile->GetName());
 		fprintf(stdout,"TreeWriter::Init(): closing previous file\n");
 		outfile->Close();
 	}
-	outfile = new TFile(OutputFileName,"recreate");
-	tree = new TTree("tree","tree");
-	tree->SetBranch("ASGARD", event.ASGARD);
-	tree->SetBranch("StarkJr", event.StarkJr);
+	outfile = new TFile(OutputFileName.c_str(),"recreate");
+	tree = new TTree(TreeName.c_str(),TreeName.c_str());
+	tree->Branch("ASGARD", &(event.ASGARD));
+	tree->Branch("StarkJr", &(event.StarkJr));
 
 }
 
 void TreeWriter::Run()
 {
 	writerEnd=0;
-	while()
+	while(1)
 	{
 		fmutex.lock();
 		if (q_event.size()==0)
