@@ -14,6 +14,7 @@ using namespace std;
 #include "DataGetter.h"
 #include "TimeSorter.h"
 #include "EventProcessor.h"
+#include "HistServer.h"
 #include "HistServerUser.h"
 #include "TreeWriter.h"
 
@@ -29,11 +30,17 @@ void sig_handler(int signal)
 	{
 		fprintf(stdout,"start Closing\n");
 		flag_loop=0;
+		return;
 	}
 	if (!flag_loop)
 	{
 		fprintf(stdout,"force quit\n");
 		flag_force_quit=1;
+		return;
+	}
+	if (flag_force_quit)
+	{
+		exit(-100);
 	}
 
 }
@@ -118,7 +125,7 @@ int main(int argc, char *argv[])
 
 	TimeSorter timesorter; /// queue
 	timesorter.SetTimeWindow(timewindow);
-	//thread thread_timesorter(&TimeSorter::Run, &timesorter);
+	thread thread_timesorter(&TimeSorter::Run, &timesorter);
 
 	vector<DataGetter*> v_datagetter;
 	v_datagetter.push_back(new DataGetter());
@@ -132,24 +139,30 @@ int main(int argc, char *argv[])
 	vector<thread> v_thread_datagetter;
 	for (datagetter=v_datagetter.begin(); datagetter!=v_datagetter.end(); datagetter++)
 	{
-		//v_thread_datagetter.push_back(thread(&DataGetter::Loop, *datagetter));
+		v_thread_datagetter.push_back(thread(&DataGetter::Loop, *datagetter));
 		//fprintf(stdout,"DataGetter::Loop\n");
 	}
 
 	EventProcessor eventprocessor;
 	eventprocessor.RegisterTimeSorter(&timesorter);
 	eventprocessor.RegisterConfig(&config);
-
+#define WriteTree 1
+#ifdef WriteTree
 	TreeWriter treewriter(outputfilename);
 	eventprocessor.RegisterTreeWriter(&treewriter);
+#endif
 
-	return 0;
+	fprintf(stdout,"before histserver init\n");
+	//HistServer histserver(8181);
 	HistServerUser histserver;
+	fprintf(stdout,"after histserver init\n");
 	histserver.SetHistFile(histfilename);
 	eventprocessor.RegisterHistServer(&histserver);
-	//thread thread_eventprocessor(&EventProcessor::Run, &eventprocessor);
-	//thread thread_histserver(&HistServer::Run, &histserver);
-	//thread thread_treewriter(&TreeWriter::Run, &treewriter);
+	thread thread_eventprocessor(&EventProcessor::Run, &eventprocessor);
+	thread thread_histserver(&HistServer::Run, &histserver);
+#ifdef WriteTree
+	thread thread_treewriter(&TreeWriter::Run, &treewriter);
+#endif
 
 
 	fprintf(stdout,"Start while loop\n");
@@ -158,54 +171,62 @@ int main(int argc, char *argv[])
 
 	while (1)
 	{
-//		signal(SIGINT,sig_handler);
-//		if ( flag_force_quit) exit(0);
+		signal(SIGINT,sig_handler);
+		if ( flag_force_quit) exit(0);
 		if ( flag_loop)
 		{
 			fprintf(stdout,"looping\n");
 			usleep(refresh_rate);
 			continue;
 		}
-//		if (!flag_loop && !flag_closing)
-//		{
-//			for (int i=0; i<v_datagetter.size(); i++)
-//			{
-//				v_datagetter.at(i)->Stop();
-//			}
-//			for (int i=0; i<v_datagetter.size(); i++)
-//			{
-//				v_thread_datagetter.at(i).join();
-//			}
-//			timesorter.Stop();
-//			thread_timesorter.join();
-//
-//			fprintf(stdout,"stopped readers\n");
-//			flag_closing=1;
-//			continue;
-//		}
-//		if ( flag_closing)
-//		{
-//			if (timesorter.GetNSorted())
-//			{
-//				fprintf(stdout,"emptying timesorter\n");
-//				usleep(refresh_rate);
-//				continue;
-//			}
-//			else
-//			{
-//				fprintf(stdout,"emptyed timesorter. Finalizing\n");
-//				eventprocessor.Stop();
-//				histserver.Stop();
-//				treewriter.Stop();
-//				thread_eventprocessor.join();
-//				thread_histserver.join();
-//				thread_treewriter.join();
-//				treewriter.Write();
-//				treewriter.Close();
-//				fprintf(stdout,"Wrote to files\n");
-//			}
-//		}
-//
+		if (!flag_loop && !flag_closing)
+		{
+			for (int i=0; i<v_datagetter.size(); i++)
+			{
+				v_datagetter.at(i)->Stop();
+			}
+			for (int i=0; i<v_datagetter.size(); i++)
+			{
+				v_thread_datagetter.at(i).join();
+			}
+			timesorter.Stop();
+			thread_timesorter.join();
+
+			fprintf(stdout,"stopped readers\n");
+			flag_closing=1;
+			continue;
+		}
+		if ( flag_closing)
+		{
+			if ( timesorter.GetNSorted())
+			{
+				fprintf(stdout,"emptying timesorter\n");
+				usleep(refresh_rate);
+				continue;
+			}
+			else
+			{
+				fprintf(stdout,"emptyed timesorter. Finalizing\n");
+				eventprocessor.Stop();
+				histserver.Stop();
+#ifdef WriteTree
+				treewriter.Stop();
+#endif
+				thread_eventprocessor.join();
+				thread_histserver.join();
+#ifdef WriteTree
+				thread_treewriter.join();
+#endif
+				histserver.Write();
+#ifdef WriteTree
+				treewriter.Write();
+				treewriter.Close();
+#endif
+				fprintf(stdout,"Wrote to files and file closed\n");
+				break;
+			}
+		}
+
 	}
 
 	return 0;

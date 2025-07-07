@@ -23,7 +23,8 @@ class DataGetter
 		void Stop();
         virtual int GetNextData()
 		{
-			fprintf(stdout,"not implemented yet\n"); 
+			fprintf(stdout,"GetNextData(): ");
+			fprintf(stdout,"not implemented yet. 1 second sleep\n"); 
 			return 0;	
 		};
 

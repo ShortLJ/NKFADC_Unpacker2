@@ -3,6 +3,7 @@
 
 HistServerUser::HistServerUser()
 {
+	fprintf(stdout,"HistServerUser::HistServerUser()\n");
 }
 
 HistServerUser::~HistServerUser()

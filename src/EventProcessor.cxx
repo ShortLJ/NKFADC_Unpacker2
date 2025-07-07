@@ -28,6 +28,11 @@ void EventProcessor::Run()
 		}
 		fmutex.unlock();
 
+		if ( timesorter->GetNSorted()==0) 
+		{
+			timesorter->fmutex_output.unlock();
+			break;
+		}
 		uint64_t ref_lgt = timesorter->GetMinLGT();
 		//uint64_t ref_lgt = timesorter->GetLGT(sid,brd,cha);
 		vector<Sig> v_sig = timesorter->GetCoinvSig(ref_lgt); /// potential error

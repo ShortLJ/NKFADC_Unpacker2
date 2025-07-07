@@ -61,8 +61,11 @@ target_link_libraries(EventProcessor Event)
 add_library(TreeWriter SHARED src/TreeWriter.cxx inc/TreeWriter.h inc/Global.h ${ROOT_LIBRARIES})
 target_link_libraries(TreeWriter EvtASGARD)
 target_link_libraries(TreeWriter ${ROOT_LIBRARIES})
-add_library(HistServerUser SHARED src/HistServer.cxx inc/HistServer.h src/HistServerUser.cxx inc/HistServerUser.h inc/Global.h)
-target_link_libraries(HistServerUser ${ROOT_LIBRARIES})
+add_library(HistServer SHARED src/HistServer.cxx inc/HistServer.h)
+target_link_libraries(HistServer ${ROOT_LIBRARIES})
+
+add_library(HistServerUser SHARED src/HistServerUser.cxx inc/HistServerUser.h)
+target_link_libraries(HistServerUser HistServer ${ROOT_LIBRARIES})
 #target_link_libraries(HistServerUser Event)
 #target_link_libraries(HistServerUser ${ROOT_LIBRARIES})
 #
@@ -71,7 +74,7 @@ add_library(Config SHARED src/Config.cxx inc/Config.h inc/Global.h)
 
 #---Create  a main program using the library
 add_executable(NKFADC_Unpacker Unpacker.cpp)
-target_link_libraries(NKFADC_Unpacker DataGetter Config TimeSorter EventProcessor TreeWriter HistServerUser)
+target_link_libraries(NKFADC_Unpacker DataGetter Config TimeSorter EventProcessor TreeWriter HistServer HistServerUser)
 target_link_libraries(NKFADC_Unpacker ${ROOT_LIBRARIES})
 
 
@@ -81,3 +84,20 @@ target_link_libraries(NKFADC_Unpacker ${ROOT_LIBRARIES})
 #ROOT_GENERATE_DICTIONARY(EvtStarkJr_dict MODULE TreeWriter LINKDEF EvtStarkJrLinkDef.h)
 ROOT_GENERATE_DICTIONARY(Event_dict MODULE TreeWriter LINKDEF EventLinkDef.h)
 target_link_libraries(Event_dict EvtASGARD EvtStarkJr)
+
+
+set(CONFIG_CSV
+		config/det_map.csv
+)
+
+
+foreach(_script ${CONFIG_CSV})
+	configure_file(
+			${PROJECT_SOURCE_DIR}/${_script}
+			${PROJECT_BINARY_DIR}/${_script}
+			COPYONLY
+			)
+endforeach()
+
+
+

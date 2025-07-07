@@ -90,6 +90,7 @@ void TimeSorter::Stop()
 
 uint64_t TimeSorter::GetMinLGT()
 {
+	fprintf(stdout,"is it called somewhere?\n");
 	uint64_t ret=-1; /// uint64_t max
 	for (isid=0; isid<Nsid; isid++) for (ibrd=0; ibrd<Nbrd; ibrd++) for (icha=0; icha<Ncha; icha++) if (!Empty(isid,ibrd,icha))
 	{
@@ -101,7 +102,7 @@ uint64_t TimeSorter::GetMinLGT()
 	if (ret==-1)
 	{
 		fprintf(stderr,"TimeSorter::GetMinLGT(): all q is empty\n");
-		exit (-11);
+		//exit (-11);
 	}
 	return ret;
 }

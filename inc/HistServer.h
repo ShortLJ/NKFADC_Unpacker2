@@ -33,7 +33,7 @@ class HistServer
 		void Close(){ outfile->Close(); }
 
 		virtual void ProcessToHistUser(){	};
-		virtual void InitUser(){	};
+		//virtual void InitUser(){	};
 
 	protected: // shall be called in InitUser();
 		void InitFile();
@@ -45,7 +45,7 @@ class HistServer
 	private:
 		vector<TObject*> v_histograms;
 
-		string OutputFileName=NULL;
+		string OutputFileName;
 		bool flag_histfile=0;
 		TFile *outfile=0;
 

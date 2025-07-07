@@ -9,6 +9,7 @@ TreeWriter::TreeWriter()
 TreeWriter::TreeWriter(string outfilename, string treename)
 	: OutputFileName(outfilename), TreeName(treename)
 {
+	fprintf(stdout, "TreeWriter::TreeWriter(string outfilename, string treename)\n");
 	Init();
 }
 TreeWriter::~TreeWriter()
@@ -18,7 +19,7 @@ TreeWriter::~TreeWriter()
 
 void TreeWriter::Init()
 {
-	if ( outfile->IsOpen())
+	if (outfile!=0)	if ( outfile->IsOpen())
 	{
 		fprintf(stdout,"TreeWriter::Init(): output file is already open: %s\n",outfile->GetName());
 		fprintf(stdout,"TreeWriter::Init(): closing previous file\n");

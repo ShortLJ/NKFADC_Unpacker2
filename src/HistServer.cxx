@@ -4,11 +4,13 @@
 
 HistServer::HistServer()
 {
+	fprintf(stdout,"HistServer::HistServer()\n");
 }
 
-HistServer::HistServer(uint16_t portnumber)
+HistServer::HistServer(uint16_t portnumber=0)
 	: PortNumber(portnumber)
 {
+	fprintf(stderr,"HistServer::HistServer(uint16_t portnumber)\n");
 	if (portnumber)	flag_httpServer=1;
 	else flag_httpServer=0;
 
@@ -33,7 +35,7 @@ void HistServer::InitFile()
 	}
 	else // if ( flag_histfile)
 	{
-		if (outfile!=0)
+		if (outfile!=0) if ( outfile->IsOpen())
 		{
 			fprintf(stdout,"HistServer::Init(): output file is already open: %s\n",outfile->GetName());
 			fprintf(stdout,"HistServer::Init(): closing previous file\n");
@@ -112,7 +114,7 @@ TH2I* HistServer::MakeH2(const char *name, const char *title, Int_t nbinsx, Doub
 
 void HistServer::Write()
 {
-	if (!outfile->IsOpen())
+	if (outfile==0 || !outfile->IsOpen())
 	{
 		fprintf(stdout,"Histogram file is not open\n");
 		return;
