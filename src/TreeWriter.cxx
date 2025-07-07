@@ -13,12 +13,12 @@ TreeWriter::TreeWriter(string outfilename, string treename)
 }
 TreeWriter::~TreeWriter()
 {
-	if (outfile->IsOpen()) outfile->Close();
+	if ( outfile->IsOpen()) outfile->Close();
 }
 
 void TreeWriter::Init()
 {
-	if (outfile->IsOpen())
+	if ( outfile->IsOpen())
 	{
 		fprintf(stdout,"TreeWriter::Init(): output file is already open: %s\n",outfile->GetName());
 		fprintf(stdout,"TreeWriter::Init(): closing previous file\n");

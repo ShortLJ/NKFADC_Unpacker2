@@ -18,8 +18,11 @@ class EventProcessor
 		EventProcessor();
 		~EventProcessor();
 
-		RegisterTimeSorter(TimeSorter *ts){timesorter=ts;}
-		RegisterConfig(Config *cfg){config=cfg;}
+		void RegisterTimeSorter(TimeSorter *ts){timesorter=ts;}
+		void RegisterConfig(Config *cfg){config=cfg;}
+
+		void RegisterHistServer(HistServer *hs){histserver=hs;}
+		void RegisterTreeWriter(TreeWriter *tw){treewriter=tw;}
 
 		mutex fmutex;
 		void Run();
@@ -36,7 +39,7 @@ class EventProcessor
 		bool processorEnd;
 
 
-}
+};
 
 
 #endif //__EVENTPROCESSOR__

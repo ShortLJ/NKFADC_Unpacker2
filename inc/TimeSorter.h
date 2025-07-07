@@ -22,6 +22,7 @@ class TimeSorter
 
 		mutex fmutex_input;
 		void Push(Sig sig);
+		uint64_t GetNSorted(){return nsorted;}
 		
 		mutex fmutex_output;
 		void SetTimeWindow(int64_t tw) {timewindow=tw;}
@@ -40,7 +41,6 @@ class TimeSorter
 		void Pop(uint8_t sid, uint8_t brd, uint8_t cha);
 
 		bool sorterEnd=0;
-		uint64_t nenque=0;
 		uint64_t nsorted=0;
 		uint8_t isid; uint8_t ibrd; uint8_t icha;
 

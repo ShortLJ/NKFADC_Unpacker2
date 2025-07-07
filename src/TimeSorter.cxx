@@ -15,7 +15,6 @@ TimeSorter::~TimeSorter()
 void TimeSorter::Push(Sig sig)
 {
 	q_sig_input.push(sig);
-	nenque++;
 }
 Sig TimeSorter::Top(uint8_t isid, uint8_t ibrd, uint8_t icha)
 {

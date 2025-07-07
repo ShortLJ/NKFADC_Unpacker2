@@ -38,8 +38,8 @@ class HistServer
 	protected: // shall be called in InitUser();
 		void InitFile();
 		void InitHttp();
-		TH1I* MakeH1(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup);
-		TH2I* MakeH2(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup);
+		TH1I* MakeH1(const char *name, const char *title, int nbinsx, double xlow, double xup);
+		TH2I* MakeH2(const char *name, const char *title, int nbinsx, double xlow, double xup, int nbinsy, double ylow, double yup);
 		Event event;
 
 	private:

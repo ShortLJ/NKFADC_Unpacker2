@@ -1,6 +1,17 @@
 
 
 
+#include <cstdio>
+#include <csignal>
+
+#include "Global.h"
+#include "Config.h"
+#include "DataGetter.h"
+#include "TimeSorter.h"
+#include "EventProcessor.h"
+#include "HistServerUser.h"
+#include "TreeWriter.h"
+
 
 bool flag_loop=1;
 bool flag_closing=0;
@@ -22,42 +33,100 @@ void sig_handler(int signal)
 
 }
 
+void print_usage()
+{
 
+
+}
 
 
 int main(int argc, char *argv[])
 {
 
+	if (argc<2)
+	{
+		print_usage();
+		return 0;
+	}
+
+	string inputfilename;
+	string outputfilename = "tree.root";
+	string histfilename = "hists.root";
+	string configdir = "config";
+	int64_t timewindow = 0;
+
+
+	bool flag_online=1;
+
+	for (int i=1; i<argc; i++)
+	{
+		if ((strcmp(argv[i],"--input")==0 || strcmp(argv[i],"-i")==0) && (argv[i+1]))
+		{
+			if (strcmp(argv[i+1],"online")==0)
+			{
+				flag_online=1;
+			}
+			else
+			{
+				flag_online=0;
+				inputfilename = string(argv[i+1]);
+			}
+			i++;
+		}
+		else if ((strcmp(argv[i],"--output")==0 || strcmp(argv[i],"-o")==0) && (argv[i+1]))
+		{
+			outputfilename = string(argv[++i]);
+		}
+		else if ((strcmp(argv[i],"--config")==0 || strcmp(argv[i],"-c")==0) && (argv[i+1]))
+		{
+			configdir = string(argv[++i]);
+		}
+		else if ((strcmp(argv[i],"--timewindow")==0 || strcmp(argv[i],"-tw")==0) && (argv[i+1]))
+		{
+			timewindow = atoll(argv[++i]);
+		}
+		else if (strcmp(argv[i],"-h")==0)
+		{
+			print_usage();
+			return 0;
+		}
+		else
+		{
+			fprintf(stderr,"invalid opt\n");
+			print_usage();
+			return -1;
+		}
+	}
+
 
 
 	Config config;
-	config.ReadConfig(configdir);
+	config.ReadDetMapFile(configdir);
 
-
-	Timesorter timesorter; /// queue
+	TimeSorter timesorter; /// queue
 	timesorter.SetTimeWindow(timewindow);
-	thread thread_timesorter(&Timesorter::Run, &timesorter);
+	thread thread_timesorter(&TimeSorter::Run, &timesorter);
 
-	vector<DataGetter*> v_datagetter
-	v_datagetters.push_back(new DataGetter());
+	vector<DataGetter*> v_datagetter;
+	v_datagetter.push_back(new DataGetter());
 
-	vector<DataGetter>::iterator datagetter;
+	vector<DataGetter*>::iterator datagetter;
 	for (datagetter=v_datagetter.begin(); datagetter!=v_datagetter.end(); datagetter++)
 	{
-		datagetter->RegisterTimeSorter(&timesorter);
-		datagetter->RegisterConfig(&config); /// for time offset
+		(*datagetter)->RegisterTimeSorter(&timesorter);
+		(*datagetter)->RegisterConfig(&config); /// for time offset
 	}
 	vector<thread> v_thread_datagetter;
 	for (datagetter=v_datagetter.begin(); datagetter!=v_datagetter.end(); datagetter++)
 	{
-		v_thread_datagetter.push_back(thread(&DataGetter::Loop, datagetter));
+		v_thread_datagetter.push_back(thread(&DataGetter::Loop, *datagetter));
 	}
 
 	EventProcessor eventprocessor;
 	eventprocessor.RegisterTimeSorter(&timesorter);
 	eventprocessor.RegisterConfig(&config);
 
-	HistServer histserver(0);
+	HistServerUser histserver;
 	histserver.SetHistFile(histfilename);
 	TreeWriter treewriter(outputfilename);
 	eventprocessor.RegisterHistServer(&histserver);
@@ -70,22 +139,22 @@ int main(int argc, char *argv[])
 
 
 
-	constexpr refresh_rate = 5000000;
+	constexpr useconds_t refresh_rate = 5000000;
 
-	while ()
+	while (1)
 	{
 		signal(SIGINT,sig_handler);
 		if ( flag_force_quit) exit(0);
 		if ( flag_loop)
 		{
-			fprintf(stdout,"looping %d\n",seq);
+			fprintf(stdout,"looping\n");
 			usleep(refresh_rate);
 			continue;
 		}
 		if (!flag_loop && !flag_closing)
 		{
 			for (int i=0; i<v_datagetter.size(); i++)
-				v_datagetter.at(i).Stop();
+				v_datagetter.at(i)->Stop();
 			for (int i=0; i<v_datagetter.size(); i++)
 				v_thread_datagetter.at(i).join();
 			timesorter.Stop();
@@ -97,7 +166,7 @@ int main(int argc, char *argv[])
 		}
 		if ( flag_closing)
 		{
-			if (!timesorter.AllEmpty())
+			if (timesorter.GetNSorted())
 			{
 				fprintf(stdout,"emptying timesorter\n");
 				usleep(refresh_rate);

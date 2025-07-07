@@ -12,7 +12,7 @@ EventProcessor::~EventProcessor()
 void EventProcessor::Run()
 {
 	processorEnd=0;
-	while()
+	while(1)
 	{
 		fmutex.lock();
 		if (!processorEnd)
@@ -65,7 +65,7 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 	vector<SigAna> v_sigana_sort[Ntype][Ndet];
 
 	vector<Sig>::iterator it_sig;
-	for (it_sig=v_sigs.begin(); it_sig!=v_sigs.end(); it_sig++)
+	for (it_sig=v_sig.begin(); it_sig!=v_sig.end(); it_sig++)
 	{
 		uint8_t isid = (*it_sig).sid;
 		uint8_t ibrd = (*it_sig).brd;
