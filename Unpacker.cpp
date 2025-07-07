@@ -3,8 +3,13 @@
 
 #include <cstdio>
 #include <csignal>
+#include <cstring>
+#include <string>
+#include <vector>
+#include <thread>
+using namespace std;
 
-#include "Global.h"
+//#include "Global.h"
 #include "Config.h"
 #include "DataGetter.h"
 #include "TimeSorter.h"
@@ -35,6 +40,12 @@ void sig_handler(int signal)
 
 void print_usage()
 {
+	fprintf(stdout,"Usage\n");
+	fprintf(stdout,"--input,-i <file.dat> or 'online'\\\n");
+	fprintf(stdout,"--treeout,-to <tree.root>\\\n");
+	fprintf(stdout,"--histout,-to <hists.root>\\\n");
+	fprintf(stdout,"--config,-c <config>\\\n");
+	fprintf(stdout,"--timewindow,-tw <timewindow=0> ## 8 ns for NKfadc\\\n");
 
 
 }
@@ -73,10 +84,12 @@ int main(int argc, char *argv[])
 			}
 			i++;
 		}
-		else if ((strcmp(argv[i],"--output")==0 || strcmp(argv[i],"-o")==0) && (argv[i+1]))
+		else if ((strcmp(argv[i],"--treeout")==0 || strcmp(argv[i],"-to")==0) && (argv[i+1]))
 		{
 			outputfilename = string(argv[++i]);
 		}
+		else if ((strcmp(argv[i],"--histout")==0 || strcmp(argv[i],"-ho")==0) && (argv[i+1]))
+			histfilename = string(argv[++i]);
 		else if ((strcmp(argv[i],"--config")==0 || strcmp(argv[i],"-c")==0) && (argv[i+1]))
 		{
 			configdir = string(argv[++i]);
@@ -105,7 +118,7 @@ int main(int argc, char *argv[])
 
 	TimeSorter timesorter; /// queue
 	timesorter.SetTimeWindow(timewindow);
-	thread thread_timesorter(&TimeSorter::Run, &timesorter);
+	//thread thread_timesorter(&TimeSorter::Run, &timesorter);
 
 	vector<DataGetter*> v_datagetter;
 	v_datagetter.push_back(new DataGetter());
@@ -114,79 +127,85 @@ int main(int argc, char *argv[])
 	for (datagetter=v_datagetter.begin(); datagetter!=v_datagetter.end(); datagetter++)
 	{
 		(*datagetter)->RegisterTimeSorter(&timesorter);
-		(*datagetter)->RegisterConfig(&config); /// for time offset
+		//(*datagetter)->RegisterConfig(&config); /// for time offset
 	}
 	vector<thread> v_thread_datagetter;
 	for (datagetter=v_datagetter.begin(); datagetter!=v_datagetter.end(); datagetter++)
 	{
-		v_thread_datagetter.push_back(thread(&DataGetter::Loop, *datagetter));
+		//v_thread_datagetter.push_back(thread(&DataGetter::Loop, *datagetter));
+		//fprintf(stdout,"DataGetter::Loop\n");
 	}
 
 	EventProcessor eventprocessor;
 	eventprocessor.RegisterTimeSorter(&timesorter);
 	eventprocessor.RegisterConfig(&config);
 
-	HistServerUser histserver;
-	histserver.SetHistFile(histfilename);
 	TreeWriter treewriter(outputfilename);
-	eventprocessor.RegisterHistServer(&histserver);
 	eventprocessor.RegisterTreeWriter(&treewriter);
 
-	thread thread_eventprocessor(&EventProcessor::Run, &eventprocessor);
-	thread thread_histserver(&HistServer::Run, &histserver);
-	thread thread_treewriter(&TreeWriter::Run, &treewriter);
+	return 0;
+	HistServerUser histserver;
+	histserver.SetHistFile(histfilename);
+	eventprocessor.RegisterHistServer(&histserver);
+	//thread thread_eventprocessor(&EventProcessor::Run, &eventprocessor);
+	//thread thread_histserver(&HistServer::Run, &histserver);
+	//thread thread_treewriter(&TreeWriter::Run, &treewriter);
 
 
-
+	fprintf(stdout,"Start while loop\n");
 
 	constexpr useconds_t refresh_rate = 5000000;
 
 	while (1)
 	{
-		signal(SIGINT,sig_handler);
-		if ( flag_force_quit) exit(0);
+//		signal(SIGINT,sig_handler);
+//		if ( flag_force_quit) exit(0);
 		if ( flag_loop)
 		{
 			fprintf(stdout,"looping\n");
 			usleep(refresh_rate);
 			continue;
 		}
-		if (!flag_loop && !flag_closing)
-		{
-			for (int i=0; i<v_datagetter.size(); i++)
-				v_datagetter.at(i)->Stop();
-			for (int i=0; i<v_datagetter.size(); i++)
-				v_thread_datagetter.at(i).join();
-			timesorter.Stop();
-			thread_timesorter.join();
-
-			fprintf(stdout,"stopped readers\n");
-			flag_closing=1;
-			continue;
-		}
-		if ( flag_closing)
-		{
-			if (timesorter.GetNSorted())
-			{
-				fprintf(stdout,"emptying timesorter\n");
-				usleep(refresh_rate);
-				continue;
-			}
-			else
-			{
-				fprintf(stdout,"emptyed timesorter. Finalizing\n");
-				eventprocessor.Stop();
-				histserver.Stop();
-				treewriter.Stop();
-				thread_eventprocessor.join();
-				thread_histserver.join();
-				thread_treewriter.join();
-				treewriter.Write();
-				treewriter.Close();
-				fprintf(stdout,"Wrote to files\n");
-			}
-		}
-
+//		if (!flag_loop && !flag_closing)
+//		{
+//			for (int i=0; i<v_datagetter.size(); i++)
+//			{
+//				v_datagetter.at(i)->Stop();
+//			}
+//			for (int i=0; i<v_datagetter.size(); i++)
+//			{
+//				v_thread_datagetter.at(i).join();
+//			}
+//			timesorter.Stop();
+//			thread_timesorter.join();
+//
+//			fprintf(stdout,"stopped readers\n");
+//			flag_closing=1;
+//			continue;
+//		}
+//		if ( flag_closing)
+//		{
+//			if (timesorter.GetNSorted())
+//			{
+//				fprintf(stdout,"emptying timesorter\n");
+//				usleep(refresh_rate);
+//				continue;
+//			}
+//			else
+//			{
+//				fprintf(stdout,"emptyed timesorter. Finalizing\n");
+//				eventprocessor.Stop();
+//				histserver.Stop();
+//				treewriter.Stop();
+//				thread_eventprocessor.join();
+//				thread_histserver.join();
+//				thread_treewriter.join();
+//				treewriter.Write();
+//				treewriter.Close();
+//				fprintf(stdout,"Wrote to files\n");
+//			}
+//		}
+//
 	}
 
 	return 0;

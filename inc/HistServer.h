@@ -32,8 +32,8 @@ class HistServer
 		void Write();
 		void Close(){ outfile->Close(); }
 
-		virtual void ProcessToHistUser();
-		virtual void InitUser();
+		virtual void ProcessToHistUser(){	};
+		virtual void InitUser(){	};
 
 	protected: // shall be called in InitUser();
 		void InitFile();

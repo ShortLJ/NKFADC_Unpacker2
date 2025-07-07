@@ -10,6 +10,9 @@ EvtASGARD::EvtASGARD(vector<HitClover> v_hit_clover)
 {
 	vHitClover=v_hit_clover;
 }
+EvtASGARD::~EvtASGARD()
+{
+}
 EvtASGARD::EvtASGARD(vector<HitCrystal> v_hit_crystal)
 {
 	vHitClover.clear();
@@ -30,3 +33,11 @@ EvtASGARD::EvtASGARD(vector<HitCrystal> v_hit_crystal)
 	}
 }
 
+bool EvtASGARD::isValid()
+{
+	return true;
+}
+void EvtASGARD::Clear()
+{
+	vHitClover.clear();
+}

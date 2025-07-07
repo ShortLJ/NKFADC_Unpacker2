@@ -2,10 +2,11 @@
 #include <string>
 
 
-#include "Global.h"
 
 #ifndef __CONFIG__
 #define __CONFIG__
+
+#include "Global.h"
 
 uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};

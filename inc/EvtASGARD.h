@@ -20,7 +20,7 @@ class EvtASGARD
 		~EvtASGARD();
 
 		void Clear();
-		virtual bool isValid();
+		bool isValid();
 
 
 	private:

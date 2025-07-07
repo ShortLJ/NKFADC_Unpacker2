@@ -47,9 +47,11 @@ void DataGetter::Loop()
 		fmutex.lock();
 		if (getterEnd) break;
 		fmutex.unlock();
-		int ret = GetNextData();
-		if (ret) ProcessData();
-		else usleep(1000); // 1000 us = 1 ms
+		fprintf(stdout,"GetNextData()\n");
+		//int ret = GetNextData();
+		//if (ret) ProcessData();
+		//else usleep(10000); // 1000 us = 1 ms
+		usleep(10000000);
 	}
 	fmutex.unlock();
 }

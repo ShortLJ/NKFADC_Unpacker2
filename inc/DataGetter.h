@@ -3,7 +3,7 @@
 
 #include "Global.h"
 #include "TimeSorter.h"
-#include "Config.h"
+//#include "Config.h"
 
 #include "NKSig.h"
 
@@ -18,10 +18,14 @@ class DataGetter
         DataGetter();
         ~DataGetter();
         void RegisterTimeSorter (TimeSorter *ts){timesorter=ts;}
-        void RegisterConfig (Config *cfg){config=cfg;}
+        //void RegisterConfig (Config *cfg){config=cfg;}
         void Loop();
 		void Stop();
-        virtual int GetNextData();
+        virtual int GetNextData()
+		{
+			fprintf(stdout,"not implemented yet\n"); 
+			return 0;	
+		};
 
         uint32_t sig_processed;
     private:
@@ -33,14 +37,10 @@ class DataGetter
 		bool getterEnd=0;
 
         TimeSorter *timesorter;
-        Config *config;
+		//Config *config;
 
 
 
 };
-
-
-
-
 
 #endif // __DATAGETTER__

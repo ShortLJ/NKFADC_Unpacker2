@@ -49,6 +49,9 @@ HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna>
 	ProcessHit();
 
 }
+HitClover::~HitClover()
+{
+}
 void HitClover::Clear()
 {
 	Hit::Clear();
