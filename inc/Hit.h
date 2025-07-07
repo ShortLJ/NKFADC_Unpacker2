@@ -16,7 +16,7 @@ class Hit
 		uint16_t fine_time;
 
 		Hit();
-		Hit(SigAna *sigana);
+		Hit(SigAna sigana);
 		Hit(uint8_t idx, float Energy, uint64_t coarse_time, uint16_t fine_time);
 		Hit(uint8_t idx);
 		~Hit();

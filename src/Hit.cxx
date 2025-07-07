@@ -11,7 +11,7 @@ Hit::Hit()
 	fine_time=-1;
 }
 
-Hit::Hit(SigAna *sigana)
+Hit::Hit(SigAna sigana)
 	: idx(sigana.idx), Energy(sigana.Energy), coarse_time(sigana.coarse_time), fine_time(sigana.fine_time)
 {
 
@@ -36,16 +36,16 @@ void Hit::Clear()
 	fine_time=-1;
 }
 
-void Hit::isValid()
+bool Hit::isValid()
 {
 	return true;
 }
 void Hit::ProcessHit()
 {
 }
-void HIt::Print()
+void Hit::Print()
 {
-	fprintf(stdout,"Hit idx %u Energy %f ct %u ft %u\n", idx,Energy,coarse_time,fine_time);
+	fprintf(stdout,"Hit idx %u Energy %f ct %lu ft %u\n", idx,Energy,coarse_time,fine_time);
 }
 
 
