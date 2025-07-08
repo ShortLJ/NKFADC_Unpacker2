@@ -12,27 +12,18 @@ DataGetter::~DataGetter()
 }
 
 
-int DataGetter::ProcessData()
+int DataGetter::ProcessPacket(uint8_t *packet)
 {
-	uint8_t *tmp = data;
+	uint8_t *tmp = packet;
+	fprintf(stdout,"packet_size %d\n",packet_size);
 
-	while(tmp<data+8192)
+	while(tmp<packet+packet_size)
 	{
-		data_length = tmp[0] & 0xFF;
-		if (data_length != 32)
-		{
-			fprintf(stderr, "\ndata_length %u!=32\n data_read += fread(data, 1, 8160, fp);\n",data_length);
-		}
-		else
-		{
-			//Sig sig_tmp(tmp);
-			NKSig nksig_tmp(tmp); Sig sig_tmp=nksig_tmp.GetSig();
-			timesorter->fmutex_input.lock();
-			timesorter->Push(sig_tmp);
-			timesorter->fmutex_input.unlock();
-			sig_processed++;
-			tmp += 32;
-		}
+		Sig sig_tmp = Interpret(tmp);
+		timesorter->fmutex_input.lock();
+		timesorter->Push(sig_tmp);
+		timesorter->fmutex_input.unlock();
+		sig_processed++;
 	}
 	return sig_processed;
 }
@@ -47,8 +38,8 @@ void DataGetter::Loop()
 		fmutex.lock();
 		if (getterEnd) break;
 		fmutex.unlock();
-		int ret = GetNextData();
-		if (ret) ProcessData();
+		uint8_t *packet = GetNextPacket();
+		if (packet_size) ProcessPacket(packet);
 		else usleep(1000000); // 1000 us = 1 ms
 		//usleep(10000);
 	}

@@ -12,6 +12,7 @@ using namespace std;
 //#include "Global.h"
 #include "Config.h"
 #include "DataGetter.h"
+#include "NKFileReader.h"
 #include "TimeSorter.h"
 #include "EventProcessor.h"
 #include "HistServer.h"
@@ -128,7 +129,10 @@ int main(int argc, char *argv[])
 	thread thread_timesorter(&TimeSorter::Run, &timesorter);
 
 	vector<DataGetter*> v_datagetter;
-	v_datagetter.push_back(new DataGetter());
+	if (!flag_online) 
+		v_datagetter.push_back(new NKFileReader(inputfilename));
+	//else // if ( flag_online)
+	//	v_datagetter.push_back(new NKSharedMemory);
 
 	vector<DataGetter*>::iterator datagetter;
 	for (datagetter=v_datagetter.begin(); datagetter!=v_datagetter.end(); datagetter++)
@@ -200,7 +204,7 @@ int main(int argc, char *argv[])
 		{
 			if ( timesorter.GetNSorted())
 			{
-				fprintf(stdout,"emptying timesorter\n");
+				fprintf(stdout,"emptying timesorter. %lu\n",timesorter.GetNSorted());
 				usleep(refresh_rate);
 				continue;
 			}
