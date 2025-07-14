@@ -44,9 +44,11 @@ target_link_libraries(EvtStarkJr HitX6)
 add_library(Event SHARED src/Event.cxx inc/Event.h)
 target_link_libraries(Event EvtASGARD EvtStarkJr)
 #
-add_library(DataGetter SHARED src/DataGetter.cxx inc/DataGetter.h inc/Global.h)
-target_link_libraries(DataGetter NKSig)
+add_library(DataGetter SHARED src/DataGetter.cxx inc/DataGetter.h)
+target_link_libraries(DataGetter Sig)
 target_link_libraries(DataGetter TimeSorter)
+add_library(NKFileReader SHARED src/NKFileReader.cxx inc/NKFileReader.h)
+target_link_libraries(NKFileReader DataGetter NKSig)
 #
 add_library(TimeSorter SHARED src/TimeSorter.cxx inc/TimeSorter.h inc/Global.h)
 #target_link_libraries(TimeSorter SigAna)
@@ -74,7 +76,7 @@ add_library(Config SHARED src/Config.cxx inc/Config.h inc/Global.h)
 
 #---Create  a main program using the library
 add_executable(NKFADC_Unpacker Unpacker.cpp)
-target_link_libraries(NKFADC_Unpacker DataGetter Config TimeSorter EventProcessor TreeWriter HistServer HistServerUser)
+target_link_libraries(NKFADC_Unpacker DataGetter NKFileReader Config TimeSorter EventProcessor TreeWriter HistServer HistServerUser)
 target_link_libraries(NKFADC_Unpacker ${ROOT_LIBRARIES})
 
 

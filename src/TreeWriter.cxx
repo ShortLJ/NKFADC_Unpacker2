@@ -70,9 +70,9 @@ void TreeWriter::Stop()
 
 void TreeWriter::Enque(Event *evt)
 {
-	fmutex.lock();
+	//fmutex.lock();
 	q_event.push(*evt);
-	fmutex.unlock();
+	//fmutex.unlock();
 }
 
 

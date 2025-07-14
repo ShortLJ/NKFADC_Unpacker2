@@ -27,7 +27,7 @@ class Sig
 #endif //WAVEFORM
 
 		Sig() {	}
-		//Sig(uint8_t *data);
+		Sig(uint8_t *data){	};
 		~Sig() {	}
 
 	public: 

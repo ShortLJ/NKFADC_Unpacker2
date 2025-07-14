@@ -25,9 +25,11 @@ void EventProcessor::Run()
 				usleep (100000);
 				continue;
 			}
+			//timesorter->fmutex_output.unlock();
 		}
 		fmutex.unlock();
 
+		//timesorter->fmutex_output.lock();
 		if ( timesorter->GetNSorted()==0) 
 		{
 			timesorter->fmutex_output.unlock();

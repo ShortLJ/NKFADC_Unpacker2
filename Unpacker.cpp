@@ -12,6 +12,7 @@ using namespace std;
 //#include "Global.h"
 #include "Config.h"
 #include "DataGetter.h"
+#include "NKFileReader.h"
 #include "TimeSorter.h"
 #include "EventProcessor.h"
 #include "HistServer.h"
@@ -128,7 +129,10 @@ int main(int argc, char *argv[])
 	thread thread_timesorter(&TimeSorter::Run, &timesorter);
 
 	vector<DataGetter*> v_datagetter;
-	v_datagetter.push_back(new DataGetter());
+	if (!flag_online) 
+		v_datagetter.push_back(new NKFileReader(inputfilename));
+	//else // if ( flag_online)
+	//	v_datagetter.push_back(new NKSharedMemory);
 
 	vector<DataGetter*>::iterator datagetter;
 	for (datagetter=v_datagetter.begin(); datagetter!=v_datagetter.end(); datagetter++)
@@ -152,11 +156,10 @@ int main(int argc, char *argv[])
 	eventprocessor.RegisterTreeWriter(&treewriter);
 #endif
 
-	fprintf(stdout,"before histserver init\n");
 	//HistServer histserver(8181);
 	HistServerUser histserver;
-	fprintf(stdout,"after histserver init\n");
 	histserver.SetHistFile(histfilename);
+	histserver.InitUser();
 	eventprocessor.RegisterHistServer(&histserver);
 	thread thread_eventprocessor(&EventProcessor::Run, &eventprocessor);
 	thread thread_histserver(&HistServer::Run, &histserver);
@@ -176,6 +179,7 @@ int main(int argc, char *argv[])
 		if ( flag_loop)
 		{
 			fprintf(stdout,"looping\n");
+			timesorter.fmutex_output.lock(); fprintf(stdout,"%lu\n",timesorter.GetNSorted()); timesorter.fmutex_output.unlock();
 			usleep(refresh_rate);
 			continue;
 		}
@@ -194,13 +198,14 @@ int main(int argc, char *argv[])
 
 			fprintf(stdout,"stopped readers\n");
 			flag_closing=1;
+			eventprocessor.Stop();
 			continue;
 		}
 		if ( flag_closing)
 		{
 			if ( timesorter.GetNSorted())
 			{
-				fprintf(stdout,"emptying timesorter\n");
+				fprintf(stdout,"emptying timesorter. %lu\n",timesorter.GetNSorted());
 				usleep(refresh_rate);
 				continue;
 			}
@@ -218,6 +223,7 @@ int main(int argc, char *argv[])
 				thread_treewriter.join();
 #endif
 				histserver.Write();
+				histserver.Close();
 #ifdef WriteTree
 				treewriter.Write();
 				treewriter.Close();
@@ -228,6 +234,8 @@ int main(int argc, char *argv[])
 		}
 
 	}
+	usleep(1000000);
+	fprintf(stdout,"close!\n");
 
 	return 0;
 

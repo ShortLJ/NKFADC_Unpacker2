@@ -28,7 +28,7 @@ class TreeWriter
 		void Enque(Event *evt);	
 		void Stop();
 
-		void Write(){ tree->Write(); }
+		void Write(){ outfile->cd(); tree->Write(); }
 		void Close(){ outfile->Close(); }
 
 	private:
