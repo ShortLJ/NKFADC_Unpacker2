@@ -19,7 +19,7 @@ HistServer::HistServer(uint16_t portnumber=0)
 HistServer::~HistServer()
 {
 	vector<TObject*>::iterator it_histo;
-	for (it_histo=v_histograms.begin(); it_histo!=v_histograms.end(); it_histo++)
+	if (flag_httpServer) for (it_histo=v_histograms.begin(); it_histo!=v_histograms.end(); it_histo++)
 	{
 		srv_http->Unregister(*it_histo);
 		delete *it_histo;
@@ -92,9 +92,9 @@ void HistServer::Stop()
 
 void HistServer::Enque(Event *evt)
 {
-	fmutex.lock();
+	//fmutex.lock();
 	q_event.push(*evt);
-	fmutex.unlock();
+	//fmutex.unlock();
 }
 
 TH1I* HistServer::MakeH1(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup)

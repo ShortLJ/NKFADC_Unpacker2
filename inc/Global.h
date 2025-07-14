@@ -4,7 +4,7 @@
 #define __GLOBAL__
 
 //#define WAVEFORM 1
-#define NBUFF_SORTER 10000
+#define NBUFF_SORTER 1000
 
 
 

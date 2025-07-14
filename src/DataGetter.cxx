@@ -15,7 +15,7 @@ DataGetter::~DataGetter()
 int DataGetter::ProcessPacket(uint8_t *packet)
 {
 	uint8_t *tmp = packet;
-	fprintf(stdout,"packet_size %d\n",packet_size);
+	//fprintf(stdout,"packet_size %d\n",packet_size);
 
 	while(tmp<packet+packet_size)
 	{

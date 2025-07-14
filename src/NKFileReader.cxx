@@ -1,11 +1,20 @@
 
+//#define SMALL_FILE 1
+
 #include "NKFileReader.h"
+
+NKFileReader::~NKFileReader()
+{
+	if (fp) fclose(fp);
+}
 
 uint8_t* NKFileReader::GetNextPacket()
 {
-	if (data_read>=file_size)
+	if (data_read+8192>file_size)
+	//if (data_read>=file_size)
 	{
-		fprintf(stdout, "data_read >= file_size (reached file end)\n");
+		fprintf(stdout, "data_read+8192>file_size (reached file end). %d MB abandoned.\n", file_size-data_read);
+		//fprintf(stdout, "data_read >= file_size (reached file end)\n");
 		localEnd=1;
 		it_input++;
 	}
@@ -33,7 +42,7 @@ uint8_t* NKFileReader::GetNextPacket()
 	packet_size= fread(NKPacket, 1, 8192, fp);
 	data_read += packet_size;
 
-	//if ((data_read & 0xff)==0)
+	if ((data_read & 0xfffff)==0)
 	{
 		fprintf(stdout, "\rdata_read to= %d/%d\t", data_read, file_size);
 		fprintf(stdout,"sig_processed %d", sig_processed);
@@ -120,6 +129,10 @@ int NKFileReader::InitFile(vector<string>::iterator iter)
 	fseek(fp, 0L, SEEK_END);
 	file_size = ftell(fp);
 	fprintf(stdout, "Opened input File: \"%s\" (%d Bytes)\n",iter->c_str(), file_size);
+#ifdef SMALL_FILE
+	fprintf(stderr,"\n\n\n File size set to be small\n\n\n");
+	file_size = file_size /16;
+#endif //SMALL_FILE
 
 	if (file_size<0)
 	{

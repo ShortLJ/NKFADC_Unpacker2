@@ -56,6 +56,7 @@ void TimeSorter::Run()
 		fmutex_input.lock();
 		if (!q_sig_input.empty())
 		{
+			//fprintf(stdout,"if (!q_sig_input.empty())\n");
 			Sig sig_tmp = q_sig_input.front();
 			q_sig_input.pop();
 			fmutex_input.unlock();
@@ -65,13 +66,16 @@ void TimeSorter::Run()
 		}
 		else //if ( q_sig_input.empty())
 		{
+			//fprintf(stdout,"else //if ( q_sig_input.empty())\n");
 			if ( sorterEnd)
 			{
+				//fprintf(stdout,"if ( sorterEnd)\n");
 				fmutex_input.unlock();
 				break;
 			}
 			else //if (!sorterEnd)
 			{
+				//fprintf(stdout,"else //if (!sorterEnd)\n");
 				fmutex_input.unlock();
 				usleep(100000);
 			}
@@ -90,7 +94,6 @@ void TimeSorter::Stop()
 
 uint64_t TimeSorter::GetMinLGT()
 {
-	fprintf(stdout,"is it called somewhere?\n");
 	uint64_t ret=-1; /// uint64_t max
 	for (isid=0; isid<Nsid; isid++) for (ibrd=0; ibrd<Nbrd; ibrd++) for (icha=0; icha<Ncha; icha++) if (!Empty(isid,ibrd,icha))
 	{
