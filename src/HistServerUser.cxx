@@ -51,17 +51,13 @@ void HistServerUser::ProcessToHistUser()
 
 	for (iClover=evtASGARD->vHitClover.begin(); iClover!=evtASGARD->vHitClover.end(); iClover++)
 	{
-	fprintf(stdout,"debug1\n");
 		for (iCrystal=iClover->vHitCrystal.begin(); iCrystal!=iClover->vHitCrystal.end(); iCrystal++)
 		{
-	fprintf(stdout,"debug2\n");
 			for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++)
 			{
-	fprintf(stdout,"debug3\n");
 				///h1_ADC_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->ADC);
 				h2_ADC_cha->Fill(iFV->cha + 32*(iFV->brd + 10*iFV->sid), iFV->ADC);
 				h2_Energy_cha->Fill(iFV->cha + 32*(iFV->brd + 10*iFV->sid), iFV->Energy);
-				fprintf(stdout,"%u %u %u : %u\n",iFV->sid, iFV->brd, iFV->cha, iFV->ADC);
 			}
 			for (iSeg=iCrystal->vSigAnaSeg.begin(); iSeg!=iCrystal->vSigAnaSeg.end(); iSeg++)
 			{

@@ -48,6 +48,7 @@ void Config::ReadDetMapFile(string filename)
 					map_type	[isid][ibrd][icha] = itype;
 					map_det		[isid][ibrd][icha] = idet;
 					map_idx		[isid][ibrd][icha] = iidx++;
+		fprintf(stdout,"%u %u %u / type %u det %u idx %u\n",isid,ibrd,icha, map_type[isid][ibrd][icha],map_det[isid][ibrd][icha],map_idx[isid][ibrd][icha]);
 				}
 				break;
 			}
@@ -67,6 +68,7 @@ void Config::ReadDetMapFile(string filename)
 			}
 		}
 	}
+
 }
 
 void Config::InitializeGlobalVariables()

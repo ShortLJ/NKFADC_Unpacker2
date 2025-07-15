@@ -38,6 +38,7 @@ void EventProcessor::Run()
 		uint64_t ref_lgt = timesorter->GetMinLGT();
 		//uint64_t ref_lgt = timesorter->GetLGT(sid,brd,cha);
 		vector<Sig> v_sig = timesorter->GetCoinvSig(ref_lgt); /// potential error
+		//fprintf(stdout,"v_sig.size()=%ld\n",v_sig.size());
 		timesorter->fmutex_output.unlock();
 
 		Event event = ProcessEvent(v_sig);
@@ -74,6 +75,7 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 	vector<Sig>::iterator it_sig;
 	for (it_sig=v_sig.begin(); it_sig!=v_sig.end(); it_sig++)
 	{
+		//it_sig->PrintSummary();
 		uint8_t isid = (*it_sig).sid;
 		uint8_t ibrd = (*it_sig).brd;
 		uint8_t icha = (*it_sig).cha;
