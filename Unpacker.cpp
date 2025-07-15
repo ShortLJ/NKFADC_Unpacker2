@@ -121,8 +121,8 @@ int main(int argc, char *argv[])
 
 
 
-	Config config;
-	config.ReadDetMapFile(configdir);
+	Config config(configdir);
+	config.ReadDetMapFile();
 
 	TimeSorter timesorter; /// queue
 	timesorter.SetTimeWindow(timewindow);
