@@ -156,8 +156,8 @@ int main(int argc, char *argv[])
 	eventprocessor.RegisterTreeWriter(&treewriter);
 #endif
 
-	//HistServer histserver(8181);
-	HistServerUser histserver;
+	HistServerUser histserver("http:127.0.0.1:8181");
+	//HistServerUser histserver;
 	histserver.SetHistFile(histfilename);
 	histserver.InitUser();
 	eventprocessor.RegisterHistServer(&histserver);

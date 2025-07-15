@@ -20,7 +20,7 @@ Config::~Config()
 
 void Config::ReadDetMapFile(string filename)
 {
-	string fullpath = configdir+filename;
+	string fullpath = configdir+"/"+filename;
 	fprintf(stdout, "Detector Map file: %s\n",fullpath.c_str());
 
 	FILE *fr;
