@@ -16,7 +16,8 @@
 class HistServerUser : public HistServer
 {
 	public:
-		HistServerUser();
+		//HistServerUser();
+		HistServerUser(string opt_http="");
 		~HistServerUser();
 
 		void InitUser();

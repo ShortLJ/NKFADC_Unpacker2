@@ -7,23 +7,26 @@ HistServer::HistServer()
 	fprintf(stdout,"HistServer::HistServer()\n");
 }
 
-HistServer::HistServer(uint16_t portnumber=0)
-	: PortNumber(portnumber)
+HistServer::HistServer(string opt_)
+	: opt_http(opt_)
 {
-	fprintf(stderr,"HistServer::HistServer(uint16_t portnumber)\n");
-	if (portnumber)	flag_httpServer=1;
-	else flag_httpServer=0;
+	fprintf(stderr,"HistServer::HistServer(%s)\n",opt_.c_str());
+	if (opt_http=="")
+	{
+		flag_httpServer=0;
+	}
+	else
+	{
+		flag_httpServer=1;
+		fprintf(stdout,"THttpServer : %s\n",opt_http.c_str());
+		srv_http = new THttpServer(opt_http.c_str());
+	}
+
 
 }
 
 HistServer::~HistServer()
 {
-	vector<TObject*>::iterator it_histo;
-	if (flag_httpServer) for (it_histo=v_histograms.begin(); it_histo!=v_histograms.end(); it_histo++)
-	{
-		srv_http->Unregister(*it_histo);
-		delete *it_histo;
-	}
 }
 
 
@@ -44,16 +47,6 @@ void HistServer::InitFile()
 		outfile = new TFile(OutputFileName.c_str(),"recreate");
 	}
 }
-void HistServer::InitHttp()
-{
-	if ( flag_httpServer)
-	{
-		//// TODO : make ROOT http server
-		fprintf(stderr,"\nhttp server not implemented yet\nWork! Labor! Jaehwan!\n");
-		flag_httpServer=0;
-	}
-}
-
 void HistServer::Run()
 {
 	histerEnd=0;
@@ -81,6 +74,7 @@ void HistServer::Run()
 		fmutex.unlock();
 
 		ProcessToHistUser();
+		if (flag_httpServer) srv_http->ProcessRequests();
 	}
 }
 void HistServer::Stop()
@@ -128,4 +122,14 @@ void HistServer::Write()
 
 }
 
+void HistServer::Close()
+{
+	vector<TObject*>::iterator it_histo;
+	if (flag_httpServer) for (it_histo=v_histograms.begin(); it_histo!=v_histograms.end(); it_histo++)
+	{
+		srv_http->Unregister(*it_histo);
+		//delete *it_histo;
+	}
+	outfile->Close();
+}
 

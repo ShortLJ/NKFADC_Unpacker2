@@ -19,7 +19,7 @@ class HistServer
 {
 	public:
 		HistServer();
-		HistServer(uint16_t portnumber);
+		HistServer(string opt_http="");
 		~HistServer();
 
 		void SetHistFile(string filename){ OutputFileName=filename; flag_histfile=1;}
@@ -30,14 +30,14 @@ class HistServer
 		void Stop();
 
 		void Write();
-		void Close(){ outfile->Close(); }
+		void Close();
 
 		virtual void ProcessToHistUser()=0;
 		virtual void InitUser()=0;
 
 	protected: // shall be called in InitUser();
 		void InitFile();
-		void InitHttp();
+		//void InitHttp();
 		TH1I* MakeH1(const char *name, const char *title, int nbinsx, double xlow, double xup);
 		TH2I* MakeH2(const char *name, const char *title, int nbinsx, double xlow, double xup, int nbinsy, double ylow, double yup);
 		Event event;
@@ -49,7 +49,7 @@ class HistServer
 		bool flag_histfile=0;
 		TFile *outfile=0;
 
-		uint16_t PortNumber;
+		string opt_http=0;
 		bool flag_httpServer=0;
 		THttpServer *srv_http;
 

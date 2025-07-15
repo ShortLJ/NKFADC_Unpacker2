@@ -1,9 +1,13 @@
 
 #include "HistServerUser.h"
 
-HistServerUser::HistServerUser()
+//HistServerUser::HistServerUser()
+//{
+//}
+HistServerUser::HistServerUser(string opt_)
+	: HistServer(opt_)
 {
-	fprintf(stdout,"HistServerUser::HistServerUser()\n");
+	fprintf(stdout,"HistServerUser::HistServerUser(%s)\n",opt_.c_str());
 }
 
 HistServerUser::~HistServerUser()
@@ -13,7 +17,7 @@ HistServerUser::~HistServerUser()
 void HistServerUser::InitUser()
 {
 	InitFile();
-	InitHttp();
+	//InitHttp();
 
 ///////////// User Area top /////////////////
 
