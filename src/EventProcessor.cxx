@@ -85,11 +85,14 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 
 		v_sigana_sort[itype][idet].push_back(SigAna(itype,idet,iidx,*it_sig));
 	}
+	////////// Simple //////////
+	evt.Simple = EvtSimple(v_sigana_sort[0]);
+
 	////////// ASGARD //////////
 	vector<HitCrystal> v_hit_crystal;
 	for (uint8_t idet=0; idet<Ndet; idet++)
 	{
-		if (v_sigana_sort[0][idet].size()+v_sigana_sort[1][idet].size()>0)
+		if (v_sigana_sort[1][idet].size()+v_sigana_sort[2][idet].size()>0)
 		{
 			uint8_t iclover = idet >> 2; 
 			uint8_t icrystal = idet & 0x3;
@@ -101,7 +104,7 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 	vector<HitX6> v_hit_x6;
 	for (uint8_t idet=0; idet<Ndet; idet++)
 	{
-		if (v_sigana_sort[2][idet].size()+v_sigana_sort[3][idet].size()+v_sigana_sort[4][idet].size()>0)
+		if (v_sigana_sort[3][idet].size()+v_sigana_sort[4][idet].size()+v_sigana_sort[5][idet].size()>0)
 		{
 			v_hit_x6.push_back(HitX6(idet,v_sigana_sort[2][idet],v_sigana_sort[3][idet],v_sigana_sort[4][idet]));
 		}

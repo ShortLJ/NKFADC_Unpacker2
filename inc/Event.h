@@ -1,5 +1,6 @@
 
 
+#include "EvtSimple.h"
 #include "EvtASGARD.h"
 #include "EvtStarkJr.h"
 
@@ -12,6 +13,7 @@ class Event
 		Event();
 		~Event();
 
+		EvtSimple Simple;
 		EvtASGARD ASGARD;
 		EvtStarkJr StarkJr;
 

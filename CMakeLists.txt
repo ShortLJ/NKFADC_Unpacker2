@@ -29,6 +29,9 @@ target_link_libraries(SigAna Sig)
 add_library(Hit SHARED src/Hit.cxx inc/Hit.h)
 target_link_libraries(Hit SigAna)
 
+add_library(EvtSimple SHARED src/EvtSimple.cxx inc/EvtSimple.h)
+target_link_libraries(EvtSimple SigAna)
+
 add_library(HitCrystal SHARED src/HitCrystal.cxx inc/HitCrystal.h)
 target_link_libraries(HitCrystal Hit)
 add_library(HitClover SHARED src/HitClover.cxx inc/HitClover.h)
@@ -42,7 +45,7 @@ add_library(EvtStarkJr SHARED src/EvtStarkJr.cxx inc/EvtStarkJr.h)
 target_link_libraries(EvtStarkJr HitX6)
 #
 add_library(Event SHARED src/Event.cxx inc/Event.h)
-target_link_libraries(Event EvtASGARD EvtStarkJr)
+target_link_libraries(Event EvtSimple EvtASGARD EvtStarkJr)
 #
 add_library(DataGetter SHARED src/DataGetter.cxx inc/DataGetter.h)
 target_link_libraries(DataGetter Sig)

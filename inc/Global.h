@@ -30,7 +30,10 @@
 /// global static variables defined in Config.h
 #include <stdint.h>
 
-#define Ntype 5
+#define Ntype 6
+// 0: simple
+// 1,2: ASGARD FV, Seg
+// 3,4,5: StarkJr pad,strp U,D
 #define Ndet 48
 extern uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 extern uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
