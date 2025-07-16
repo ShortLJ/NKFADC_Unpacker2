@@ -52,6 +52,7 @@ class HistServer
 		string opt_http=0;
 		bool flag_httpServer=0;
 		THttpServer *srv_http;
+		bool FolderParser(const char *name, string &obj, string &folder);
 
 		queue<Event> q_event;
 

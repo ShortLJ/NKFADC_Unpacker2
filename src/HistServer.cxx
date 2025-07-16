@@ -91,19 +91,51 @@ void HistServer::Enque(Event *evt)
 	//fmutex.unlock();
 }
 
+bool HistServer::FolderParser(const char *fullname, string &objectname, string &foldername)
+{
+	if (!fullname || (strlen(fullname)==0))
+	{
+		return false;
+	}
+	const char *separ = strrchr(fullname,'/');
+	if ( separ)
+	{
+		objectname = separ + 1;
+		foldername.append(fullname, separ - fullname);
+	}
+	else // (!separ)
+	{
+		objectname = fullname;
+	}
+	return true;
+}
+
 TH1I* HistServer::MakeH1(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup)
 {
-	TH1I *ret = new TH1I(name,title, nbinsx,xlow,xup);
-	if (flag_httpServer) srv_http->Register(/*SUBFOLDER*/"test", ret); // TODO: How to manage SUBFOLDER? 
-	v_histograms.push_back(ret);
-	return ret;
+	string foldername, objectname;
+	if (!FolderParser(name, objectname, foldername))
+	{
+		fprintf(stderr,"TH1 name must be specified!\nname %s\ntitle %s\n",name,title);
+		exit(-61);
+	}
+	TH1I *h1 = new TH1I(name,title, nbinsx,xlow,xup);
+	if (flag_httpServer) srv_http->Register(foldername.c_str(), h1);
+	v_histograms.push_back(h1);
+	return h1;
 }
+
 TH2I* HistServer::MakeH2(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup)
 {
-	TH2I *ret = new TH2I(name,title, nbinsx,xlow,xup, nbinsy,ylow,yup);
-	if (flag_httpServer) srv_http->Register(/*SUBFOLDER*/"test", ret); // TODO: How to manage SUBFOLDER? 
-	v_histograms.push_back(ret);
-	return ret;
+	string foldername, objectname;
+	if (!FolderParser(name, objectname, foldername))
+	{
+		fprintf(stderr,"TH2 name must be specified!\nname %s\ntitle %s\n",name,title);
+		exit(-61);
+	}
+	TH2I *h2 = new TH2I(name,title, nbinsx,xlow,xup, nbinsy,ylow,yup);
+	if (flag_httpServer) srv_http->Register(foldername.c_str(), h2); 
+	v_histograms.push_back(h2);
+	return h2;
 }
 
 void HistServer::Write()
