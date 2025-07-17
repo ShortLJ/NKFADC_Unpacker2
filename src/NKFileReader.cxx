@@ -44,9 +44,11 @@ uint8_t* NKFileReader::GetNextPacket()
 
 	if ((data_read & 0xfffff)==0)
 	{
-		fprintf(stdout, "\rdata_read to= %d/%d\t", data_read, file_size);
+		fprintf(stdout, "\r");
+		fprintf(stdout, "data_read to= %d/%d\t", data_read, file_size);
 		fprintf(stdout,"sig_processed %d", sig_processed);
 		fprintf(stdout,"packet_size %d",packet_size);
+		//fprintf(stdout, "\n");
 		fflush(stdout);
 	}
 
@@ -62,6 +64,7 @@ int NKFileReader::Interpret(uint8_t *&tmp, Sig &sig)
 	{
 		case 0x20:
 		{
+			//fprintf(stdout, "data_type %u: ADC data\n",data_type);
 			NKSig nksig(tmp);
 			//nksig.Print();
 			data_length = 32;
@@ -71,16 +74,17 @@ int NKFileReader::Interpret(uint8_t *&tmp, Sig &sig)
 		}
 		case 0x40:
 		{
-			fprintf(stdout, "data_type %u: TCB data\n",data_type);
+			//fprintf(stdout, "data_type %u: TCB data\n",data_type);
 			data_length = 64;
 			ret = 2;
 			break;
 		}
 		default:
 		{
-			fprintf(stderr, "data_type %u: unknown\n",data_type);
+			fprintf(stderr, "NKFileReader::Interpret : data_type %u: unknown\n",data_type);
 			data_length = packet_size;
 			ret = -1;
+			exit(-61);
 			break;
 		}
 	}

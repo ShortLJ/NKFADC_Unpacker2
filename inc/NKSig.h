@@ -39,6 +39,7 @@ class NKSig : public Sig
 		//uint8_t sid;
 		//uint8_t mid;
 		//uint8_t cha;
+		bool ADC_type;
 
 		uint32_t local_trigger_pattern;
 		uint32_t local_trigger_number;
