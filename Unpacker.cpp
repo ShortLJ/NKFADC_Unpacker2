@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
 	eventprocessor.RegisterTreeWriter(&treewriter);
 #endif
 
-	HistServerUser histserver("http:127.0.0.1:8181");
+	HistServerUser histserver("http:127.0.0.1:8181?thrds=2");
 	//HistServerUser histserver;
 	histserver.SetHistFile(histfilename);
 	histserver.InitUser();
@@ -175,7 +175,10 @@ int main(int argc, char *argv[])
 	while (1)
 	{
 		signal(SIGINT,sig_handler);
-		if ( flag_force_quit) exit(0);
+		if ( flag_force_quit)
+		{
+			break;
+		}
 		if ( flag_loop)
 		{
 			fprintf(stdout,"looping\n");
