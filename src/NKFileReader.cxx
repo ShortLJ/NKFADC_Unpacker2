@@ -52,7 +52,7 @@ uint8_t* NKFileReader::GetNextPacket()
 
 	return NKPacket;
 }
-Sig NKFileReader::Interpret(uint8_t *&tmp)
+int NKFileReader::Interpret(uint8_t *&tmp, Sig &sig)
 {
 	uint8_t data_length = tmp[0] & 0xFF;
 	if (data_length != 32)
@@ -63,7 +63,8 @@ Sig NKFileReader::Interpret(uint8_t *&tmp)
 	NKSig nksig(tmp);
 	//nksig.Print();
 	tmp += data_length;
-	return nksig.GetSig();
+	sig = nksig.GetSig();
+	return 1;
 }
 
 NKFileReader::NKFileReader(string input)

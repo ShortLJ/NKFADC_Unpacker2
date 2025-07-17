@@ -24,20 +24,7 @@ class DataGetter
 
 	protected:
         virtual uint8_t *GetNextPacket() = 0;
-		//{
-		//	fprintf(stdout,"GetNextPacket(): ");
-		//	fprintf(stdout,"not implemented yet. 1 second sleep\n"); 
-		//	packet_size=0;
-		//	return 0;	// packet size?
-		//}
-		virtual Sig Interpret(uint8_t *&tmp) = 0;
-		//{
-		//	fprintf(stderr, "DataGetter::Interpret(uint8_t *&tmp) is virtual only.\n");
-		//	uint8_t data_length = tmp[0] & 0xFF;
-		//	Sig ret(tmp);
-		//	tmp += data_length;
-		//	return ret;
-		//}
+		virtual int Interpret(uint8_t *&tmp, Sig &sig) = 0;
 		int packet_size; // byte - uint8_t 
 
 		mutex fmutex;

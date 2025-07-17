@@ -19,11 +19,14 @@ int DataGetter::ProcessPacket(uint8_t *packet)
 
 	while(tmp<packet+packet_size)
 	{
-		Sig sig_tmp = Interpret(tmp);
-		timesorter->fmutex_input.lock();
-		timesorter->Push(sig_tmp);
-		timesorter->fmutex_input.unlock();
-		sig_processed++;
+		Sig sig_tmp;
+		if ( Interpret(tmp,sig_tmp))
+		{
+			timesorter->fmutex_input.lock();
+			timesorter->Push(sig_tmp);
+			timesorter->fmutex_input.unlock();
+			sig_processed++;
+		}
 	}
 	return sig_processed;
 }

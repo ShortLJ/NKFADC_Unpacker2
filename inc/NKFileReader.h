@@ -10,7 +10,7 @@ class NKFileReader : public DataGetter
 {
 	public:
 		uint8_t *GetNextPacket() override;
-		Sig Interpret(uint8_t *&tmp) override;
+		int Interpret(uint8_t *&tmp, Sig &sig) override;
 
 	public:
 		NKFileReader(string input);
