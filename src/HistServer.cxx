@@ -27,6 +27,8 @@ HistServer::HistServer(string opt_)
 
 HistServer::~HistServer()
 {
+	srv_http->SetTerminate();
+	delete srv_http;
 }
 
 
@@ -110,6 +112,23 @@ bool HistServer::FolderParser(const char *fullname, string &objectname, string &
 	return true;
 }
 
+TH1I* HistServer::MakeH1(const char *foldername, const char *objname, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup)
+{
+	TH1I *h1 = new TH1I(objname,title, nbinsx,xlow,xup);
+	if ( flag_histfile)
+	{
+		if (!outfile->GetDirectory(foldername))
+		{
+			outfile->mkdir(foldername,"",true);
+		}
+		h1->SetDirectory(outfile->GetDirectory(foldername));
+		fprintf(stdout, "folder %s obj %s\n",foldername, objname);
+	}
+	if (flag_httpServer) srv_http->Register(foldername, h1);
+	v_histograms.push_back(h1);
+	return h1;
+}
+
 TH1I* HistServer::MakeH1(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup)
 {
 	string foldername, objectname;
@@ -118,12 +137,25 @@ TH1I* HistServer::MakeH1(const char *name, const char *title, Int_t nbinsx, Doub
 		fprintf(stderr,"TH1 name must be specified!\nname %s\ntitle %s\n",name,title);
 		exit(-61);
 	}
-	TH1I *h1 = new TH1I(name,title, nbinsx,xlow,xup);
-	if (flag_httpServer) srv_http->Register(foldername.c_str(), h1);
-	v_histograms.push_back(h1);
-	return h1;
+	return MakeH1(foldername.c_str(), objectname.c_str(), title, nbinsx,xlow,xup);
 }
 
+TH2I* HistServer::MakeH2(const char *foldername, const char *objname, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup)
+{
+	TH2I *h2 = new TH2I(objname,title, nbinsx,xlow,xup, nbinsy,ylow,yup);
+	if ( flag_histfile)
+	{
+		if (!outfile->GetDirectory(foldername))
+		{
+			outfile->mkdir(foldername,"",true);
+		}
+		h2->SetDirectory(outfile->GetDirectory(foldername));
+	}
+	if (flag_httpServer) srv_http->Register(foldername, h2);
+	v_histograms.push_back(h2);
+	return h2;
+
+}
 TH2I* HistServer::MakeH2(const char *name, const char *title, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup)
 {
 	string foldername, objectname;
@@ -132,10 +164,7 @@ TH2I* HistServer::MakeH2(const char *name, const char *title, Int_t nbinsx, Doub
 		fprintf(stderr,"TH2 name must be specified!\nname %s\ntitle %s\n",name,title);
 		exit(-61);
 	}
-	TH2I *h2 = new TH2I(name,title, nbinsx,xlow,xup, nbinsy,ylow,yup);
-	if (flag_httpServer) srv_http->Register(foldername.c_str(), h2); 
-	v_histograms.push_back(h2);
-	return h2;
+	return MakeH2(foldername.c_str(), objectname.c_str(), title, nbinsx,xlow,xup, nbinsy,ylow,yup);
 }
 
 void HistServer::Write()
@@ -145,12 +174,13 @@ void HistServer::Write()
 		fprintf(stdout,"Histogram file is not open\n");
 		return;
 	}
-	outfile->cd();
-	vector<TObject*>::iterator it;
-	for (it=v_histograms.begin(); it!=v_histograms.end(); it++)
-	{
-		(*it)->Write();
-	}
+	outfile->Write();
+	//outfile->cd();
+	//vector<TObject*>::iterator it;
+	//for (it=v_histograms.begin(); it!=v_histograms.end(); it++)
+	//{
+	//	(*it)->Write();
+	//}
 
 }
 

@@ -26,17 +26,19 @@ void HistServerUser::InitUser()
 			for (int iseg=0; iseg<Nseg; iseg++)
 			{
 				h1_ADC_seg[iclov][icrys][iseg] = MakeH1(
-						Form("ADC/clov%02d/crys%d/seg%d",iclov,icrys,iseg),
+						Form("ADC/clov%02d/crys%d",iclov,icrys),
+						Form("ADC_clov%02d_crys%d_seg%d",iclov,icrys,iseg),
 						Form("ADC_clov%02d_crys%d_seg%d; ADC [A.U]; count",iclov,icrys,iseg),
 						1<<10,0.,double(1<<16) );
 				h1_Energy_seg[iclov][icrys][iseg] = MakeH1(
-						Form("Energy/clov%02d/crys%d/seg%d",iclov,icrys,iseg),
+						Form("Energy/clov%02d/crys%d",iclov,icrys),
+						Form("Energy_clov%02d_crys%d_seg%d",iclov,icrys,iseg),
 						Form("Energy_clov%02d_crys%d_seg%d; Energy [keV]; count",iclov,icrys,iseg),
 						1000,0,3000 );
 			}
 
-	h2_ADC_cha = MakeH2("ADC","ADC by channel; channel; ADC", Nsid*Nbrd*Ncha, 0,Nsid*Nbrd*Ncha, 1<<10,0,double(1<<16));
-	h2_Energy_cha = MakeH2("Energy","Energy by channel; channel; Energy", Nsid*Nbrd*Ncha, 0,Nsid*Nbrd*Ncha, 1000,0,3000);
+	h2_ADC_cha = MakeH2("ADC_cha","ADC by channel; channel; ADC", Nsid*Nbrd*Ncha, 0,Nsid*Nbrd*Ncha, 1<<10,0,double(1<<16));
+	h2_Energy_cha = MakeH2("Energy_cha","Energy by channel; channel; Energy", Nsid*Nbrd*Ncha, 0,Nsid*Nbrd*Ncha, 1000,0,3000);
 ///////////// User Area bottom  /////////////////
 }
 
