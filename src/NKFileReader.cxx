@@ -54,17 +54,38 @@ uint8_t* NKFileReader::GetNextPacket()
 }
 int NKFileReader::Interpret(uint8_t *&tmp, Sig &sig)
 {
-	uint8_t data_length = tmp[0] & 0xFF;
-	if (data_length != 32)
+	int ret;
+	uint8_t data_type = tmp[0] & 0xFF;
+	uint16_t data_length=0;
+
+	switch (data_type)
 	{
-		fprintf(stderr, "\ndata_length %u!=32\n",data_length);
-		exit(-99);
+		case 0x20:
+		{
+			NKSig nksig(tmp);
+			//nksig.Print();
+			data_length = 32;
+			sig = nksig.GetSig();
+			ret = 1;
+			break;
+		}
+		case 0x40:
+		{
+			fprintf(stdout, "data_type %u: TCB data\n",data_type);
+			data_length = 8192;
+			ret = 2;
+			break;
+		}
+		default:
+		{
+			fprintf(stderr, "data_type %u: unknown\n",data_type);
+			data_length = packet_size;
+			ret = -1;
+			break;
+		}
 	}
-	NKSig nksig(tmp);
-	//nksig.Print();
 	tmp += data_length;
-	sig = nksig.GetSig();
-	return 1;
+	return ret;
 }
 
 NKFileReader::NKFileReader(string input)

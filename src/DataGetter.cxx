@@ -20,7 +20,7 @@ int DataGetter::ProcessPacket(uint8_t *packet)
 	while(tmp<packet+packet_size)
 	{
 		Sig sig_tmp;
-		if ( Interpret(tmp,sig_tmp))
+		if ( Interpret(tmp,sig_tmp)==1)
 		{
 			timesorter->fmutex_input.lock();
 			timesorter->Push(sig_tmp);
