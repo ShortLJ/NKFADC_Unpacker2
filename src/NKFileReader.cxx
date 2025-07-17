@@ -72,7 +72,7 @@ int NKFileReader::Interpret(uint8_t *&tmp, Sig &sig)
 		case 0x40:
 		{
 			fprintf(stdout, "data_type %u: TCB data\n",data_type);
-			data_length = 8192;
+			data_length = 64;
 			ret = 2;
 			break;
 		}
