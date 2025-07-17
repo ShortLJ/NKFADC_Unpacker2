@@ -122,7 +122,6 @@ TH1I* HistServer::MakeH1(const char *foldername, const char *objname, const char
 			outfile->mkdir(foldername,"",true);
 		}
 		h1->SetDirectory(outfile->GetDirectory(foldername));
-		fprintf(stdout, "folder %s obj %s\n",foldername, objname);
 	}
 	if (flag_httpServer) srv_http->Register(foldername, h1);
 	v_histograms.push_back(h1);
