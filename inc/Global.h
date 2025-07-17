@@ -21,7 +21,7 @@
 #define N_CHA 32 // 0~9 cha mask 0xFF but NKFADC10 has 10 mcx inputs
 
 //// used
-#define Nsid 1
+#define Nsid 4
 #define Nbrd 10
 #define Ncha 32
 
