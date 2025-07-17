@@ -46,6 +46,17 @@ void HistServerUser::ProcessToHistUser()
 {
 
 ///////////// User Area top /////////////////
+	EvtSimple *evtSimple = &(event.Simple);
+	vector<SigAna>::iterator iSig, jSig;
+	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
+	{
+		h2_ADC_cha->Fill(iSig->cha + Ncha*(iSig->brd + Nbrd*iSig->sid), iSig->ADC);
+	}
+
+
+
+
+
 	EvtASGARD *evtASGARD = &(event.ASGARD);
 	vector<HitClover>::iterator iClover, jClover;
 	vector<HitCrystal>::iterator iCrystal, jCrystal;
@@ -58,8 +69,8 @@ void HistServerUser::ProcessToHistUser()
 			for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++)
 			{
 				///h1_ADC_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->ADC);
-				h2_ADC_cha->Fill(iFV->cha + 32*(iFV->brd + 10*iFV->sid), iFV->ADC);
-				h2_Energy_cha->Fill(iFV->cha + 32*(iFV->brd + 10*iFV->sid), iFV->Energy);
+				//h2_ADC_cha->Fill(iFV->cha + Ncha*(iFV->brd + Nbrd*iFV->sid), iFV->ADC);
+				h2_Energy_cha->Fill(iFV->cha + Ncha*(iFV->brd + Nbrd*iFV->sid), iFV->Energy);
 			}
 			for (iSeg=iCrystal->vSigAnaSeg.begin(); iSeg!=iCrystal->vSigAnaSeg.end(); iSeg++)
 			{
