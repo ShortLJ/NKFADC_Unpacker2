@@ -13,6 +13,7 @@ using namespace std;
 #include "Config.h"
 #include "DataGetter.h"
 #include "NKFileReader.h"
+#include "NKMessageQueue.h"
 #include "TimeSorter.h"
 #include "EventProcessor.h"
 #include "HistServer.h"
@@ -129,6 +130,8 @@ int main(int argc, char *argv[])
 	thread thread_timesorter(&TimeSorter::Run, &timesorter);
 
 	vector<DataGetter*> v_datagetter;
+	if ( flag_online) 
+		v_datagetter.push_back(new NKMessageQueue("/MQ_ASGARD"));
 	if (!flag_online) 
 		v_datagetter.push_back(new NKFileReader(inputfilename));
 	//else // if ( flag_online)
