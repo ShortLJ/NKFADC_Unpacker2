@@ -52,6 +52,8 @@ target_link_libraries(DataGetter Sig)
 target_link_libraries(DataGetter TimeSorter)
 add_library(NKFileReader SHARED src/NKFileReader.cxx inc/NKFileReader.h)
 target_link_libraries(NKFileReader DataGetter NKSig)
+add_library(NKMessageQueue SHARED src/NKMessageQueue.cxx inc/NKMessageQueue.h)
+target_link_libraries(NKMessageQueue DataGetter NKSig)
 #
 add_library(TimeSorter SHARED src/TimeSorter.cxx inc/TimeSorter.h inc/Global.h)
 #target_link_libraries(TimeSorter SigAna)
@@ -79,7 +81,7 @@ add_library(Config SHARED src/Config.cxx inc/Config.h inc/Global.h)
 
 #---Create  a main program using the library
 add_executable(NKFADC_Unpacker Unpacker.cpp)
-target_link_libraries(NKFADC_Unpacker DataGetter NKFileReader Config TimeSorter EventProcessor TreeWriter HistServer HistServerUser)
+target_link_libraries(NKFADC_Unpacker DataGetter NKFileReader NKMessageQueue Config TimeSorter EventProcessor TreeWriter HistServer HistServerUser)
 target_link_libraries(NKFADC_Unpacker ${ROOT_LIBRARIES})
 
 
