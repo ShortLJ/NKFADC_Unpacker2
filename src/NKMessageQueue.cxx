@@ -10,10 +10,17 @@ NKMessageQueue::~NKMessageQueue()
 
 uint8_t* NKMessageQueue::GetNextPacket()
 {
-	packet_size = mq_receive(msgq, (char*)&NKPacket, atr.mq_msgsize,NULL);
+	clock_gettime(CLOCK_REALTIME,&timeout);
+	timeout.tv_sec += 1;
+	packet_size = mq_timedreceive(msgq, (char*)&NKPacket, atr.mq_msgsize,NULL,&timeout);
 	if (packet_size==-1)
 	{
 		perror("mq_receive error:");
+		fprintf(stdout,"%jd %09ld\n", timeout.tv_sec, timeout.tv_nsec);
+	}
+	else
+	{
+		//fprintf(stdout,"received %d bytes\n", packet_size);
 	}
 	return NKPacket;
 }

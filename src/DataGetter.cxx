@@ -43,7 +43,8 @@ void DataGetter::Loop()
 		fmutex.unlock();
 		uint8_t *packet = GetNextPacket();
 		if (packet_size>0) ProcessPacket(packet);
-		else usleep(1000000); // 1000 us = 1 ms
+		else usleep(1000); // 1000 us = 1 ms
+		//else usleep(1000000); // 1000 us = 1 ms
 		//usleep(10000);
 	}
 	fmutex.unlock();

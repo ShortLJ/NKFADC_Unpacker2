@@ -7,6 +7,7 @@
 
 #include <fcntl.h>
 #include <mqueue.h>
+#include <time.h>
 
 #include "NKSig.h"
 
@@ -23,7 +24,7 @@ class NKMessageQueue : public DataGetter
 		string mq_name;
 		mq_attr atr;
 		mqd_t msgq;
-
+		struct timespec timeout;
 
 		uint8_t NKPacket[16384];
 
