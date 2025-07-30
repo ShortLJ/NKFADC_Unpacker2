@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
 
 	fprintf(stdout,"Start while loop\n");
 
-	constexpr useconds_t refresh_rate = 5000000;
+	constexpr useconds_t refresh_rate = 1000000;
 
 	while (1)
 	{
