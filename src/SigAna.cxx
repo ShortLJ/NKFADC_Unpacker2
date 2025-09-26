@@ -29,4 +29,17 @@ bool SigAna::isValid()
 void SigAna::ProcessSigAna()
 {
 	// Ecal, etc
+	if (type==3) // pad
+	{
+		Energy = ADC;
+		// if (det == 3 && idx==2) Energy = Energy * 0.9;
+	}
+	if (type==4) // stripU
+	{
+		Energy = ADC;
+	}
+	if (type==5) // stripD
+	{
+		Energy = ADC;
+	}
 }
