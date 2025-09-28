@@ -95,6 +95,8 @@ class HitX6 : public Hit
 		uint8_t flag_pad=0;
 		uint16_t flag_strip=0;
 
+		uint64_t counts_stripU=0, counts_stripD=0;
+
 };
 
 

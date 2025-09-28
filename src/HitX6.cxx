@@ -14,6 +14,19 @@ HitX6::HitX6(uint8_t idet, vector<SigAna> v_sigana_pad, vector<SigAna> v_sigana_
 		vHitPad.push_back(HitPad(*sigpad));
 	}
 
+	counts_stripU=0; counts_stripD=0;
+	for (sigstrpU=v_sigana_strpU.begin(); sigstrpU!=v_sigana_strpU.end(); sigstrpU++)
+		counts_stripU += 0x1<<(sigstrpU->idx << 2);
+	for (sigstrpD=v_sigana_strpD.begin(); sigstrpD!=v_sigana_strpD.end(); sigstrpD++)
+		counts_stripD += 0x1<<(sigstrpD->idx << 2);
+	if (counts_stripU!=counts_stripD)
+	{
+		fprintf(stderr, "X6 #%02d:   %16lX\n", idet, 0xFEDCBA9876543210);
+		fprintf(stderr, "X6 #%02d: U %16lX\n", idet, counts_stripU);
+		fprintf(stderr, "X6 #%02d: D %16lX\n", idet, counts_stripD);
+	}
+
+
 	for (sigstrpU=v_sigana_strpU.begin(); sigstrpU!=v_sigana_strpU.end(); sigstrpU++)
 	{
 		for (sigstrpD=v_sigana_strpD.begin(); sigstrpD!=v_sigana_strpD.end(); sigstrpD++)
