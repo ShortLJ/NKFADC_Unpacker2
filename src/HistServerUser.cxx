@@ -37,6 +37,24 @@ void HistServerUser::InitUser()
 						1000,0,3000 );
 			}
 
+	for (int ix6=0; ix6<Nx6; ix6++)
+	{
+		h2_X6_Energy_idx[ix6] = MakeH2(
+				Form("X6/det%02d",ix6),
+				Form("X6_det%02d_Energy",ix6),
+				Form("X6_det%02d_Energy;idx;Energy",ix6),
+				Nstrip+Npad,0,Nstrip+Npad, 1024,0,double(1<<16)
+				);
+		h2_X6_Pos_idx[ix6] = MakeH2(
+				Form("X6/det%02d",ix6),
+				Form("X6_det%02d_Position",ix6),
+				Form("X6_det%02d_Position;istrip;Position",ix6),
+				Nstrip,0,Nstrip, 1024,-1.2,1.2
+				);
+	}
+
+
+
 	h2_ADC_cha = MakeH2("ADC_cha","ADC by channel; channel; ADC", Nsid*Nbrd*Ncha, 0,Nsid*Nbrd*Ncha, 1<<10,0,double(1<<16));
 	h2_Energy_cha = MakeH2("Energy_cha","Energy by channel; channel; Energy", Nsid*Nbrd*Ncha, 0,Nsid*Nbrd*Ncha, 1000,0,3000);
 ///////////// User Area bottom  /////////////////
@@ -80,9 +98,31 @@ void HistServerUser::ProcessToHistUser()
 		}
 
 	}
-	// for clov for cry for x6 for strip
+	// for clov for cry
 	// crystal->r/theta/phi, strip->r/theta/phi
 	
+	EvtStarkJr *evtStarkJr = &(event.StarkJr);
+	vector<HitX6>::iterator iX6, jX6;
+	vector<HitStrip>::iterator iStrip, jStrip;
+	vector<HitPad>::iterator iPad, jPad;
+
+	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
+	{
+		for (iStrip=iX6->vHitStrip.begin(); iStrip!=iX6->vHitStrip.end(); iStrip++)
+		{
+			h2_X6_Energy_idx[iX6->idx]->Fill(iStrip->idx, iStrip->Energy);
+			h2_X6_Pos_idx[iX6->idx]->Fill(iStrip->idx, iStrip->position);
+		}
+		for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
+		{
+			h2_X6_Energy_idx[iX6->idx]->Fill(Nstrip + iPad->idx, iPad->Energy);
+		}
+
+
+
+	}
+
+
 
 
 ///////////// User Area bottom  /////////////////

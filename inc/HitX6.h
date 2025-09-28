@@ -46,7 +46,7 @@ class HitStrip : public Hit
 		HitStrip(){	}
 		HitStrip(SigAna siganaU, SigAna siganaD) : Hit(siganaU.idx), sigStripU(siganaU), sigStripD(siganaD)
 		{	
-			
+			ProcessHit();
 		}
 		void ProcessHit()
 		{
