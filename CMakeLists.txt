@@ -53,7 +53,7 @@ target_link_libraries(DataGetter TimeSorter)
 add_library(NKFileReader SHARED src/NKFileReader.cxx inc/NKFileReader.h)
 target_link_libraries(NKFileReader DataGetter NKSig)
 add_library(NKMessageQueue SHARED src/NKMessageQueue.cxx inc/NKMessageQueue.h)
-target_link_libraries(NKMessageQueue DataGetter NKSig)
+target_link_libraries(NKMessageQueue DataGetter NKSig rt)
 #
 add_library(TimeSorter SHARED src/TimeSorter.cxx inc/TimeSorter.h inc/Global.h)
 #target_link_libraries(TimeSorter SigAna)
