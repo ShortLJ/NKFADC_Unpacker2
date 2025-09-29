@@ -40,9 +40,11 @@ void TimeSorter::Sort(Sig sig)
 	isid=sig.sid;
 	ibrd=sig.brd;
 	icha=sig.cha;
-	checker(isid,ibrd,icha);
-	q_sig[isid][ibrd][icha].push(sig);
-	nsorted++;
+	if (checker(isid,ibrd,icha))
+	{
+		q_sig[isid][ibrd][icha].push(sig);
+		nsorted++;
+	}
 }
 
 
@@ -153,7 +155,7 @@ bool TimeSorter::checker(uint8_t isid, uint8_t ibrd, uint8_t icha)
 	else
     {
         fprintf(stderr,"TimeSorter::checker(uint8_t isid, uint8_t ibrd, uint8_t icha): (isid%u<Nsid%d && ibrd%u<Nbrd%d && icha%u<Ncha%d)\n", isid,Nsid,ibrd,Nbrd,icha,Ncha);
-        exit(-4);
+        //exit(-4);
         return false;
     }
     return false;

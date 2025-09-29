@@ -44,30 +44,48 @@ uint8_t* NKFileReader::GetNextPacket()
 
 	if ((data_read & 0xfffff)==0)
 	{
-		fprintf(stdout, "\r");
+		//fprintf(stdout, "\r");
 		fprintf(stdout, "data_read to= %d/%d\t", data_read, file_size);
 		fprintf(stdout,"sig_processed %d", sig_processed);
 		fprintf(stdout,"packet_size %d",packet_size);
-		//fprintf(stdout, "\n");
+		fprintf(stdout, "\n");
 		fflush(stdout);
 	}
 
 	return NKPacket;
 }
+void print_binary(uint8_t *&tmp, long N)
+{
+	uint8_t *tt = tmp;
+	uint8_t *t = tmp;
+	while (t-tt<N)
+	{
+		fprintf(stdout,
+		"%02x %02x %02x %02x %02x %02x %02x %02x (%04ld) %02x %02x %02x %02x %02x %02x %02x %02x (%04ld) %02x %02x %02x %02x %02x %02x %02x %02x (%04ld) %02x %02x %02x %02x %02x %02x %02x %02x (%04ld)\n",
+		*t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt,
+		*t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt,
+		*t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt,
+		*t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt
+		);
+	}
+}
 int NKFileReader::Interpret(uint8_t *&tmp, Sig &sig)
 {
 	int ret;
-	uint8_t data_type = tmp[0] & 0xFF;
+	uint8_t data_type = tmp[0] & 0x7F;
 	uint16_t data_length=0;
+	counts++; //fprintf(stdout, "counts: %ld\n",counts);
+	//fprintf(stdout, "data_type: %u (%#x)\n", data_type,data_type);
 
 	switch (data_type)
 	{
 		case 0x20:
 		{
 			//fprintf(stdout, "data_type %u: ADC data\n",data_type);
+			data_length = 32;
+			//print_binary(tmp,data_length);
 			NKSig nksig(tmp);
 			//nksig.Print();
-			data_length = 32;
 			sig = nksig.GetSig();
 			ret = 1;
 			break;
@@ -76,6 +94,7 @@ int NKFileReader::Interpret(uint8_t *&tmp, Sig &sig)
 		{
 			//fprintf(stdout, "data_type %u: TCB data\n",data_type);
 			data_length = 64;
+			//print_binary(tmp,data_length);
 			ret = 2;
 			break;
 		}
