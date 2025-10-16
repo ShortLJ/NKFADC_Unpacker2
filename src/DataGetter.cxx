@@ -4,6 +4,23 @@
 
 #include "DataGetter.h"
 
+void DataGetter::print_binary(uint8_t *&tmp, long N)
+{
+       uint8_t *tt = tmp;
+       uint8_t *t = tmp;
+       while (t-tt<N)
+       {
+               fprintf(stdout,
+               "%02x %02x %02x %02x %02x %02x %02x %02x (%04ld) %02x %02x %02x %02x %02x %02x %02x %02x (%04ld) %02x %02x %02x %02x %02x %02x %02x %02x (%04ld) %02x %02x %02x %02x %02x %02x %02x %02x (%04ld)\n",
+               *t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt,
+               *t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt,
+               *t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt,
+               *t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt
+               );
+       }
+}
+
+
 DataGetter::DataGetter()
 {
 }

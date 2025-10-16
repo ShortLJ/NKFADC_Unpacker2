@@ -1,11 +1,14 @@
 
-
+#include <cstring>
 
 #include "NKSig.h"
 
 
 NKSig::NKSig(uint8_t *data)
 {
+#ifdef STORE_BINARY
+	memcpy(binarydata,data,32);
+#endif //STORE_BINARY
 	uint64_t ltmp;
 	uint32_t itmp;
 	uint16_t stmp;
@@ -44,8 +47,7 @@ NKSig::NKSig(uint8_t *data)
 	brd = data[10] & 0x0F;
 	sid = (data[10] & 0xF0) >> 4;
 
-	cha = data[11] & 0x7F;
-	cha = cha-1;
+	cha = data[11] & 0x7F; cha = cha-1;
 	ADC_type = (data[11] & 0x80) >> 7;
 
 	local_trigger_number = 0;
@@ -123,7 +125,12 @@ NKSig::NKSig(uint8_t *data)
 
 	trigger_number = tcb_trigger_number;
 	coarse_time = local_gate_time;
-
+#ifdef STORE_BINARY
+	//print_binary();
+#endif //STORE_BINARY
+	//Print();
+	if (cha>=32) fprintf(stdout,"cha >= 32\n");
+	//cha = cha&0x1f;
 
 }
 

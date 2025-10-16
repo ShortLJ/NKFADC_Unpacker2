@@ -30,7 +30,7 @@ class NKFileReader : public DataGetter
 		bool localEnd;
 		bool readerEnd;
 
-
+		long counts=0;
 };
 
 

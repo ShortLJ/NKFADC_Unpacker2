@@ -21,9 +21,9 @@ HitX6::HitX6(uint8_t idet, vector<SigAna> v_sigana_pad, vector<SigAna> v_sigana_
 		counts_stripD += 0x1<<(sigstrpD->idx << 2);
 	if (counts_stripU!=counts_stripD)
 	{
-		fprintf(stderr, "X6 #%02d:   %16lX\n", idet, 0xFEDCBA9876543210);
-		fprintf(stderr, "X6 #%02d: U %16lX\n", idet, counts_stripU);
-		fprintf(stderr, "X6 #%02d: D %16lX\n", idet, counts_stripD);
+		fprintf(stderr, "X6 #%02d:   %016lX\n", idet, 0xFEDCBA9876543210);
+		fprintf(stderr, "X6 #%02d: U %016lX\n", idet, counts_stripU);
+		fprintf(stderr, "X6 #%02d: D %016lX\n", idet, counts_stripD);
 	}
 
 
@@ -73,6 +73,7 @@ void HitX6::ProcessHit()
 bool HitX6::isValid()
 {
 	bool ret=1;
+	flag_pad=0;
 	vector<HitPad>::iterator pad;
 	for (pad=vHitPad.begin(); pad!=vHitPad.end(); pad++)
 	{
@@ -85,6 +86,7 @@ bool HitX6::isValid()
 		}
 		flag_pad |= 0x1<<(pad->idx);
 	}
+	flag_strip=0;
 	vector<HitStrip>::iterator strip;
 	for (strip=vHitStrip.begin(); strip!=vHitStrip.end(); strip++)
 	{

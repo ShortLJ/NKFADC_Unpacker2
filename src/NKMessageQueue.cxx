@@ -16,7 +16,7 @@ uint8_t* NKMessageQueue::GetNextPacket()
 	if (packet_size==-1)
 	{
 		perror("mq_receive error:");
-		fprintf(stdout,"%jd %09ld\n", timeout.tv_sec, timeout.tv_nsec);
+		//fprintf(stdout,"%jd %09ld\n", timeout.tv_sec, timeout.tv_nsec);
 	}
 	else
 	{
@@ -38,6 +38,7 @@ int NKMessageQueue::Interpret(uint8_t *&tmp, Sig &sig)
 			NKSig nksig(tmp);
 			//nksig.Print();
 			data_length = 32;
+			//print_binary(tmp,32);
 			sig = nksig.GetSig();
 			ret = 1;
 			break;
@@ -53,6 +54,7 @@ int NKMessageQueue::Interpret(uint8_t *&tmp, Sig &sig)
 		{
 			fprintf(stderr, "NKMessageQueue::Interpret : data_type %u: unknown\n",data_type);
 			data_length = packet_size;
+			//print_binary(tmp,8192);
 			ret = -1;
 			exit(-61);
 			break;
