@@ -11,6 +11,8 @@
 
 #include "NKSig.h"
 
+#define MQ_PACKET_MAX_SIZE 65536
+
 class NKMessageQueue : public DataGetter
 {
 	public:
@@ -26,7 +28,7 @@ class NKMessageQueue : public DataGetter
 		mqd_t msgq;
 		struct timespec timeout;
 
-		uint8_t NKPacket[16384];
+		uint8_t NKPacket[MQ_PACKET_MAX_SIZE];
 
 
 };

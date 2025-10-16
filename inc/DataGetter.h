@@ -21,6 +21,7 @@ class DataGetter
         //void RegisterConfig (Config *cfg){config=cfg;}
         void Loop();
 		void Stop();
+		void print_binary(uint8_t *&tmp,long N);
 
 	protected:
         virtual uint8_t *GetNextPacket() = 0;

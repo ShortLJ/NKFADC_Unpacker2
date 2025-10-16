@@ -7,6 +7,9 @@
 #ifndef __SIG__
 #define __SIG__
 
+//#define STORE_BINARY 1
+
+
 class Sig
 {
 	public: 
@@ -32,6 +35,10 @@ class Sig
 
 	public: 
 		void PrintSummary();
+#ifdef STORE_BINARY
+		uint8_t binarydata[32];
+		void print_binary();
+#endif // STORE_BINARY
 
 		bool operator<(const Sig sig) const
 		{

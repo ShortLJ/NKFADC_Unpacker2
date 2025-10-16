@@ -54,21 +54,6 @@ uint8_t* NKFileReader::GetNextPacket()
 
 	return NKPacket;
 }
-void print_binary(uint8_t *&tmp, long N)
-{
-	uint8_t *tt = tmp;
-	uint8_t *t = tmp;
-	while (t-tt<N)
-	{
-		fprintf(stdout,
-		"%02x %02x %02x %02x %02x %02x %02x %02x (%04ld) %02x %02x %02x %02x %02x %02x %02x %02x (%04ld) %02x %02x %02x %02x %02x %02x %02x %02x (%04ld) %02x %02x %02x %02x %02x %02x %02x %02x (%04ld)\n",
-		*t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt,
-		*t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt,
-		*t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt,
-		*t++,*t++,*t++,*t++,*t++,*t++,*t++,*t++,t-tt
-		);
-	}
-}
 int NKFileReader::Interpret(uint8_t *&tmp, Sig &sig)
 {
 	int ret;
@@ -103,7 +88,7 @@ int NKFileReader::Interpret(uint8_t *&tmp, Sig &sig)
 			fprintf(stderr, "NKFileReader::Interpret : data_type %u: unknown\n",data_type);
 			data_length = packet_size;
 			ret = -1;
-			exit(-61);
+			//exit(-61);
 			break;
 		}
 	}
