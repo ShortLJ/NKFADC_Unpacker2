@@ -11,7 +11,7 @@
 
 #include "NKSig.h"
 
-#define MQ_PACKET_MAX_SIZE 65536
+#define MQ_PACKET_MAX_SIZE 8*1024*1024 // Byte
 
 class NKMessageQueue : public DataGetter
 {
