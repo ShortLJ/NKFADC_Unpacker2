@@ -55,6 +55,7 @@ void print_usage()
 	fprintf(stdout,"--histout,-to <hists.root>\\\n");
 	fprintf(stdout,"--config,-c <config>\\\n");
 	fprintf(stdout,"--timewindow,-tw <timewindow=0> ## 8 ns for NKfadc\\\n");
+	fprintf(stdout,"--histport, -hp <histport=8181>\\\n");
 
 
 }
@@ -74,6 +75,7 @@ int main(int argc, char *argv[])
 	string histfilename = "hists.root";
 	string configdir = "config";
 	int64_t timewindow = 0;
+	uint16_t histport = 8181;
 
 
 	bool flag_online=1;
@@ -106,6 +108,10 @@ int main(int argc, char *argv[])
 		else if ((strcmp(argv[i],"--timewindow")==0 || strcmp(argv[i],"-tw")==0) && (argv[i+1]))
 		{
 			timewindow = atoll(argv[++i]);
+		}
+		else if ((strcmp(argv[i],"--histport")==0 || strcmp(argv[i],"-hp")==0) && (argv[i+1]))
+		{
+			histport = atoi(argv[++i]);
 		}
 		else if (strcmp(argv[i],"-h")==0)
 		{
@@ -159,7 +165,7 @@ int main(int argc, char *argv[])
 	eventprocessor.RegisterTreeWriter(&treewriter);
 #endif
 
-	HistServerUser histserver("http:127.0.0.1:8181?thrds=2");
+	HistServerUser histserver(Form("http:127.0.0.1:%u?thrds=2",histport));
 	//HistServerUser histserver;
 	histserver.SetHistFile(histfilename);
 	histserver.InitUser();
