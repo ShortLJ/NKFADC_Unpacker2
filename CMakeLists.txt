@@ -90,7 +90,7 @@ target_link_libraries(NKFADC_Unpacker ${ROOT_LIBRARIES})
 #ROOT_GENERATE_DICTIONARY(EvtASGARD_dict MODULE TreeWriter LINKDEF EvtASGARDLinkDef.h)
 #ROOT_GENERATE_DICTIONARY(EvtStarkJr_dict MODULE TreeWriter LINKDEF EvtStarkJrLinkDef.h)
 ROOT_GENERATE_DICTIONARY(Event_dict MODULE TreeWriter LINKDEF EventLinkDef.h)
-target_link_libraries(Event_dict EvtASGARD EvtStarkJr)
+target_link_libraries(Event_dict EvtSimple EvtASGARD EvtStarkJr)
 
 
 set(CONFIG_CSV
