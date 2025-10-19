@@ -30,7 +30,7 @@ void EventProcessor::Run()
 		fmutex.unlock();
 
 		//timesorter->fmutex_output.lock();
-		if ( timesorter->GetNSorted()==0) 
+		if ( timesorter->GetNSorted()==0 || processorEnd) 
 		{
 			timesorter->fmutex_output.unlock();
 			break;

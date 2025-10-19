@@ -66,7 +66,7 @@ void TimeSorter::Run()
 			Sort(sig_tmp);
 			fmutex_output.unlock();
 		}
-		else //if ( q_sig_input.empty())
+		if ( q_sig_input.empty() || sorterEnd)
 		{
 			//fprintf(stdout,"else //if ( q_sig_input.empty())\n");
 			if ( sorterEnd)

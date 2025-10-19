@@ -23,7 +23,7 @@
 
 //// used
 #define Nsid 10
-#define Nbrd  8 //// mid 9 not used
+#define Nbrd 10 //// mid 9 not used
 #define Ncha 32
 
 

@@ -21,20 +21,21 @@ using namespace std;
 #include "TreeWriter.h"
 
 
-bool flag_loop=1;
+bool flag_reading=1;
 bool flag_closing=0;
 bool flag_force_quit=0;
+bool flag_kill=0;
 
 void sig_handler(int signal)
 {
 	fprintf(stdout, "signal received: ");
-	if ( flag_loop)
+	if ( flag_reading)
 	{
 		fprintf(stdout,"start Closing\n");
-		flag_loop=0;
+		flag_reading=0;
 		return;
 	}
-	if (!flag_loop)
+	if (!flag_reading)
 	{
 		fprintf(stdout,"force quit\n");
 		flag_force_quit=1;
@@ -42,6 +43,7 @@ void sig_handler(int signal)
 	}
 	if (flag_force_quit)
 	{
+		flag_kill=1;
 		exit(-100);
 	}
 
@@ -52,7 +54,7 @@ void print_usage()
 	fprintf(stdout,"Usage\n");
 	fprintf(stdout,"--input,-i <file.dat> or 'online'\\\n");
 	fprintf(stdout,"--treeout,-to <tree.root>\\\n");
-	fprintf(stdout,"--histout,-to <hists.root>\\\n");
+	fprintf(stdout,"--histout,-ho <hists.root>\\\n");
 	fprintf(stdout,"--config,-c <config>\\\n");
 	fprintf(stdout,"--timewindow,-tw <timewindow=0> ## 8 ns for NKfadc\\\n");
 	fprintf(stdout,"--histport, -hp <histport=8181>\\\n");
@@ -184,19 +186,20 @@ int main(int argc, char *argv[])
 	while (1)
 	{
 		signal(SIGINT,sig_handler);
-		if ( flag_force_quit)
+		if ( flag_kill)
 		{
 			break;
 		}
-		if ( flag_loop)
+		if ( flag_reading)
 		{
-			fprintf(stdout,"looping\n");
+			fprintf(stdout,"Reading\n");
 			timesorter.fmutex_output.lock(); fprintf(stdout,"%lu\n",timesorter.GetNSorted()); timesorter.fmutex_output.unlock();
 			usleep(refresh_rate);
 			continue;
 		}
-		if (!flag_loop && !flag_closing)
+		if (!flag_reading && !flag_closing)
 		{
+			fprintf(stdout,"stopping readers\n");
 			for (int i=0; i<v_datagetter.size(); i++)
 			{
 				v_datagetter.at(i)->Stop();
@@ -205,17 +208,19 @@ int main(int argc, char *argv[])
 			{
 				v_thread_datagetter.at(i).join();
 			}
+			fprintf(stdout,"stopped readers\n");
 			timesorter.Stop();
 			thread_timesorter.join();
+			fprintf(stdout,"stopped sorter\n");
 
-			fprintf(stdout,"stopped readers\n");
 			flag_closing=1;
-			eventprocessor.Stop();
 			continue;
 		}
 		if ( flag_closing)
 		{
-			if ( timesorter.GetNSorted())
+			fprintf(stdout,"Closing\n");
+			timesorter.fmutex_output.lock(); fprintf(stdout,"%lu\n",timesorter.GetNSorted()); timesorter.fmutex_output.unlock();
+			if ( timesorter.GetNSorted() && !flag_force_quit)
 			{
 				fprintf(stdout,"emptying timesorter. %lu\n",timesorter.GetNSorted());
 				usleep(refresh_rate);
