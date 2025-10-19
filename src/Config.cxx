@@ -33,6 +33,7 @@ void Config::ReadDetMapFile(string filename)
 	char line[100];
 
 	uint8_t param[2];
+	uint8_t itype, idet, iidx;
 	while (fgets(line, sizeof line, fr))
 	{
 		if (*line == '#') continue;
@@ -42,7 +43,7 @@ void Config::ReadDetMapFile(string filename)
 			case 8:
 			{
 				uint8_t chL=icha, chU=param[0], granul=param[1];
-				fprintf(stdout,"program %u %u %u %u %u %u %u %u\n",itype,idet,iidx,isid,ibrd,chL,chU,granul);
+				fprintf(stdout,"det map program %u %u %u %u %u %u %u %u\n",itype,idet,iidx,isid,ibrd,chL,chU,granul);
 				for (icha=chL; icha<=chU; icha+=granul)
 				{
 					map_type	[isid][ibrd][icha] = itype;
@@ -55,7 +56,7 @@ void Config::ReadDetMapFile(string filename)
 			case 6:
 			{
 				//uint8_t asdf = param[0], aaa=param[1];
-				fprintf(stdout,"brute %u %u %u %u %u %u\n", itype,idet,iidx, isid,ibrd,icha);
+				fprintf(stdout,"det map brute %u %u %u %u %u %u\n", itype,idet,iidx, isid,ibrd,icha);
 				map_type	[isid][ibrd][icha] = itype;
 				map_det		[isid][ibrd][icha] = idet;
 				map_idx		[isid][ibrd][icha] = iidx;
@@ -70,6 +71,45 @@ void Config::ReadDetMapFile(string filename)
 	}
 
 }
+void Config::ReadErgCalFile(string filename)
+{
+	string fullpath = configdir+"/"+filename;
+	fprintf(stdout, "Energy Calibration file: %s\n",fullpath.c_str());
+
+	FILE *fr;
+	fr = fopen(fullpath.c_str(),"r");
+	if(fr==NULL)
+	{
+		fprintf(stderr,"Ecal file is not opened.\n");
+		exit(-6);
+	}
+	char line[100];
+
+	uint8_t param[2];
+	while (fgets(line, sizeof line, fr))
+	{
+		if (*line == '#') continue;
+		switch (sscanf(line, "%hhu,%hhu,%hhu,%f,%f",
+			&isid,&ibrd,&icha,&param[0],&param[1])	)
+		{
+			case 5:
+			{
+				fprintf(stdout,"erg cal %u %u %u %u %f %f\n", isid,ibrd,icha, param[0],param[1] );
+				Ecal_par0	[isid][ibrd][icha] = param[0];
+				Ecal_par1	[isid][ibrd][icha] = param[1];
+				break;
+			}
+			default: 
+			{
+				fprintf(stderr,"failed to read erg cal file\n");
+				exit(-7);
+			}
+		}
+	}
+
+}
+
+
 
 void Config::InitializeGlobalVariables()
 {
@@ -78,6 +118,8 @@ void Config::InitializeGlobalVariables()
 		map_type[isid][ibrd][icha] = 0xFF;
 		map_det [isid][ibrd][icha] = 0xFF;
 		map_idx [isid][ibrd][icha] = 0xFF;
+		Ecal_par0 [isid][ibrd][icha] = 0;
+		Ecal_par1 [isid][ibrd][icha] = 0;
 	}
 }
 

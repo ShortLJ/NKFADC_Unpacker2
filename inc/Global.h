@@ -4,7 +4,8 @@
 #define __GLOBAL__
 
 //#define WAVEFORM 1
-#define NBUFF_SORTER 1000
+#define NBUFF_SORTER 10000
+#define NBUFF_SORTER_ULIMIT 100000
 
 
 
@@ -21,8 +22,8 @@
 #define N_CHA 32 // 0~9 cha mask 0xFF but NKFADC10 has 10 mcx inputs
 
 //// used
-#define Nsid 4
-#define Nbrd 10
+#define Nsid 10
+#define Nbrd  8 //// mid 9 not used
 #define Ncha 32
 
 
@@ -34,7 +35,7 @@
 // 0: simple
 // 1,2: ASGARD FV, Seg
 // 3,4,5: StarkJr pad,strp U,D
-#define Ndet 48
+#define Ndet 56
 extern uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 extern uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 extern uint8_t	map_idx		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
