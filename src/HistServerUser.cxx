@@ -20,11 +20,14 @@ void HistServerUser::InitUser()
 	//InitHttp();
 
 ///////////// User Area top /////////////////
-	h2_ADC_cha = MakeH2(
-			"ADC_cha",
-			"ADC by channel; channel; ADC",
-			Nsid*Nbrd*Ncha, 0,Nsid*Nbrd*Ncha, 1<<10,0,double(1<<16)
+	for (int isid=0; isid<Nsid; isid++)
+	{
+		h2_ADC_cha[isid] = MakeH2(
+			Form("ADC_sid%02d",isid),
+			Form("ADC by channel %02d;cha+%d*brd;ADC",isid,Ncha),
+			Nbrd*Ncha, 0, Nbrd*Ncha, 1<<12, 0, double(1<<15)
 			);
+	}
 	h2_Energy_cha = MakeH2(
 			"Energy_cha",
 			"Energy by channel; channel; Energy",
@@ -79,7 +82,8 @@ void HistServerUser::ProcessToHistUser()
 	vector<SigAna>::iterator iSig, jSig;
 	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
 	{
-		h2_ADC_cha->Fill(iSig->cha + Ncha*(iSig->brd + Nbrd*iSig->sid), iSig->ADC);
+		h2_ADC_cha[iSig->sid]->Fill(iSig->cha + Ncha*iSig->brd, iSig->ADC);
+		//h2_ADC_cha->Fill(iSig->cha + Ncha*(iSig->brd + Nbrd*iSig->sid), iSig->ADC);
 	}
 
 	EvtASGARD *evtASGARD = &(event.ASGARD);

@@ -31,7 +31,7 @@ class HistServerUser : public HistServer
 
 ///////////// User Area top /////////////////
 	private:
-		TH2 *h2_ADC_cha;
+		TH2 *h2_ADC_cha[Nsid];
 		TH2 *h2_Energy_cha;
 	
 		TH1 *h1_Clover_ADC_seg[Nclover][Ncrysal][Nseg];
