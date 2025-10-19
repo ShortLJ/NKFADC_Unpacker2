@@ -27,6 +27,7 @@ void TreeWriter::Init()
 	}
 	outfile = new TFile(OutputFileName.c_str(),"recreate");
 	tree = new TTree(TreeName.c_str(),TreeName.c_str());
+	tree->Branch("EvtSimple", &(event.Simple));
 	tree->Branch("ASGARD", &(event.ASGARD));
 	tree->Branch("StarkJr", &(event.StarkJr));
 

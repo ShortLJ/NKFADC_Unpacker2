@@ -4,6 +4,7 @@
 #include "HitCrystal.h"
 #include "HitClover.h"
 #include "HitX6.h"
+#include "EvtSimple.h"
 #include "EvtASGARD.h"
 #include "EvtStarkJr.h"
 
@@ -13,6 +14,7 @@
 #pragma link C++ nestedtypedefs;
 #pragma link C++ class SigAna+;
 #pragma link C++ class vector<SigAna>+;
+#pragma link C++ class EvtSimple+;
 
 #pragma link C++ class HitCrystal+;
 #pragma link C++ class vector<HitCrystal>+;
