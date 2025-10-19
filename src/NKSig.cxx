@@ -132,6 +132,11 @@ NKSig::NKSig(uint8_t *data)
 	if (cha>=32) fprintf(stdout,"cha >= 32\n");
 	//cha = cha&0x1f;
 
+	if (brd>=Nbrd)
+	{
+		fprintf(stderr,"TimeSorter::checker(uint8_t isid, uint8_t ibrd, uint8_t icha): (isid%u<Nsid%d && ibrd%u<Nbrd%d && icha%u<Ncha%d)\n", sid,Nsid,brd,Nbrd,cha,Ncha);
+	}
+
 }
 
 

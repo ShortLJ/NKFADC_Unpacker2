@@ -20,7 +20,7 @@ uint8_t* NKMessageQueue::GetNextPacket()
 	}
 	else
 	{
-		//fprintf(stdout,"received %d bytes\n", packet_size);
+		//fprintf(stdout,"received %d bytes, starting with %02x\n", packet_size,*NKPacket);
 	}
 	return NKPacket;
 }
@@ -54,9 +54,9 @@ int NKMessageQueue::Interpret(uint8_t *&tmp, Sig &sig)
 		{
 			fprintf(stderr, "NKMessageQueue::Interpret : data_type %u: unknown\n",data_type);
 			data_length = packet_size;
-			//print_binary(tmp,8192);
+			//print_binary(tmp,16);
 			ret = -1;
-			exit(-61);
+			//exit(-61);
 			break;
 		}
 	}
