@@ -85,18 +85,19 @@ void Config::ReadErgCalFile(string filename)
 	}
 	char line[100];
 
-	uint8_t param[2];
+	float param[3];
 	while (fgets(line, sizeof line, fr))
 	{
 		if (*line == '#') continue;
-		switch (sscanf(line, "%hhu,%hhu,%hhu,%f,%f",
-			&isid,&ibrd,&icha,&param[0],&param[1])	)
+		switch (sscanf(line, "%hhu,%hhu,%hhu,%f,%f,%f",
+			&isid,&ibrd,&icha,&param[0],&param[1],&param[2]))
 		{
-			case 5:
+			case 6:
 			{
-				fprintf(stdout,"erg cal %u %u %u %u %f %f\n", isid,ibrd,icha, param[0],param[1] );
+				fprintf(stdout,"erg cal %u %u %u %f %f %f\n", isid,ibrd,icha, param[0],param[1],param[2] );
 				Ecal_par0	[isid][ibrd][icha] = param[0];
 				Ecal_par1	[isid][ibrd][icha] = param[1];
+				Ecal_par2	[isid][ibrd][icha] = param[2];
 				break;
 			}
 			default: 
