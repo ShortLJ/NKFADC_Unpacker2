@@ -6,6 +6,9 @@
 
 #include "NKSig.h"
 
+#include <stdio.h>
+#define _FILE_OFFSET_BITS 64
+
 class NKFileReader : public DataGetter
 {
 	public:
@@ -23,7 +26,7 @@ class NKFileReader : public DataGetter
 
 		FILE *fp;
 		int idx_file, nfile;
-		int data_read, file_size;
+		off_t data_read, file_size;
 
 		uint8_t NKPacket[8192];
 
