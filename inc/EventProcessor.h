@@ -27,6 +27,7 @@ class EventProcessor
 		mutex fmutex;
 		void Run();
 		void Stop();
+		void Quit();
 
 	private:
 		TimeSorter *timesorter;
@@ -37,6 +38,7 @@ class EventProcessor
 		Event ProcessEvent(vector<Sig> v_sig);
 
 		bool processorEnd;
+		bool processorQuit;
 
 
 };

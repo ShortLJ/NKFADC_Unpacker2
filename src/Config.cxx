@@ -46,6 +46,7 @@ void Config::ReadDetMapFile(string filename)
 				fprintf(stdout,"det map program %u %u %u %u %u %u %u %u\n",itype,idet,iidx,isid,ibrd,chL,chU,granul);
 				for (icha=chL; icha<=chU; icha+=granul)
 				{
+					enabled		[isid][ibrd][icha] = true;
 					map_type	[isid][ibrd][icha] = itype;
 					map_det		[isid][ibrd][icha] = idet;
 					map_idx		[isid][ibrd][icha] = iidx++;
@@ -57,6 +58,7 @@ void Config::ReadDetMapFile(string filename)
 			{
 				//uint8_t asdf = param[0], aaa=param[1];
 				fprintf(stdout,"det map brute %u %u %u %u %u %u\n", itype,idet,iidx, isid,ibrd,icha);
+				enabled		[isid][ibrd][icha] = true;
 				map_type	[isid][ibrd][icha] = itype;
 				map_det		[isid][ibrd][icha] = idet;
 				map_idx		[isid][ibrd][icha] = iidx;
@@ -116,6 +118,7 @@ void Config::InitializeGlobalVariables()
 {
 	for (isid=0; isid<N_SID; isid++) for (ibrd=0; ibrd<N_BRD; ibrd++) for (icha=0; icha<N_CHA; icha++)
 	{
+		enabled [isid][ibrd][icha] = 0;
 		map_type[isid][ibrd][icha] = 0xFF;
 		map_det [isid][ibrd][icha] = 0xFF;
 		map_idx [isid][ibrd][icha] = 0xFF;

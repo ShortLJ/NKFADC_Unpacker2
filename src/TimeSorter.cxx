@@ -15,6 +15,7 @@ TimeSorter::~TimeSorter()
 void TimeSorter::Push(Sig sig)
 {
 	q_sig_input.push(sig);
+	nenque++;
 }
 Sig TimeSorter::Top(uint8_t isid, uint8_t ibrd, uint8_t icha)
 {
@@ -61,6 +62,7 @@ void TimeSorter::Run()
 			//fprintf(stdout,"if (!q_sig_input.empty())\n");
 			Sig sig_tmp = q_sig_input.front();
 			q_sig_input.pop();
+			nenque--;
 			fmutex_input.unlock();
 			fmutex_output.lock();
 			Sort(sig_tmp);
@@ -97,7 +99,7 @@ void TimeSorter::Stop()
 uint64_t TimeSorter::GetMinLGT()
 {
 	uint64_t ret=-1; /// uint64_t max
-	for (isid=0; isid<Nsid; isid++) for (ibrd=0; ibrd<Nbrd; ibrd++) for (icha=0; icha<Ncha; icha++) if (!Empty(isid,ibrd,icha))
+	for (isid=0; isid<Nsid; isid++) for (ibrd=0; ibrd<Nbrd; ibrd++) for (icha=0; icha<Ncha; icha++) if (enabled[isid][ibrd][icha]) if (!Empty(isid,ibrd,icha))
 	{
 		if (ret > Top(isid,ibrd,icha).coarse_time)
 		{
@@ -120,7 +122,7 @@ uint64_t TimeSorter::GetLGT(uint8_t isid, uint8_t ibrd, uint8_t icha)
 int TimeSorter::FindSigWithLGT(uint64_t ct)
 {
 	int ret=0;
-	for (isid=0; isid<Nsid; isid++) for (ibrd=0; ibrd<Nbrd; ibrd++) for (icha=0; icha<Ncha; icha++) if (!Empty(isid,ibrd,icha))
+	for (isid=0; isid<Nsid; isid++) for (ibrd=0; ibrd<Nbrd; ibrd++) for (icha=0; icha<Ncha; icha++) if (enabled[isid][ibrd][icha]) if (!Empty(isid,ibrd,icha))
 	{
 		if (Top(isid,ibrd,icha).coarse_time - ct <= timewindow)
 		{
@@ -151,7 +153,8 @@ bool TimeSorter::Empty(uint8_t isid, uint8_t ibrd, uint8_t icha)
 
 bool TimeSorter::checker(uint8_t isid, uint8_t ibrd, uint8_t icha)
 {
-	if(isid<Nsid && ibrd<Nbrd && icha<Ncha) return true;
+	if(isid<Nsid && ibrd<Nbrd && icha<Ncha) if (enabled[isid][ibrd][icha])
+		return true;
 	else
     {
         fprintf(stderr,"TimeSorter::checker(uint8_t isid, uint8_t ibrd, uint8_t icha): (isid%u<Nsid%d && ibrd%u<Nbrd%d && icha%u<Ncha%d)\n", isid,Nsid,ibrd,Nbrd,icha,Ncha);

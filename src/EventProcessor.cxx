@@ -12,7 +12,8 @@ EventProcessor::~EventProcessor()
 void EventProcessor::Run()
 {
 	processorEnd=0;
-	while(1)
+	processorQuit=0;
+	while(!processorQuit)
 	{
 		fmutex.lock();
 		if (!processorEnd)
@@ -30,7 +31,7 @@ void EventProcessor::Run()
 		fmutex.unlock();
 
 		//timesorter->fmutex_output.lock();
-		if ( timesorter->GetNSorted()==0 || processorEnd) 
+		if ( timesorter->GetNSorted()==0) 
 		{
 			timesorter->fmutex_output.unlock();
 			break;
@@ -62,6 +63,13 @@ void EventProcessor::Stop()
 {
 	fmutex.lock();
 	processorEnd=1;
+	fmutex.unlock();
+}
+void EventProcessor::Quit()
+{
+	fmutex.lock();
+	processorEnd=1;
+	processorQuit=1;
 	fmutex.unlock();
 }
 

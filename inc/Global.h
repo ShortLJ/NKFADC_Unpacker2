@@ -41,13 +41,13 @@
 
 
 /// parameters to configure from .csv
-static uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
-static uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
-static uint8_t	map_idx		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
-
-static float Ecal_par0		[N_SID][N_BRD][N_CHA];
-static float Ecal_par1		[N_SID][N_BRD][N_CHA];
-static float Ecal_par2		[N_SID][N_BRD][N_CHA];
+extern bool enabled [N_SID][N_BRD][N_CHA];
+extern uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
+extern uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
+extern uint8_t	map_idx		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
+extern float Ecal_par0		[N_SID][N_BRD][N_CHA];
+extern float Ecal_par1		[N_SID][N_BRD][N_CHA];
+extern float Ecal_par2		[N_SID][N_BRD][N_CHA];
 ///
 
 

@@ -57,7 +57,7 @@ void print_usage()
 	fprintf(stdout,"--histout,-ho <hists.root>\\\n");
 	fprintf(stdout,"--config,-c <config>\\\n");
 	fprintf(stdout,"--timewindow,-tw <timewindow=0> ## 8 ns for NKfadc\\\n");
-	fprintf(stdout,"--histport, -hp <histport=8181>\\\n");
+	fprintf(stdout,"--httpport, -hp <httpport=8181>\\\n");
 
 
 }
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 	string histfilename = "hists.root";
 	string configdir = "config";
 	int64_t timewindow = 0;
-	uint16_t histport = 8181;
+	uint16_t httpport = 8181;
 
 
 	bool flag_online=1;
@@ -111,9 +111,9 @@ int main(int argc, char *argv[])
 		{
 			timewindow = atoll(argv[++i]);
 		}
-		else if ((strcmp(argv[i],"--histport")==0 || strcmp(argv[i],"-hp")==0) && (argv[i+1]))
+		else if ((strcmp(argv[i],"--httpport")==0 || strcmp(argv[i],"-hp")==0) && (argv[i+1]))
 		{
-			histport = atoi(argv[++i]);
+			httpport = atoi(argv[++i]);
 		}
 		else if (strcmp(argv[i],"-h")==0)
 		{
@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
 
 	Config config(configdir);
 	config.ReadDetMapFile();
+	config.ReadErgCalFile();
 
 	TimeSorter timesorter; /// queue
 	timesorter.SetTimeWindow(timewindow);
@@ -167,7 +168,8 @@ int main(int argc, char *argv[])
 	eventprocessor.RegisterTreeWriter(&treewriter);
 #endif
 
-	HistServerUser histserver(Form("http:127.0.0.1:%u?thrds=2",histport));
+	HistServerUser histserver(Form("http:%u?thrds=2",httpport));
+	//HistServerUser histserver(Form("http:127.0.0.1:%u?thrds=2",httpport));
 	//HistServerUser histserver;
 	histserver.SetHistFile(histfilename);
 	histserver.InitUser();
@@ -193,7 +195,7 @@ int main(int argc, char *argv[])
 		if ( flag_reading)
 		{
 			fprintf(stdout,"Reading\n");
-			timesorter.fmutex_output.lock(); fprintf(stdout,"%lu\n",timesorter.GetNSorted()); timesorter.fmutex_output.unlock();
+			timesorter.fmutex_output.lock(); fprintf(stdout,"%lu %lu\n",timesorter.GetNenque(),timesorter.GetNSorted()); timesorter.fmutex_output.unlock();
 			usleep(refresh_rate);
 			continue;
 		}
@@ -214,13 +216,18 @@ int main(int argc, char *argv[])
 			fprintf(stdout,"stopped sorter\n");
 
 			flag_closing=1;
+			eventprocessor.Stop();
 			continue;
 		}
-		if ( flag_closing)
+		if ( flag_force_quit)
 		{
-			fprintf(stdout,"Closing\n");
-			timesorter.fmutex_output.lock(); fprintf(stdout,"%lu\n",timesorter.GetNSorted()); timesorter.fmutex_output.unlock();
-			if ( timesorter.GetNSorted() && !flag_force_quit)
+			eventprocessor.Quit();
+		}
+		if ( flag_closing && !flag_force_quit)
+		{
+			fprintf(stdout,"Processing\n");
+			timesorter.fmutex_output.lock(); fprintf(stdout,"%lu %lu\n",timesorter.GetNenque(),timesorter.GetNSorted()); timesorter.fmutex_output.unlock();
+			if ( timesorter.GetNSorted())
 			{
 				fprintf(stdout,"emptying timesorter. %lu\n",timesorter.GetNSorted());
 				usleep(refresh_rate);
@@ -229,27 +236,26 @@ int main(int argc, char *argv[])
 			else
 			{
 				fprintf(stdout,"emptyed timesorter. Finalizing\n");
-				eventprocessor.Stop();
-				histserver.Stop();
-#ifdef WriteTree
-				treewriter.Stop();
-#endif
-				thread_eventprocessor.join();
-				thread_histserver.join();
-#ifdef WriteTree
-				thread_treewriter.join();
-#endif
-				histserver.Write();
-				histserver.Close();
-#ifdef WriteTree
-				treewriter.Write();
-				treewriter.Close();
-#endif
-				fprintf(stdout,"Wrote to files and file closed\n");
-				break;
+				eventprocessor.Quit();
 			}
 		}
-
+		histserver.Stop();
+#ifdef WriteTree
+		treewriter.Stop();
+#endif
+		thread_eventprocessor.join();
+		thread_histserver.join();
+#ifdef WriteTree
+		thread_treewriter.join();
+#endif
+		histserver.Write();
+		histserver.Close();
+#ifdef WriteTree
+		treewriter.Write();
+		treewriter.Close();
+#endif
+		fprintf(stdout,"Wrote to files and file closed\n");
+		break;
 	}
 	usleep(1000000);
 	fprintf(stdout,"close!\n");
