@@ -23,10 +23,10 @@ void HistServerUser::InitUser()
 	for (int isid=0; isid<Nsid; isid++)
 	{
 		h2_ADC_cha[isid] = MakeH2(
-			Form("ADC_sid%02d",isid),
-			Form("ADC by channel %02d;cha+%d*brd;ADC",isid,Ncha),
-			Nbrd*Ncha, 0, Nbrd*Ncha, 1<<12, 0, double(1<<15)
-			);
+				Form("ADC_sid%02d",isid),
+				Form("ADC by channel %02d;cha+%d*brd;ADC",isid,Ncha),
+				Nbrd*Ncha, 0, Nbrd*Ncha, 1<<12, 0, double(1<<15)
+				);
 	}
 	h2_Energy_cha = MakeH2(
 			"FV_Energy_cha",
@@ -41,20 +41,32 @@ void HistServerUser::InitUser()
 
 	for (int iclov=0; iclov<Nclover; iclov++)
 	{
-		for (int icrys=0;  icrys<Ncrysal; icrys++) for (int iseg=0; iseg<Nseg; iseg++)
+		for (int icrys=0;  icrys<Ncrysal; icrys++)
 		{
-			h1_Clover_ADC_seg[iclov][icrys][iseg] = MakeH1(
-					Form("Clover/ADC/clov%02d/crys%d",iclov,icrys),
-					Form("ADC_clov%02d_crys%d_seg%d",iclov,icrys,iseg),
-					Form("ADC_clov%02d_crys%d_seg%d; ADC [A.U]; count",iclov,icrys,iseg),
-					1<<10,0.,double(1<<16)
-					);
-			h1_Clover_Energy_seg[iclov][icrys][iseg] = MakeH1(
-					Form("Clover/Energy/clov%02d/crys%d",iclov,icrys),
-					Form("Energy_clov%02d_crys%d_seg%d",iclov,icrys,iseg),
-					Form("Energy_clov%02d_crys%d_seg%d; Energy [keV]; count",iclov,icrys,iseg),
-					1000,0,3000
-					);
+			for (int iseg=0; iseg<Nseg; iseg++)
+			{
+				h1_Clover_ADC_seg[iclov][icrys][iseg] = MakeH1(
+						Form("Clover/ADC/clov%02d/crys%d",iclov,icrys),
+						Form("ADC_clov%02d_crys%d_seg%d",iclov,icrys,iseg),
+						Form("ADC_clov%02d_crys%d_seg%d; ADC [A.U]; count",iclov,icrys,iseg),
+						1<<10,0.,double(1<<16)
+						);
+				h1_Clover_Energy_seg[iclov][icrys][iseg] = MakeH1(
+						Form("Clover/Energy/clov%02d/crys%d",iclov,icrys),
+						Form("Energy_clov%02d_crys%d_seg%d",iclov,icrys,iseg),
+						Form("Energy_clov%02d_crys%d_seg%d; Energy [keV]; count",iclov,icrys,iseg),
+						1000,0,3000
+						);
+			}
+			for (int ifv=0; ifv<Nfv; ifv++)
+			{
+				h1_Clover_Energy_fv[iclov][icrys][ifv] = MakeH1(
+						Form("Clover/Energy/clov%02d/crys%d",iclov,icrys),
+						Form("Energy_clov%02d_crys%d_fv%d",iclov,icrys,ifv),
+						Form("Energy_clov%02d_crys%d_fv%d; Energy [keV]; count",iclov,icrys,ifv),
+						1000,0,3000
+						);
+			}
 		}
 	}
 
@@ -90,14 +102,14 @@ void HistServerUser::ProcessToHistUser()
 		h2_ADC_cha[iSig->sid]->Fill(iSig->cha + Ncha*iSig->brd, iSig->ADC);
 		//h2_ADC_cha->Fill(iSig->cha + Ncha*(iSig->brd + Nbrd*iSig->sid), iSig->ADC);
 		if (iSig->cha==8 || iSig->cha==9)
-		h2_Energy_cha->Fill((iSig->cha-8) + 2*(iSig->brd + Nbrd*iSig->sid), iSig->Energy);
+			h2_Energy_cha->Fill((iSig->cha-8) + 2*(iSig->brd + Nbrd*iSig->sid), iSig->Energy);
 	}
 
 	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++) if (iSig->cha==8)
-	for (jSig = evtSimple->vSigAna.begin(); jSig != evtSimple->vSigAna.end(); jSig++) if (jSig->cha==8) if (iSig!=jSig)
-	{
-		h2_Eg_Eg->Fill(iSig->Energy, jSig->Energy);
-	}
+		for (jSig = evtSimple->vSigAna.begin(); jSig != evtSimple->vSigAna.end(); jSig++) if (jSig->cha==8) if (iSig!=jSig)
+		{
+			h2_Eg_Eg->Fill(iSig->Energy, jSig->Energy);
+		}
 
 	EvtASGARD *evtASGARD = &(event.ASGARD);
 	vector<HitClover>::iterator iClover, jClover;
@@ -113,6 +125,7 @@ void HistServerUser::ProcessToHistUser()
 				///h1_ADC_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->ADC);
 				//h2_ADC_cha->Fill(iFV->cha + Ncha*(iFV->brd + Nbrd*iFV->sid), iFV->ADC);
 				h2_Energy_cha->Fill(iFV->cha + Ncha*(iFV->brd + Nbrd*iFV->sid), iFV->Energy);
+				h1_Clover_Energy_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->Energy);
 			}
 			for (iSeg=iCrystal->vSigAnaSeg.begin(); iSeg!=iCrystal->vSigAnaSeg.end(); iSeg++)
 			{
@@ -120,9 +133,8 @@ void HistServerUser::ProcessToHistUser()
 				h1_Clover_Energy_seg[iClover->idx][iCrystal->idx][iSeg->idx]->Fill(iSeg->Energy);
 			}
 		}
-
 	}
-	
+
 	EvtStarkJr *evtStarkJr = &(event.StarkJr);
 	vector<HitX6>::iterator iX6, jX6;
 	vector<HitStrip>::iterator iStrip, jStrip;
