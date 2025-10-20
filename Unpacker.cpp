@@ -53,9 +53,9 @@ void print_usage()
 {
 	fprintf(stdout,"Usage\n");
 	fprintf(stdout,"--input,-i <file.dat> or 'online'\\\n");
+	fprintf(stdout,"--config,-c <config>\\\n");
 	fprintf(stdout,"--treeout,-to <tree.root>\\\n");
 	fprintf(stdout,"--histout,-ho <hists.root>\\\n");
-	fprintf(stdout,"--config,-c <config>\\\n");
 	fprintf(stdout,"--timewindow,-tw <timewindow=0> ## 8 ns for NKfadc\\\n");
 	fprintf(stdout,"--httpport, -hp <httpport=8181>\\\n");
 

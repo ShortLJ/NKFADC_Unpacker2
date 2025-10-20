@@ -50,7 +50,7 @@ void Config::ReadDetMapFile(string filename)
 					map_type	[isid][ibrd][icha] = itype;
 					map_det		[isid][ibrd][icha] = idet;
 					map_idx		[isid][ibrd][icha] = iidx++;
-		fprintf(stdout,"%u %u %u / type %u det %u idx %u\n",isid,ibrd,icha, map_type[isid][ibrd][icha],map_det[isid][ibrd][icha],map_idx[isid][ibrd][icha]);
+					//fprintf(stdout,"%u %u %u / type %u det %u idx %u\n",isid,ibrd,icha, map_type[isid][ibrd][icha],map_det[isid][ibrd][icha],map_idx[isid][ibrd][icha]);
 				}
 				break;
 			}
@@ -70,6 +70,11 @@ void Config::ReadDetMapFile(string filename)
 				exit(-7);
 			}
 		}
+	}
+	
+	for (isid=0; isid<N_SID; isid++) for (ibrd=0; ibrd<N_BRD; ibrd++) for (icha=0; icha<N_CHA; icha++) if (enabled[isid][ibrd][icha])
+	{
+		fprintf(stdout,"%u %u %u / type %u det %u idx %u\n",isid,ibrd,icha, map_type[isid][ibrd][icha],map_det[isid][ibrd][icha],map_idx[isid][ibrd][icha]);
 	}
 
 }
