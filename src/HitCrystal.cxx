@@ -51,11 +51,15 @@ void HitCrystal::Process_Esum()
 		E_seg_sum+=seg->Energy;
 	}
 	E_fv_avg = 0;
+	int nhit=0;
 	vector<SigAna>::iterator fv;
 	for (fv=vSigAnaFV.begin(); fv!=vSigAnaFV.end(); fv++)
 	{
-		E_fv_avg+=fv->Energy/2.;
+		E_fv_avg+=fv->Energy;
+		nhit++;
 	}
+	if (nhit) E_fv_avg /= nhit;
+	else E_fv_avg = -1;
 }
 
 
