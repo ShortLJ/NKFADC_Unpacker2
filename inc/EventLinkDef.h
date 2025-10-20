@@ -12,7 +12,10 @@
 #ifdef __CLING__
 #pragma link C++ nestedclasses;
 #pragma link C++ nestedtypedefs;
+#pragma link C++ class Sig+;
+#pragma link C++ class Hit+;
 #pragma link C++ class SigAna+;
+
 #pragma link C++ class vector<SigAna>+;
 #pragma link C++ class EvtSimple+;
 

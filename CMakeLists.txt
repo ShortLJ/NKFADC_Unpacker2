@@ -66,7 +66,7 @@ target_link_libraries(EventProcessor Event)
 #target_link_libraries(EventProcessor HistServerUser)
 #
 add_library(TreeWriter SHARED src/TreeWriter.cxx inc/TreeWriter.h inc/Global.h ${ROOT_LIBRARIES})
-target_link_libraries(TreeWriter EvtASGARD)
+target_link_libraries(TreeWriter Event)
 target_link_libraries(TreeWriter ${ROOT_LIBRARIES})
 add_library(HistServer SHARED src/HistServer.cxx inc/HistServer.h)
 target_link_libraries(HistServer ${ROOT_LIBRARIES})
@@ -89,7 +89,7 @@ target_link_libraries(NKFADC_Unpacker ${ROOT_LIBRARIES})
 
 #ROOT_GENERATE_DICTIONARY(EvtASGARD_dict MODULE TreeWriter LINKDEF EvtASGARDLinkDef.h)
 #ROOT_GENERATE_DICTIONARY(EvtStarkJr_dict MODULE TreeWriter LINKDEF EvtStarkJrLinkDef.h)
-ROOT_GENERATE_DICTIONARY(Event_dict MODULE TreeWriter LINKDEF EventLinkDef.h)
+ROOT_GENERATE_DICTIONARY(Event_dict Event.h LINKDEF EventLinkDef.h MODULE TreeWriter DEPENDENCIES EvtSimple EvtASGARD EvtStarkJr)
 target_link_libraries(Event_dict EvtSimple EvtASGARD EvtStarkJr)
 
 
