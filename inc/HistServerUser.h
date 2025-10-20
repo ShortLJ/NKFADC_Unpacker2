@@ -33,6 +33,8 @@ class HistServerUser : public HistServer
 	private:
 		TH2 *h2_ADC_cha[Nsid];
 		TH2 *h2_Energy_cha;
+
+		TH2 *h2_Eg_Eg;
 	
 		TH1 *h1_Clover_ADC_seg[Nclover][Ncrysal][Nseg];
 		TH1 *h1_Clover_Energy_seg[Nclover][Ncrysal][Nseg];

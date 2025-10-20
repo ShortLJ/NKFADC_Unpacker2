@@ -29,9 +29,14 @@ void HistServerUser::InitUser()
 			);
 	}
 	h2_Energy_cha = MakeH2(
-			"Energy_cha",
-			"Energy by channel; channel; Energy",
-			Nsid*Nbrd*Ncha, 0,Nsid*Nbrd*Ncha, 1000,0,3000
+			"FV_Energy_cha",
+			Form("FV Energy; 2*(brd+%02d*sid); Energy [keV]",Nbrd),
+			Nsid*Nbrd*2, 0,Nsid*Nbrd*2, 1500,0,3000
+			);
+	h2_Eg_Eg = MakeH2(
+			"Eg_Eg",
+			"g-g coincidence;Energy;Energy",
+			3000,0,3000, 3000,0,3000
 			);
 
 	for (int iclov=0; iclov<Nclover; iclov++)
@@ -84,6 +89,14 @@ void HistServerUser::ProcessToHistUser()
 	{
 		h2_ADC_cha[iSig->sid]->Fill(iSig->cha + Ncha*iSig->brd, iSig->ADC);
 		//h2_ADC_cha->Fill(iSig->cha + Ncha*(iSig->brd + Nbrd*iSig->sid), iSig->ADC);
+		if (iSig->cha==8 || iSig->cha==9)
+		h2_Energy_cha->Fill((iSig->cha-8) + 2*(iSig->brd + Nbrd*iSig->sid), iSig->Energy);
+	}
+
+	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++) if (iSig->cha==8)
+	for (jSig = evtSimple->vSigAna.begin(); jSig != evtSimple->vSigAna.end(); jSig++) if (jSig->cha==8) if (iSig!=jSig)
+	{
+		h2_Eg_Eg->Fill(iSig->Energy, jSig->Energy);
 	}
 
 	EvtASGARD *evtASGARD = &(event.ASGARD);
