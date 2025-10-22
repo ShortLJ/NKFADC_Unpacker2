@@ -39,6 +39,7 @@ class HistServerUser : public HistServer
 		TH1 *h1_Clover_ADC_seg[Nclover][Ncrysal][Nseg];
 		TH1 *h1_Clover_Energy_seg[Nclover][Ncrysal][Nseg];
 		TH1 *h1_Clover_Energy_fv[Nclover][Ncrysal][Nfv];
+		TH1 *h1_Clover_Energy_fv_all;
 
 		TH2 *h2_X6_Energy_idx[Nx6];
 		TH2 *h2_X6_Pos_idx[Nx6];
