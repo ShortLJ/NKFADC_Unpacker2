@@ -148,6 +148,7 @@ int TimeSorter::FindSigWithLGT(uint64_t ct)
 		{
 			v_sig_coin.push_back(ipq_sig->top());
 			ipq_sig->pop();
+			nsorted--;
 			ret++;
 		}
 	}
