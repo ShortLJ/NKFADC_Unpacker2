@@ -7,6 +7,27 @@
 
 TimeSorter::TimeSorter()
 {
+	pq_size=0;
+	for (uint8_t isid=0; isid<N_SID; isid++)
+	for (uint8_t ibrd=0; ibrd<N_BRD; ibrd++)
+	for (uint8_t icha=0; icha<N_CHA; icha++)
+	{
+		if (enabled[isid][ibrd][icha]) 
+		{
+			TimeSorter_map[isid][ibrd][icha] = pq_size++;
+			vpq_sig.emplace_back();
+			if (vpq_sig.size()!=pq_size)
+			{
+				fprintf(stderr,"DEBUG function. vq.sig.size()!=pq_size\n");
+				exit(-71);
+			}
+		}
+		else
+		{
+			TimeSorter_map[isid][ibrd][icha]=-1;
+		}
+	}
+
 }
 TimeSorter::~TimeSorter()
 {
@@ -17,22 +38,22 @@ void TimeSorter::Push(Sig sig)
 	q_sig_input.push(sig);
 	nenque++;
 }
-Sig TimeSorter::Top(uint8_t isid, uint8_t ibrd, uint8_t icha)
+/*Sig TimeSorter::Top(uint8_t isid, uint8_t ibrd, uint8_t icha)
 {
-	if (q_sig[isid][ibrd][icha].empty()) 
+	if (vpq_sig[TimeSorter_map[isid][ibrd][icha]].empty()) 
 	{
 		fprintf(stderr,"q_sig[isid%u][ibrd%u][icha%u] is empty, but you tried to call Top()!!\n",isid,ibrd,icha); exit(-6);
 	}
-	return q_sig[isid][ibrd][icha].top();
+	return vpq_sig[TimeSorter_map[isid][ibrd][icha]].top();
 
-}
-void TimeSorter::Pop(uint8_t sid, uint8_t brd, uint8_t cha)
+}*/
+/*void TimeSorter::Pop(uint8_t sid, uint8_t brd, uint8_t cha)
 {
 	checker(isid,ibrd,icha);
 	if(q_sig[isid][ibrd][icha].size()==0) exit(-5);
 	q_sig[isid][ibrd][icha].pop();
 	nsorted--;
-}
+}*/
 
 
 
@@ -43,7 +64,7 @@ void TimeSorter::Sort(Sig sig)
 	icha=sig.cha;
 	if (checker(isid,ibrd,icha))
 	{
-		q_sig[isid][ibrd][icha].push(sig);
+		vpq_sig[TimeSorter_map[isid][ibrd][icha]].push(sig);
 		nsorted++;
 	}
 }
@@ -99,12 +120,10 @@ void TimeSorter::Stop()
 uint64_t TimeSorter::GetMinLGT()
 {
 	uint64_t ret=-1; /// uint64_t max
-	for (isid=0; isid<Nsid; isid++) for (ibrd=0; ibrd<Nbrd; ibrd++) for (icha=0; icha<Ncha; icha++) if (enabled[isid][ibrd][icha]) if (!Empty(isid,ibrd,icha))
+	vector<priority_queue<Sig>>::iterator ipq_sig;
+	for (ipq_sig=vpq_sig.begin(); ipq_sig!=vpq_sig.end(); ipq_sig++) if (!ipq_sig->empty())
 	{
-		if (ret > Top(isid,ibrd,icha).coarse_time)
-		{
-			ret = Top(isid,ibrd,icha).coarse_time;
-		}
+		ret = ret > ipq_sig->top().coarse_time ? ipq_sig->top().coarse_time : ret;
 	}
 	if (ret==-1)
 	{
@@ -116,18 +135,19 @@ uint64_t TimeSorter::GetMinLGT()
 uint64_t TimeSorter::GetLGT(uint8_t isid, uint8_t ibrd, uint8_t icha)
 {
 	checker(isid,ibrd,icha);
-	return Top(isid,ibrd,icha).coarse_time;
+	return vpq_sig[TimeSorter_map[isid][ibrd][icha]].top().coarse_time;
 }
 
 int TimeSorter::FindSigWithLGT(uint64_t ct)
 {
 	int ret=0;
-	for (isid=0; isid<Nsid; isid++) for (ibrd=0; ibrd<Nbrd; ibrd++) for (icha=0; icha<Ncha; icha++) if (enabled[isid][ibrd][icha]) if (!Empty(isid,ibrd,icha))
+	vector<priority_queue<Sig>>::iterator ipq_sig;
+	for (ipq_sig=vpq_sig.begin(); ipq_sig!=vpq_sig.end(); ipq_sig++) if (!ipq_sig->empty())
 	{
-		if (Top(isid,ibrd,icha).coarse_time - ct <= timewindow)
+		if (ipq_sig->top().coarse_time - ct <= timewindow)
 		{
-			v_sig_coin.push_back(Top(isid,ibrd,icha));
-			Pop(isid,ibrd,icha);
+			v_sig_coin.push_back(ipq_sig->top());
+			ipq_sig->pop();
 			ret++;
 		}
 	}
@@ -144,11 +164,11 @@ vector<Sig> TimeSorter::GetCoinvSig(uint64_t ct)
 
 
 
-bool TimeSorter::Empty(uint8_t isid, uint8_t ibrd, uint8_t icha)
+/*bool TimeSorter::Empty(uint8_t isid, uint8_t ibrd, uint8_t icha)
 {
 	checker(isid,ibrd,icha);
-	return q_sig[isid][ibrd][icha].empty();
-}
+	return vpq_sig[TimeSorter_map[isid][ibrd][icha]].empty();
+}*/
 
 
 bool TimeSorter::checker(uint8_t isid, uint8_t ibrd, uint8_t icha)

@@ -15,6 +15,7 @@ extern uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 extern uint8_t	map_idx		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 
 
+uint16_t TimeSorter_map[N_SID][N_BRD][N_CHA];
 
 using namespace std;
 
@@ -41,12 +42,14 @@ class TimeSorter
 
 	private:
 		queue<Sig> q_sig_input;
-		priority_queue<Sig> q_sig[Nsid][Nbrd][Ncha];
+		uint16_t pq_size;
+		vector<priority_queue<Sig>> vpq_sig;
+		//priority_queue<Sig> q_sig[Nsid][Nbrd][Ncha];
 		vector<Sig> v_sig_coin;
 
 		void Sort(Sig sig);
-		Sig Top(uint8_t sid, uint8_t brd, uint8_t cha);
-		void Pop(uint8_t sid, uint8_t brd, uint8_t cha);
+		//Sig Top(uint8_t sid, uint8_t brd, uint8_t cha);
+		//void Pop(uint8_t sid, uint8_t brd, uint8_t cha);
 
 		bool sorterEnd=0;
 		uint64_t nsorted=0;
@@ -56,7 +59,7 @@ class TimeSorter
 		int64_t timewindow=0;
 		int FindSigWithLGT(uint64_t ct);
 
-		bool Empty(uint8_t sid, uint8_t brd, uint8_t cha);
+		//bool Empty(uint8_t sid, uint8_t brd, uint8_t cha);
 		bool checker(uint8_t sid, uint8_t brd, uint8_t cha);
 
 };
