@@ -59,7 +59,9 @@ void DataGetter::Loop()
 		if (getterEnd) break;
 		fmutex.unlock();
 		uint8_t *packet = GetNextPacket();
+#ifdef PEND_READING_ON_FULL
 		while (timesorter->GetNSorted()+timesorter->GetNenque()>NBUFF_SORTER_ULIMIT) usleep(100000);
+#endif // PEND_READING_ON_FULL
 		if (packet_size>0) ProcessPacket(packet);
 		else usleep(1000); // 1000 us = 1 ms
 		//else usleep(1000000); // 1000 us = 1 ms
