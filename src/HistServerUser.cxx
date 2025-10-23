@@ -19,6 +19,17 @@ void HistServerUser::InitUser()
 	InitFile();
 	//InitHttp();
 
+	h1_timestamp_structure = MakeH1(
+			"Timestamp_structure",
+			"Timestamp_structure;Timestamp [s];counts in 10 iter / 1 ms",
+			1000,0,1
+			);
+	h2_timestamp_tn = MakeH2(
+			"TrigNumber_Timestamp",
+			"TrigNumber_Timestamp;Timestamp [s];Trigger Number",
+			1000,0,1, 4000,0,1e6
+			);
+
 ///////////// User Area top /////////////////
 	for (int isid=0; isid<Nsid; isid++)
 	{
@@ -31,7 +42,7 @@ void HistServerUser::InitUser()
 	h2_Energy_cha = MakeH2(
 			"FV_Energy_cha",
 			Form("FV Energy; 2*(brd+%02d*sid); Energy [keV]",Nbrd),
-			Nsid*Nbrd*2, 0,Nsid*Nbrd*2, 1500,0,3000
+			Nsid*Nbrd*2, 0,Nsid*Nbrd*2, 3000,0,3000
 			);
 	h2_Eg_Eg = MakeH2(
 			"Eg_Eg",
@@ -72,7 +83,7 @@ void HistServerUser::InitUser()
 	h1_Clover_Energy_fv_all = MakeH1(
 			Form("h1_Clover_Energy_fv_all"),
 			Form("Energy_clov_FV_all; Energy [keV]; count"),
-			1500,0,3000
+			3000,0,3000
 			);
 
 
@@ -100,10 +111,31 @@ void HistServerUser::InitUser()
 
 void HistServerUser::ProcessToHistUser()
 {
-
 ///////////// User Area top /////////////////
 	EvtSimple *evtSimple = &(event.Simple);
 	vector<SigAna>::iterator iSig, jSig;
+
+	//if ((counter & 0xffff)==0) 
+	//{
+	//	if (evtSimple->vSigAna.begin()!=evtSimple->vSigAna.end())
+	//		TS0 = evtSimple->vSigAna.begin()->coarse_time;
+	//	h1_timestamp_structure->Reset();
+	//}
+	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
+	{
+		if (iSig->coarse_time > TS1)
+		{
+			TS0 = evtSimple->vSigAna.begin()->coarse_time;
+			TS1 = TS0+10000000000;
+			tn0 = evtSimple->vSigAna.begin()->trigger_number;
+			h1_timestamp_structure->Reset();
+			h2_timestamp_tn->Reset();
+		}
+		double ts = ((iSig->coarse_time-TS0)%1000000000)/1000000000.;
+		h2_timestamp_tn->Fill(ts,iSig->trigger_number-tn0);
+		h1_timestamp_structure->Fill(ts);
+	}
+	counter++;
 	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
 	{
 		h2_ADC_cha[iSig->sid]->Fill(iSig->cha + Ncha*iSig->brd, iSig->ADC);

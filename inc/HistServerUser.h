@@ -29,6 +29,12 @@ class HistServerUser : public HistServer
 		void InitUser();
 		void ProcessToHistUser();
 
+	private:
+		TH2 *h2_timestamp_tn;
+		uint32_t tn0=0;
+		TH1 *h1_timestamp_structure;
+		uint16_t counter=0; uint64_t TS0=0; uint64_t TS1=0;
+
 ///////////// User Area top /////////////////
 	private:
 		TH2 *h2_ADC_cha[Nsid];
