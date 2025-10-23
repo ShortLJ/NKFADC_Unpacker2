@@ -4,7 +4,7 @@ set -x
 
 
 RUNNAME=$1
-RUNNUMBER=$(printf '%02d' $2)
+RUNNUMBER=$(printf '%03d' $2)
 PORT=$((8180+$3))
 TIME=`date +"%Y%m%d_%H%M"`
 
