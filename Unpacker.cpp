@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
 	eventprocessor.RegisterTreeWriter(&treewriter);
 #endif
 
-	HistServerUser histserver(Form("http:%u?thrds=2",httpport));
+	HistServerUser histserver(Form("http:%u?thrds=4",httpport));
 	//HistServerUser histserver(Form("http:127.0.0.1:%u?thrds=2",httpport));
 	//HistServerUser histserver;
 	histserver.SetHistFile(histfilename);

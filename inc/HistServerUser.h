@@ -30,10 +30,15 @@ class HistServerUser : public HistServer
 		void ProcessToHistUser();
 
 	private:
-		TH2 *h2_timestamp_tn;
 		uint32_t tn0=0;
-		TH1 *h1_timestamp_structure;
-		uint16_t counter=0; uint64_t TS0=0; uint64_t TS1=0;
+		uint64_t TS0=0; uint64_t TS1=0;
+		TH2 *h2_timestamp_tn;
+		TH1 *h1_timestamp_structure_total;
+		TH1 *h1_timestamp_structure_total_avg;
+		TH2 *h2_timestamp_structure_cha;
+		TH2 *h2_timestamp_structure_cha_avg;
+		TH2 *h2_timestamp_structure_Energy;
+		TH2 *h2_timestamp_structure_Energy_avg;
 
 ///////////// User Area top /////////////////
 	private:

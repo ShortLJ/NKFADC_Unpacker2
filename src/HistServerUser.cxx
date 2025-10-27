@@ -19,11 +19,41 @@ void HistServerUser::InitUser()
 	InitFile();
 	//InitHttp();
 
-	h1_timestamp_structure = MakeH1(
-			"Timestamp_structure",
-			"Timestamp_structure;Timestamp [s];counts in 10 iter / 1 ms",
+	h1_timestamp_structure_total = MakeH1(
+			"Timestamp_structure_total",
+			"Timestamp_structure_total;Timestamp [s];counts in 4 iter / 1 ms",
 			1000,0,1
 			);
+	h1_timestamp_structure_total_avg = MakeH1(
+			"Timestamp_structure_total_avg",
+			"Timestamp_structure_total_avg;Timestamp [s];counts moving avg / 1 ms * 100",
+			1000,0,1
+			);
+
+	h2_timestamp_structure_cha = MakeH2(
+			"Timestamp_structure_cha",
+			Form("Timestamp_structure_cha;Timestamp [s];cha+%d*(brd+%d*sid);counts in 4 iter / 1 ms",Ncha,Nbrd),
+			1000,0,1, Ncha*Nbrd*Nsid,0, Ncha*Nbrd*Nsid
+			);
+	h2_timestamp_structure_cha_avg = MakeH2(
+			"Timestamp_structure_cha_avg",
+			Form("Timestamp_structure_cha_avg;Timestamp [s];cha+%d*(brd+%d*sid);counts moving avg / 1 ms * 100",Ncha,Nbrd),
+			1000,0,1, Ncha*Nbrd*Nsid,0, Ncha*Nbrd*Nsid
+			);
+
+	h2_timestamp_structure_Energy = MakeH2(
+			"Timestamp_structure_Energy",
+			Form("Timestamp_structure_Energy;Timestamp [s];Energy [keV];counts in 4 iter / 1 ms"),
+			1000,0,1,  600,0,3000
+			);
+	h2_timestamp_structure_Energy_avg = MakeH2(
+			"Timestamp_structure_Energy_avg",
+			Form("Timestamp_structure_Energy_avg;Timestamp [s];Energy [keV];counts moving avg / 1 ms * 100"),
+			1000,0,1,  600,0,3000
+			);
+
+
+
 	h2_timestamp_tn = MakeH2(
 			"TrigNumber_Timestamp",
 			"TrigNumber_Timestamp;Timestamp [s];Trigger Number",
@@ -47,7 +77,7 @@ void HistServerUser::InitUser()
 	h2_Eg_Eg = MakeH2(
 			"Eg_Eg",
 			"g-g coincidence;Energy;Energy",
-			3000,0,3000, 3000,0,3000
+			1500,0,3000, 1500,0,3000
 			);
 
 	for (int iclov=0; iclov<Nclover; iclov++)
@@ -115,27 +145,51 @@ void HistServerUser::ProcessToHistUser()
 	EvtSimple *evtSimple = &(event.Simple);
 	vector<SigAna>::iterator iSig, jSig;
 
-	//if ((counter & 0xffff)==0) 
-	//{
-	//	if (evtSimple->vSigAna.begin()!=evtSimple->vSigAna.end())
-	//		TS0 = evtSimple->vSigAna.begin()->coarse_time;
-	//	h1_timestamp_structure->Reset();
-	//}
 	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
 	{
 		if (iSig->coarse_time > TS1)
 		{
-			TS0 = evtSimple->vSigAna.begin()->coarse_time;
-			TS1 = TS0+10000000000;
+			if (TS1==0) TS0=evtSimple->vSigAna.begin()->coarse_time;
+			else TS0 = TS1;
+			TS1 = TS0 + 4000000000;
+			//TS0 = evtSimple->vSigAna.begin()->coarse_time;
+			//TS1 = TS0+4000000000;
 			tn0 = evtSimple->vSigAna.begin()->trigger_number;
-			h1_timestamp_structure->Reset();
+			for (int ibin=1; ibin<=h1_timestamp_structure_total_avg->GetXaxis()->GetNbins(); ibin++)
+			{
+				h1_timestamp_structure_total_avg->SetBinContent(ibin, (
+							h1_timestamp_structure_total_avg->GetBinContent(ibin)*3
+							+h1_timestamp_structure_total->GetBinContent(ibin)*1*100
+							)/4/4);
+			}
+			for (int ibin=1; ibin<=h2_timestamp_structure_cha_avg->GetXaxis()->GetNbins(); ibin++)
+			for (int jbin=1; jbin<=h2_timestamp_structure_cha_avg->GetYaxis()->GetNbins(); jbin++)
+			{
+				h2_timestamp_structure_cha_avg->SetBinContent(ibin,jbin, (
+							h2_timestamp_structure_cha_avg->GetBinContent(ibin,jbin)*3
+							+ h2_timestamp_structure_cha->GetBinContent(ibin,jbin)*1*100
+							)/4/4);
+			}
+			for (int ibin=1; ibin<=h2_timestamp_structure_Energy_avg->GetXaxis()->GetNbins(); ibin++)
+			for (int jbin=1; jbin<=h2_timestamp_structure_Energy_avg->GetYaxis()->GetNbins(); jbin++)
+			{
+				h2_timestamp_structure_Energy_avg->SetBinContent(ibin,jbin, (
+							h2_timestamp_structure_Energy_avg->GetBinContent(ibin,jbin)*9
+							+ h2_timestamp_structure_Energy->GetBinContent(ibin,jbin)*1*100
+							)/10/4);
+			}
+
+			h1_timestamp_structure_total->Reset();
+			h2_timestamp_structure_cha->Reset();
+			h2_timestamp_structure_Energy->Reset();
 			h2_timestamp_tn->Reset();
 		}
 		double ts = ((iSig->coarse_time-TS0)%1000000000)/1000000000.;
 		h2_timestamp_tn->Fill(ts,iSig->trigger_number-tn0);
-		h1_timestamp_structure->Fill(ts);
+		h1_timestamp_structure_total->Fill(ts);
+		h2_timestamp_structure_cha->Fill(ts,iSig->cha+Ncha*(iSig->brd+Nbrd*iSig->sid));
+		if (iSig->Energy > 20) h2_timestamp_structure_Energy->Fill(ts,iSig->Energy);
 	}
-	counter++;
 	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
 	{
 		h2_ADC_cha[iSig->sid]->Fill(iSig->cha + Ncha*iSig->brd, iSig->ADC);
