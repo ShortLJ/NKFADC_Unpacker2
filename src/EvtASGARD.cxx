@@ -27,7 +27,7 @@ EvtASGARD::EvtASGARD(vector<HitCrystal> v_hit_crystal)
 	{
 		if (v_hit_crystal_sort[iclover].size()>0)
 		{
-			vHitClover.push_back(HitClover(iclover,v_hit_crystal_sort[iclover]));
+			vHitClover.emplace_back(iclover,v_hit_crystal_sort[iclover]);
 		}
 	}
 }

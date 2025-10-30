@@ -11,7 +11,7 @@ HitX6::HitX6(uint8_t idet, vector<SigAna> v_sigana_pad, vector<SigAna> v_sigana_
 	vector<SigAna>::iterator sigpad, sigstrpU, sigstrpD;
 	for (sigpad=v_sigana_pad.begin(); sigpad!=v_sigana_pad.end(); sigpad++)
 	{
-		vHitPad.push_back(HitPad(*sigpad));
+		vHitPad.emplace_back(*sigpad);
 	}
 
 	counts_stripU=0; counts_stripD=0;
@@ -33,7 +33,7 @@ HitX6::HitX6(uint8_t idet, vector<SigAna> v_sigana_pad, vector<SigAna> v_sigana_
 		{
 			if (sigstrpU->idx==sigstrpD->idx)
 			{
-				vHitStrip.push_back(HitStrip(*sigstrpU,*sigstrpD));
+				vHitStrip.emplace_back(*sigstrpU,*sigstrpD);
 			}
 		}
 	}

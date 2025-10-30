@@ -91,7 +91,7 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 		uint8_t idet  = map_det   [isid][ibrd][icha];
 		uint8_t iidx  = map_idx	  [isid][ibrd][icha];
 
-		v_sigana_sort[itype][idet].push_back(SigAna(itype,idet,iidx,*it_sig));
+		v_sigana_sort[itype][idet].emplace_back(itype,idet,iidx,*it_sig);
 	}
 	////////// Simple //////////
 	evt.Simple = EvtSimple(v_sigana_sort[0]);
@@ -104,7 +104,7 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 		{
 			uint8_t iclover = idet >> 2; 
 			uint8_t icrystal = idet & 0x3;
-			v_hit_crystal.push_back(HitCrystal(iclover,icrystal,v_sigana_sort[1][idet],v_sigana_sort[2][idet]));
+			v_hit_crystal.emplace_back(iclover,icrystal,v_sigana_sort[1][idet],v_sigana_sort[2][idet]);
 		}
 	}
 	evt.ASGARD=EvtASGARD(v_hit_crystal);
@@ -114,7 +114,7 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 	{
 		if (v_sigana_sort[3][idet].size()+v_sigana_sort[4][idet].size()+v_sigana_sort[5][idet].size()>0)
 		{
-			v_hit_x6.push_back(HitX6(idet,v_sigana_sort[3][idet],v_sigana_sort[4][idet],v_sigana_sort[5][idet]));
+			v_hit_x6.emplace_back(idet,v_sigana_sort[3][idet],v_sigana_sort[4][idet],v_sigana_sort[5][idet]);
 		}
 	}
 	evt.StarkJr=EvtStarkJr(v_hit_x6);

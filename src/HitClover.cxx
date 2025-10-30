@@ -43,7 +43,7 @@ HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna>
 
 	for (uint8_t icrstl=0; icrstl<4; icrstl++)
 	{
-		vHitCrystal.push_back(HitCrystal(icrstl, v_sigana_sort_fv[icrstl], v_sigana_sort_seg[icrstl]));
+		vHitCrystal.emplace_back(icrstl, v_sigana_sort_fv[icrstl], v_sigana_sort_seg[icrstl]);
 	}
 
 	ProcessHit();
