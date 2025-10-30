@@ -16,7 +16,6 @@ EvtASGARD::~EvtASGARD()
 EvtASGARD::EvtASGARD(vector<HitCrystal> v_hit_crystal)
 {
 	vHitClover.clear();
-	constexpr uint8_t Nclover = Ndet/4;
 	vector<HitCrystal> v_hit_crystal_sort[Nclover];
 	vector<HitCrystal>::iterator crystal;
 	for (crystal=v_hit_crystal.begin(); crystal!=v_hit_crystal.end(); crystal++)

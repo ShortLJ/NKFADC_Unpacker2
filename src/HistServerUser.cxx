@@ -82,7 +82,7 @@ void HistServerUser::InitUser()
 
 	for (int iclov=0; iclov<Nclover; iclov++)
 	{
-		for (int icrys=0;  icrys<Ncrysal; icrys++)
+		for (int icrys=0;  icrys<Ncrystal; icrys++)
 		{
 			for (int iseg=0; iseg<Nseg; iseg++)
 			{

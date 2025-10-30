@@ -41,6 +41,14 @@
 // 3,4,5: StarkJr pad,strp U,D
 #define Ndet 56
 
+	#define Nclover 10
+	#define Ncrystal 4
+	#define Nseg 8
+	#define Nfv 2
+	#define Nx6 12
+	#define Nstrip 6
+	#define Npad 4
+
 
 
 

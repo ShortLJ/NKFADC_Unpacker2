@@ -1,5 +1,5 @@
 
-
+#include "Global.h"
 #include "Event.h"
 
 #include "HistServer.h"
@@ -7,15 +7,6 @@
 #ifndef __HISTSERVERUSER__
 #define __HISTSERVERUSER__
 
-
-#define Nclover 12
-#define Ncrysal 4
-#define Nseg 8
-#define Nfv 2
-
-#define Nx6 12
-#define Nstrip 6
-#define Npad 4
 
 
 
@@ -47,9 +38,9 @@ class HistServerUser : public HistServer
 
 		TH2 *h2_Eg_Eg;
 	
-		TH1 *h1_Clover_ADC_seg[Nclover][Ncrysal][Nseg];
-		TH1 *h1_Clover_Energy_seg[Nclover][Ncrysal][Nseg];
-		TH1 *h1_Clover_Energy_fv[Nclover][Ncrysal][Nfv];
+		TH1 *h1_Clover_ADC_seg[Nclover][Ncrystal][Nseg];
+		TH1 *h1_Clover_Energy_seg[Nclover][Ncrystal][Nseg];
+		TH1 *h1_Clover_Energy_fv[Nclover][Ncrystal][Nfv];
 		TH1 *h1_Clover_Energy_fv_all;
 
 		TH2 *h2_X6_Energy_idx[Nx6];
