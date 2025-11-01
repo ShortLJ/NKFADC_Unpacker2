@@ -4,6 +4,7 @@
 
 #include "EventProcessor.h"
 
+
 EventProcessor::EventProcessor()
 {
 }
@@ -82,6 +83,7 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 	evt.Clear();
 
 	vector<SigAna> v_sigana_sort[Ntype][Ndet];
+	bool flag_det[Ntype][Ndet]={0};
 
 	vector<Sig>::iterator it_sig;
 	for (it_sig=v_sig.begin(); it_sig!=v_sig.end(); it_sig++)
@@ -91,36 +93,52 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 		uint8_t ibrd = (*it_sig).brd;
 		uint8_t icha = (*it_sig).cha;
 		uint8_t itype = map_type  [isid][ibrd][icha]; if (itype==255) continue;
-		uint8_t idet  = map_det   [isid][ibrd][icha];
+		uint8_t idet  = map_det   [isid][ibrd][icha]; if (idet>Ndet) {fprintf(stderr,"EventProcessor::ProcessEvent(vector<Sig> v_sig): idet %u>Ndet%u\n",idet,Ndet);continue;}
 		uint8_t iidx  = map_idx	  [isid][ibrd][icha];
 
 		v_sigana_sort[itype][idet].emplace_back(itype,idet,iidx,*it_sig);
+		flag_det[itype][idet]=1;
 	}
 	////////// Simple //////////
 	evt.Simple = EvtSimple(v_sigana_sort[0]);
 
+#if Nclover>=Ndet
+	#error "Nclover>=Ndet"
+#endif
 	////////// ASGARD //////////
-	vector<HitCrystal> v_hit_crystal;
-	for (uint8_t idet=0; idet<Ndet; idet++)
+	bool flag_clover[Nclover]={0};
+	for (uint8_t iclover=0; iclover<Nclover; iclover++)
 	{
-		if (v_sigana_sort[1][idet].size()+v_sigana_sort[2][idet].size()>0)
+		bool flag_crystal[Ncrystal]={0};
+		for (uint8_t icrystal=0; icrystal<Ncrystal; icrystal++)
 		{
-			uint8_t iclover = idet >> 2; 
-			uint8_t icrystal = idet & 0x3;
-			v_hit_crystal.emplace_back(iclover,icrystal,v_sigana_sort[1][idet],v_sigana_sort[2][idet]);
+			uint8_t idet = iclover * Ncrystal + icrystal;
+			if (flag_det[1][idet]||flag_det[2][idet]) flag_clover[iclover]=1;
+		}
+		if (flag_clover[iclover])
+		{
+			evt.ASGARD.vHitClover.emplace_back(iclover);
+			for (uint8_t icrystal=0; icrystal<Ncrystal; icrystal++) if (flag_crystal[icrystal])
+			{
+				uint8_t idet = iclover * Ncrystal + icrystal;
+				evt.ASGARD.vHitClover.back().vHitCrystal.emplace_back(iclover,icrystal,v_sigana_sort[1][idet], v_sigana_sort[2][idet]);
+			}
+			evt.ASGARD.vHitClover.back().ProcessHit();
 		}
 	}
-	evt.ASGARD=EvtASGARD(v_hit_crystal);
+
+#if Nx6>=Ndet
+	#error "Nx6>=Ndet"
+#endif
 	////////// StarkJr //////////
-	vector<HitX6> v_hit_x6;
-	for (uint8_t idet=0; idet<Ndet; idet++)
+	bool flag_X6[Nx6] = {0};
+	for (uint8_t ix6=0; ix6<Nx6; ix6++)
 	{
-		if (v_sigana_sort[3][idet].size()+v_sigana_sort[4][idet].size()+v_sigana_sort[5][idet].size()>0)
+		if (flag_det[3][ix6]||flag_det[4][ix6]||flag_det[5][ix6])
 		{
-			v_hit_x6.emplace_back(idet,v_sigana_sort[3][idet],v_sigana_sort[4][idet],v_sigana_sort[5][idet]);
+			evt.StarkJr.vHitX6.emplace_back(ix6,v_sigana_sort[3][ix6],v_sigana_sort[4][ix6],v_sigana_sort[5][ix6]);
 		}
 	}
-	evt.StarkJr=EvtStarkJr(v_hit_x6);
 	return evt;
 }
 
