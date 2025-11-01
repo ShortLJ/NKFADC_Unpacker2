@@ -76,6 +76,7 @@ void HistServer::Run()
 		q_event.pop();
 		fmutex.unlock();
 
+		ProcessToHistRaw();
 		ProcessToHistUser();
 		if (flag_httpServer) srv_http->ProcessRequests();
 	}
@@ -166,6 +167,14 @@ TH2I* HistServer::MakeH2(const char *name, const char *title, Int_t nbinsx, Doub
 	}
 	return MakeH2(foldername.c_str(), objectname.c_str(), title, nbinsx,xlow,xup, nbinsy,ylow,yup);
 }
+
+void HistServer::Init()
+{
+	InitFile();
+	InitRaw();
+	InitUser();
+}
+
 
 void HistServer::Write()
 {

@@ -20,6 +20,9 @@ class HistServerUser : public HistServer
 		void InitUser();
 		void ProcessToHistUser();
 
+		void InitRaw();
+		void ProcessToHistRaw();
+
 	private:
 		uint32_t tn0=0;
 		uint64_t TS0=0; uint64_t TS1=0;
@@ -31,14 +34,14 @@ class HistServerUser : public HistServer
 		TH2 *h2_timestamp_structure_Energy;
 		TH2 *h2_timestamp_structure_Energy_avg;
 
+		TH2 *h2_ADC_cha[Nsid];
+
 ///////////// User Area top /////////////////
 	private:
-		TH2 *h2_ADC_cha[Nsid];
-		TH2 *h2_Energy_cha;
 
+		TH2 *h2_FVEnergy_cha;
 		TH2 *h2_Eg_Eg;
 	
-		TH1 *h1_Clover_ADC_seg[Nclover][Ncrystal][Nseg];
 		TH1 *h1_Clover_Energy_seg[Nclover][Ncrystal][Nseg];
 		TH1 *h1_Clover_Energy_fv[Nclover][Ncrystal][Nfv];
 		TH1 *h1_Clover_Energy_fv_all;

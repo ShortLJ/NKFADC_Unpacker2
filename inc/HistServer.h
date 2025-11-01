@@ -23,6 +23,7 @@ class HistServer
 		~HistServer();
 
 		void SetHistFile(string filename){ OutputFileName=filename; flag_histfile=1;}
+		void Init();
 
 		mutex fmutex;
 		void Run();
@@ -32,8 +33,10 @@ class HistServer
 		void Write();
 		void Close();
 
-		virtual void ProcessToHistUser()=0;
+		virtual void InitRaw()=0;
+		virtual void ProcessToHistRaw()=0;
 		virtual void InitUser()=0;
+		virtual void ProcessToHistUser()=0;
 
 	protected: // shall be called in InitUser();
 		void InitFile();

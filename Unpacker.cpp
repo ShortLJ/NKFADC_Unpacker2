@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
 	//HistServerUser histserver(Form("http:127.0.0.1:%u?thrds=2",httpport));
 	//HistServerUser histserver;
 	histserver.SetHistFile(histfilename);
-	histserver.InitUser();
+	histserver.Init();
 	eventprocessor.RegisterHistServer(&histserver);
 	thread thread_eventprocessor(&EventProcessor::Run, &eventprocessor);
 	thread thread_histserver(&HistServer::Run, &histserver);

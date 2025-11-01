@@ -13,6 +13,7 @@ class Event
 		Event();
 		~Event();
 
+		vector<SigAna> vSigAna_RAW;
 		EvtSimple Simple;
 		EvtASGARD ASGARD;
 		EvtStarkJr StarkJr;

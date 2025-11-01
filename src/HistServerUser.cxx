@@ -14,147 +14,77 @@ HistServerUser::~HistServerUser()
 {
 }
 
-void HistServerUser::InitUser()
+void HistServerUser::InitRaw()
 {
-	InitFile();
-	//InitHttp();
-
 	h1_timestamp_structure_total = MakeH1(
+			"Raw/time_structure",
 			"Timestamp_structure_total",
 			"Timestamp_structure_total;Timestamp [s];counts in 4 iter / 1 ms",
 			1000,0,1
 			);
 	h1_timestamp_structure_total_avg = MakeH1(
+			"Raw/time_structure",
 			"Timestamp_structure_total_avg",
 			"Timestamp_structure_total_avg;Timestamp [s];counts moving avg / 1 ms * 100",
 			1000,0,1
 			);
 
 	h2_timestamp_structure_cha = MakeH2(
+			"Raw/time_structure",
 			"Timestamp_structure_cha",
 			Form("Timestamp_structure_cha;Timestamp [s];cha+%d*(brd+%d*sid);counts in 4 iter / 1 ms",Ncha,Nbrd),
 			1000,0,1, Ncha*Nbrd*Nsid,0, Ncha*Nbrd*Nsid
 			);
 	h2_timestamp_structure_cha_avg = MakeH2(
+			"Raw/time_structure",
 			"Timestamp_structure_cha_avg",
 			Form("Timestamp_structure_cha_avg;Timestamp [s];cha+%d*(brd+%d*sid);counts moving avg / 1 ms * 100",Ncha,Nbrd),
 			1000,0,1, Ncha*Nbrd*Nsid,0, Ncha*Nbrd*Nsid
 			);
 
 	h2_timestamp_structure_Energy = MakeH2(
+			"Raw/time_structure",
 			"Timestamp_structure_Energy",
 			Form("Timestamp_structure_Energy;Timestamp [s];Energy [keV];counts in 4 iter / 1 ms"),
 			1000,0,1,  600,0,3000
 			);
 	h2_timestamp_structure_Energy_avg = MakeH2(
+			"Raw/time_structure",
 			"Timestamp_structure_Energy_avg",
 			Form("Timestamp_structure_Energy_avg;Timestamp [s];Energy [keV];counts moving avg / 1 ms * 100"),
 			1000,0,1,  600,0,3000
 			);
 
-
-
 	h2_timestamp_tn = MakeH2(
+			"Raw/time_structure",
 			"TrigNumber_Timestamp",
 			"TrigNumber_Timestamp;Timestamp [s];Trigger Number",
 			1000,0,1, 4000,0,1e6
 			);
 
-///////////// User Area top /////////////////
 	for (int isid=0; isid<Nsid; isid++)
 	{
 		h2_ADC_cha[isid] = MakeH2(
+				"Raw/ADC",
 				Form("ADC_sid%02d",isid),
 				Form("ADC by channel %02d;cha+%d*brd;ADC",isid,Ncha),
 				Nbrd*Ncha, 0, Nbrd*Ncha, 1<<12, 0, double(1<<15)
 				);
 	}
-	h2_Energy_cha = MakeH2(
-			"FV_Energy_cha",
-			Form("FV Energy; 2*(brd+%02d*sid); Energy [keV]",Nbrd),
-			Nsid*Nbrd*2, 0,Nsid*Nbrd*2, 3000,0,3000
-			);
-	h2_Eg_Eg = MakeH2(
-			"Eg_Eg",
-			"g-g coincidence;Energy;Energy",
-			1500,0,3000, 1500,0,3000
-			);
-
-	for (int iclov=0; iclov<Nclover; iclov++)
-	{
-		for (int icrys=0;  icrys<Ncrystal; icrys++)
-		{
-			for (int iseg=0; iseg<Nseg; iseg++)
-			{
-				h1_Clover_ADC_seg[iclov][icrys][iseg] = MakeH1(
-						Form("Clover/ADC/clov%02d/crys%d",iclov,icrys),
-						Form("ADC_clov%02d_crys%d_seg%d",iclov,icrys,iseg),
-						Form("ADC_clov%02d_crys%d_seg%d; ADC [A.U]; count",iclov,icrys,iseg),
-						1<<10,0.,double(1<<16)
-						);
-				h1_Clover_Energy_seg[iclov][icrys][iseg] = MakeH1(
-						Form("Clover/Energy/clov%02d/crys%d",iclov,icrys),
-						Form("Energy_clov%02d_crys%d_seg%d",iclov,icrys,iseg),
-						Form("Energy_clov%02d_crys%d_seg%d; Energy [keV]; count",iclov,icrys,iseg),
-						1000,0,3000
-						);
-			}
-			for (int ifv=0; ifv<Nfv; ifv++)
-			{
-				h1_Clover_Energy_fv[iclov][icrys][ifv] = MakeH1(
-						Form("Clover/Energy/clov%02d/crys%d",iclov,icrys),
-						Form("Energy_clov%02d_crys%d_fv%d",iclov,icrys,ifv),
-						Form("Energy_clov%02d_crys%d_fv%d; Energy [keV]; count",iclov,icrys,ifv),
-						1000,0,3000
-						);
-			}
-		}
-	}
-	h1_Clover_Energy_fv_all = MakeH1(
-			Form("h1_Clover_Energy_fv_all"),
-			Form("Energy_clov_FV_all; Energy [keV]; count"),
-			3000,0,3000
-			);
-
-
-
-	for (int ix6=0; ix6<Nx6; ix6++)
-	{
-		h2_X6_Energy_idx[ix6] = MakeH2(
-				Form("X6/det%02d",ix6),
-				Form("X6_det%02d_Energy",ix6),
-				Form("X6_det%02d_Energy;idx;Energy",ix6),
-				Nstrip+Npad,0,Nstrip+Npad, 1024,0,double(1<<16)
-				);
-		h2_X6_Pos_idx[ix6] = MakeH2(
-				Form("X6/det%02d",ix6),
-				Form("X6_det%02d_Position",ix6),
-				Form("X6_det%02d_Position;istrip;Position",ix6),
-				Nstrip,0,Nstrip, 1024,-1.2,1.2
-				);
-	}
-
-
-
-///////////// User Area bottom  /////////////////
 }
 
-void HistServerUser::ProcessToHistUser()
+void HistServerUser::ProcessToHistRaw()
 {
-///////////// User Area top /////////////////
-	EvtSimple *evtSimple = &(event.Simple);
 	vector<SigAna>::iterator iSig, jSig;
 
-	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
+	for (iSig = event.vSigAna_RAW.begin(); iSig != event.vSigAna_RAW.end(); iSig++)
 	{
 		if (iSig->coarse_time > TS1)
 		{
-			if (TS1==0) TS0=evtSimple->vSigAna.begin()->coarse_time;
+			if (TS1==0) TS0=event.vSigAna_RAW.begin()->coarse_time;
 			else TS0 = TS1;
 			TS1 = TS0 + 4000000000;
-			//TS0 = evtSimple->vSigAna.begin()->coarse_time;
-			//TS1 = TS0+4000000000;
-			tn0 = evtSimple->vSigAna.begin()->trigger_number;
+			tn0 = event.vSigAna_RAW.begin()->trigger_number;
 			for (int ibin=1; ibin<=h1_timestamp_structure_total_avg->GetXaxis()->GetNbins(); ibin++)
 			{
 				h1_timestamp_structure_total_avg->SetBinContent(ibin, (
@@ -190,13 +120,91 @@ void HistServerUser::ProcessToHistUser()
 		h2_timestamp_structure_cha->Fill(ts,iSig->cha+Ncha*(iSig->brd+Nbrd*iSig->sid));
 		if (iSig->Energy > 20) h2_timestamp_structure_Energy->Fill(ts,iSig->Energy);
 	}
-	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
+	for (iSig = event.vSigAna_RAW.begin(); iSig != event.vSigAna_RAW.end(); iSig++)
 	{
 		h2_ADC_cha[iSig->sid]->Fill(iSig->cha + Ncha*iSig->brd, iSig->ADC);
-		//h2_ADC_cha->Fill(iSig->cha + Ncha*(iSig->brd + Nbrd*iSig->sid), iSig->ADC);
+	}
+}
+
+
+void HistServerUser::InitUser()
+{
+	h2_FVEnergy_cha = MakeH2(
+			"Clover",
+			"FV_Energy_cha",
+			Form("FV Energy; 2*(brd+%02d*sid); Energy [keV]",Nbrd),
+			Nsid*Nbrd*2, 0,Nsid*Nbrd*2, 3000,0,3000
+			);
+	h2_Eg_Eg = MakeH2(
+			"Clover",
+			"Eg_Eg",
+			"g-g coincidence;Energy;Energy",
+			1500,0,3000, 1500,0,3000
+			);
+
+	for (int iclov=0; iclov<Nclover; iclov++)
+	{
+		for (int icrys=0;  icrys<Ncrystal; icrys++)
+		{
+			for (int iseg=0; iseg<Nseg; iseg++)
+			{
+				h1_Clover_Energy_seg[iclov][icrys][iseg] = MakeH1(
+						Form("Clover/Energy/clov%02d/crys%d",iclov,icrys),
+						Form("Energy_clov%02d_crys%d_seg%d",iclov,icrys,iseg),
+						Form("Energy_clov%02d_crys%d_seg%d; Energy [keV]; count",iclov,icrys,iseg),
+						1000,0,3000
+						);
+			}
+			for (int ifv=0; ifv<Nfv; ifv++)
+			{
+				h1_Clover_Energy_fv[iclov][icrys][ifv] = MakeH1(
+						Form("Clover/Energy/clov%02d/crys%d",iclov,icrys),
+						Form("Energy_clov%02d_crys%d_fv%d",iclov,icrys,ifv),
+						Form("Energy_clov%02d_crys%d_fv%d; Energy [keV]; count",iclov,icrys,ifv),
+						1000,0,3000
+						);
+			}
+		}
+	}
+	h1_Clover_Energy_fv_all = MakeH1(
+			"Clover",
+			Form("h1_Clover_Energy_fv_all"),
+			Form("Energy_clov_FV_all; Energy [keV]; count"),
+			3000,0,3000
+			);
+
+
+
+	for (int ix6=0; ix6<Nx6; ix6++)
+	{
+		h2_X6_Energy_idx[ix6] = MakeH2(
+				Form("X6/det%02d",ix6),
+				Form("X6_det%02d_Energy",ix6),
+				Form("X6_det%02d_Energy;idx;Energy",ix6),
+				Nstrip+Npad,0,Nstrip+Npad, 1024,0,double(1<<16)
+				);
+		h2_X6_Pos_idx[ix6] = MakeH2(
+				Form("X6/det%02d",ix6),
+				Form("X6_det%02d_Position",ix6),
+				Form("X6_det%02d_Position;istrip;Position",ix6),
+				Nstrip,0,Nstrip, 1024,-1.2,1.2
+				);
+	}
+
+
+
+///////////// User Area bottom  /////////////////
+}
+void HistServerUser::ProcessToHistUser()
+{
+	EvtSimple *evtSimple = &(event.Simple);
+	vector<SigAna>::iterator iSig, jSig;
+
+	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
+	{
 		if (iSig->cha==8 || iSig->cha==9)
 		{
-			h2_Energy_cha->Fill((iSig->cha-8) + 2*(iSig->brd + Nbrd*iSig->sid), iSig->Energy);
+			h2_FVEnergy_cha->Fill((iSig->cha-8) + 2*(iSig->brd + Nbrd*iSig->sid), iSig->Energy);
 			h1_Clover_Energy_fv_all->Fill(iSig->Energy);
 		}
 	}
@@ -221,14 +229,13 @@ void HistServerUser::ProcessToHistUser()
 				//h1_ADC_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->ADC);
 				//h2_ADC_cha->Fill(iFV->cha + Ncha*(iFV->brd + Nbrd*iFV->sid), iFV->ADC);
 				h2_ADC_cha[iFV->sid]->Fill(iFV->cha + Ncha*iFV->brd, iFV->ADC);
-				h2_Energy_cha->Fill(iFV->cha + Ncha*(iFV->brd + Nbrd*iFV->sid), iFV->Energy);
+				h2_FVEnergy_cha->Fill(iFV->idx + Nfv*(iCrystal->idx + Ncrystal*iClover->idx), iFV->Energy);
 				h1_Clover_Energy_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->Energy);
-				//h1_Clover_Energy_fv_all->Fill(iFV->Energy);
+				h1_Clover_Energy_fv_all->Fill(iFV->Energy);
 			}
 			for (iSeg=iCrystal->vSigAnaSeg.begin(); iSeg!=iCrystal->vSigAnaSeg.end(); iSeg++)
 			{
 				h2_ADC_cha[iSeg->sid]->Fill(iSeg->cha + Ncha*iSeg->brd,iSeg->ADC);
-				h1_Clover_ADC_seg[iClover->idx][iCrystal->idx][iSeg->idx]->Fill(iSeg->ADC);
 				h1_Clover_Energy_seg[iClover->idx][iCrystal->idx][iSeg->idx]->Fill(iSeg->Energy);
 			}
 		}
@@ -251,14 +258,6 @@ void HistServerUser::ProcessToHistUser()
 			h2_X6_Energy_idx[iX6->idx]->Fill(Nstrip + iPad->idx, iPad->Energy);
 		}
 	}
-
-	// crystal->r/theta/phi, strip->r/theta/phi
-
-
-
-///////////// User Area bottom  /////////////////
-
-
 
 
 }
