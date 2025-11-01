@@ -9,6 +9,12 @@ HitClover::HitClover()
 {
 }
 
+HitClover::HitClover(uint8_t iclover)
+	: Hit(iclover)
+{
+
+}
+
 HitClover::HitClover(uint8_t iclover, vector<HitCrystal> &v_hit_crystal)
 	: Hit(iclover), vHitCrystal(v_hit_crystal)
 {

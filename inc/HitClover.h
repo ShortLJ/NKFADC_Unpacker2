@@ -21,16 +21,18 @@ class HitClover : public Hit
 		vector<HitCrystal> vHitCrystal;
 
 		HitClover();
+		HitClover(uint8_t iclover);
 		HitClover(uint8_t iclover, vector<HitCrystal> &v_hit_crystal);
 		HitClover(uint8_t iclover, vector<SigAna> &v_sigana_fv, vector<SigAna> &v_sigana_seg);
 		~HitClover();
+
+		void ProcessHit();
 
 	protected:
 		void Clear();
 
 	private:
 		bool isValid();
-		void ProcessHit();
 
 		float AddBack();
 };
