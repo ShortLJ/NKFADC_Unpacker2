@@ -96,6 +96,7 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 		uint8_t idet  = map_det   [isid][ibrd][icha]; if (idet>Ndet) {fprintf(stderr,"EventProcessor::ProcessEvent(vector<Sig> v_sig): idet %u>Ndet%u\n",idet,Ndet);continue;}
 		uint8_t iidx  = map_idx	  [isid][ibrd][icha];
 
+		evt.vSigAna_RAW.emplace_back(itype,idet,iidx,*it_sig);
 		v_sigana_sort[itype][idet].emplace_back(itype,idet,iidx,*it_sig);
 		flag_det[itype][idet]=1;
 	}
@@ -113,7 +114,11 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
 		for (uint8_t icrystal=0; icrystal<Ncrystal; icrystal++)
 		{
 			uint8_t idet = iclover * Ncrystal + icrystal;
-			if (flag_det[1][idet]||flag_det[2][idet]) flag_clover[iclover]=1;
+			if (flag_det[1][idet]||flag_det[2][idet]) 
+			{
+				flag_clover[iclover]=1;
+				flag_crystal[icrystal]=1;
+			}
 		}
 		if (flag_clover[iclover])
 		{
