@@ -22,7 +22,7 @@ class HitPad : public Hit
 		SigAna sigPad;
 
 		HitPad(){	}
-		HitPad(SigAna sigana) : Hit(sigana.idx), sigPad(sigana) {	}
+		HitPad(SigAna &sigana) : Hit(sigana.idx), sigPad(sigana) {	}
 };
 
 #endif //__HITPAD__
@@ -44,7 +44,7 @@ class HitStrip : public Hit
 		SigAna sigStripD;
 
 		HitStrip(){	}
-		HitStrip(SigAna siganaU, SigAna siganaD) : Hit(siganaU.idx), sigStripU(siganaU), sigStripD(siganaD)
+		HitStrip(SigAna &siganaU, SigAna &siganaD) : Hit(siganaU.idx), sigStripU(siganaU), sigStripD(siganaD)
 		{	
 			ProcessHit();
 		}
@@ -84,7 +84,7 @@ class HitX6 : public Hit
 #endif // HITX6PARTICLE
 
 		HitX6();
-		HitX6(uint8_t det, vector<SigAna> v_sigana_pad, vector<SigAna> v_sigana_strpU, vector<SigAna> v_sigana_strpD);
+		HitX6(uint8_t det, vector<SigAna> &v_sigana_pad, vector<SigAna> &v_sigana_strpU, vector<SigAna> &v_sigana_strpD);
 		~HitX6();
 
 	private:

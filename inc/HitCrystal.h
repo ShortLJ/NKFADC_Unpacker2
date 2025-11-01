@@ -26,8 +26,8 @@ class HitCrystal : public Hit
 		vector<SigAna> vSigAnaSeg;
 
 		HitCrystal();
-		HitCrystal(uint8_t detID, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
-		HitCrystal(uint8_t iclover, uint8_t icrystal, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg);
+		HitCrystal(uint8_t detID, vector<SigAna> &v_sigana_fv, vector<SigAna> &v_sigana_seg);
+		HitCrystal(uint8_t iclover, uint8_t icrystal, vector<SigAna> &v_sigana_fv, vector<SigAna> &v_sigana_seg);
 		~HitCrystal();
 
 	private:

@@ -5,7 +5,7 @@
 HitX6::HitX6()
 {
 }
-HitX6::HitX6(uint8_t idet, vector<SigAna> v_sigana_pad, vector<SigAna> v_sigana_strpU, vector<SigAna> v_sigana_strpD)
+HitX6::HitX6(uint8_t idet, vector<SigAna> &v_sigana_pad, vector<SigAna> &v_sigana_strpU, vector<SigAna> &v_sigana_strpD)
 	: Hit(idet)
 {
 	vector<SigAna>::iterator sigpad, sigstrpU, sigstrpD;

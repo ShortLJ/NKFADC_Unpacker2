@@ -11,7 +11,7 @@ Hit::Hit()
 	fine_time=-1;
 }
 
-Hit::Hit(SigAna sigana)
+Hit::Hit(SigAna &sigana)
 	: idx(sigana.idx), Energy(sigana.Energy), coarse_time(sigana.coarse_time), fine_time(sigana.fine_time)
 {
 

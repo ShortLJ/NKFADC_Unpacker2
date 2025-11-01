@@ -9,14 +9,14 @@ HitClover::HitClover()
 {
 }
 
-HitClover::HitClover(uint8_t iclover, vector<HitCrystal> v_hit_crystal)
+HitClover::HitClover(uint8_t iclover, vector<HitCrystal> &v_hit_crystal)
 	: Hit(iclover), vHitCrystal(v_hit_crystal)
 {
 	
 	ProcessHit();
 }
 
-HitClover::HitClover(uint8_t iclover, vector<SigAna> v_sigana_fv, vector<SigAna> v_sigana_seg)
+HitClover::HitClover(uint8_t iclover, vector<SigAna> &v_sigana_fv, vector<SigAna> &v_sigana_seg)
 {
 	vector<SigAna> v_sigana_sort_fv[4], v_sigana_sort_seg[4];
 	vector<SigAna>::iterator it_sigana;
