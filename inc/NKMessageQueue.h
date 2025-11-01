@@ -4,6 +4,7 @@
 #ifndef __NKMESSAGEQUEUE__
 #define __NKMESSAGEQUEUE__
 
+#include <string>
 
 #include <fcntl.h>
 #include <mqueue.h>

@@ -1,4 +1,7 @@
 
+
+#include <unistd.h>
+
 #include "EventProcessor.h"
 
 EventProcessor::EventProcessor()

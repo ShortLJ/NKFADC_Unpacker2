@@ -1,4 +1,5 @@
 
+#include <unistd.h>
 
 #include "HistServer.h"
 
