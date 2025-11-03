@@ -46,7 +46,7 @@
 	#define Nseg 8
 	#define Nfv 2
 	#define Nx6 12
-	#define Nstrip 6
+	#define Nstrip 8
 	#define Npad 4
 
 
