@@ -50,10 +50,23 @@ int NKMessageQueue::Interpret(uint8_t *&tmp, Sig &sig)
 			ret = 2;
 			break;
 		}
+		case 0x00:
+		{
+			if (tmp[1]==0x20)
+			{
+				// waveform data
+				fprintf(stdout,"waveform data found\n");
+				data_length = 8192;
+				ret = 3;
+				break;
+			}
+			// else : proceed to default
+		}
 		default:
 		{
 			fprintf(stderr, "NKMessageQueue::Interpret : data_type %u: unknown\n",data_type);
-			data_length = packet_size;
+			//data_length = packet_size;
+			data_length = 8192;
 			//print_binary(tmp,16);
 			ret = -1;
 			//exit(-61);
