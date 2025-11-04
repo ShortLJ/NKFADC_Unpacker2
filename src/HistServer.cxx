@@ -78,7 +78,7 @@ void HistServer::Run()
 
 		ProcessToHistRaw();
 		ProcessToHistUser();
-		if (flag_httpServer) srv_http->ProcessRequests();
+		//if (flag_httpServer) srv_http->ProcessRequests();
 	}
 }
 void HistServer::Stop()
@@ -173,6 +173,8 @@ void HistServer::Init()
 	InitFile();
 	InitRaw();
 	InitUser();
+
+	srv_http->SetTimer(100, kFALSE);
 }
 
 
