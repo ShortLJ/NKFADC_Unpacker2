@@ -133,6 +133,7 @@ int main(int argc, char *argv[])
 	Config config(configdir);
 	config.ReadDetMapFile();
 	config.ReadErgCalFile();
+	config.ReadSegPosFile();
 
 	TimeSorter timesorter; /// queue
 	timesorter.SetTimeWindow(timewindow);

@@ -21,6 +21,8 @@ class HitCrystal : public Hit
 		uint8_t cloverID;
 		float E_seg_sum;
 		float E_fv_avg;
+		uint8_t primary = -1;
+		float dcEnergy=-1;
 
 		vector<SigAna> vSigAnaFV;
 		vector<SigAna> vSigAnaSeg;
@@ -30,12 +32,15 @@ class HitCrystal : public Hit
 		HitCrystal(uint8_t iclover, uint8_t icrystal, vector<SigAna> &v_sigana_fv, vector<SigAna> &v_sigana_seg);
 		~HitCrystal();
 
+		float DopplerCorrE(double beta_r, double beta_theta=0, double beta_phi=0);
+
 	private:
 		bool isValid();
 		void ProcessHit();
 		//void Clear();
 
 		void Process_Esum();
+		void Process_Primary();
 
 
 };

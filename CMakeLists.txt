@@ -96,6 +96,7 @@ target_link_libraries(Event_dict EvtSimple EvtASGARD EvtStarkJr)
 set(CONFIG_CSV
 		config/det_map.csv
 		config/erg_cal.csv
+		config/seg_pos.csv
 )
 
 

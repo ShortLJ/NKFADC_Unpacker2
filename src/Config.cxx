@@ -114,9 +114,46 @@ void Config::ReadErgCalFile(string filename)
 			}
 		}
 	}
-
 }
 
+void Config::ReadSegPosFile(string filename)
+{
+	string fullpath = configdir+"/"+filename;
+	fprintf(stdout, "Segment Position file: %s\n",fullpath.c_str());
+
+	FILE *fr;
+	fr = fopen(fullpath.c_str(),"r");
+	if(fr==NULL)
+	{
+		fprintf(stderr,"Segment Position file is not opened.\n");
+		exit(-6);
+	}
+	char line[100];
+
+	uint8_t iclov,icrys,iseg;
+	float param[3];
+	while (fgets(line, sizeof line, fr))
+	{
+		if (*line == '#') continue;
+		switch (sscanf(line, "%hhu,%hhu,%hhu,%f,%f,%f",
+			&iclov,&icrys,&iseg,&param[0],&param[1],&param[2]))
+		{
+			case 6:
+			{
+				fprintf(stdout,"seg pos %u %u %u %f %f %f\n", iclov,icrys,iseg, param[0],param[1],param[2] );
+				seg_pos_cart	[iclov][icrys][iseg][0] = param[0];
+				seg_pos_cart	[iclov][icrys][iseg][1] = param[1];
+				seg_pos_cart	[iclov][icrys][iseg][2] = param[2];
+				break;
+			}
+			default:
+			{
+				fprintf(stderr,"failed to read seg pos file\n");
+				exit(-7);
+			}
+		}
+	}
+}
 
 
 void Config::InitializeGlobalVariables()
@@ -130,6 +167,14 @@ void Config::InitializeGlobalVariables()
 		Ecal_par0 [isid][ibrd][icha] = 0;
 		Ecal_par1 [isid][ibrd][icha] = 0;
 	}
+	for (uint8_t iclov=0; iclov<Nclover; iclov++) for (uint8_t icrys=0; icrys<Ncrystal; icrys++) for (uint8_t iseg=0; iseg<Nseg; iseg++)
+	{
+		seg_pos_cart	[iclov][icrys][iseg][0] = 0;
+		seg_pos_cart	[iclov][icrys][iseg][1] = 0;
+		seg_pos_cart	[iclov][icrys][iseg][2] = 0;
+	}
+
+
 }
 
 

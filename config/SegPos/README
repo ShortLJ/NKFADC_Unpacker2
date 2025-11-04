@@ -1,0 +1,4 @@
+
+How to run
+1. Check the clover distances in 'DopplerCorr_allClover.hxx'
+2. 'root ASGARD_SegPos_to_CSV.cxx' will create segpos.csv 
