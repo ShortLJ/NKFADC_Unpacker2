@@ -1,4 +1,5 @@
 
+//#define STRIP_N_TEST 1
 
 #include "HitX6.h"
 
@@ -14,6 +15,7 @@ HitX6::HitX6(uint8_t idet, vector<SigAna> &v_sigana_pad, vector<SigAna> &v_sigan
 		vHitPad.emplace_back(*sigpad);
 	}
 
+#ifdef STRIP_N_TEST
 	counts_stripU=0; counts_stripD=0;
 	for (sigstrpU=v_sigana_strpU.begin(); sigstrpU!=v_sigana_strpU.end(); sigstrpU++)
 		counts_stripU += 0x1<<(sigstrpU->idx << 2);
@@ -25,6 +27,7 @@ HitX6::HitX6(uint8_t idet, vector<SigAna> &v_sigana_pad, vector<SigAna> &v_sigan
 		fprintf(stderr, "X6 #%02d: U %016lX\n", idet, counts_stripU);
 		fprintf(stderr, "X6 #%02d: D %016lX\n", idet, counts_stripD);
 	}
+#endif // STRIP_N_TEST
 
 
 	for (sigstrpU=v_sigana_strpU.begin(); sigstrpU!=v_sigana_strpU.end(); sigstrpU++)
