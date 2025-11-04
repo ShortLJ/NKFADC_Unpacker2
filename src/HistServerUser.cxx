@@ -189,6 +189,16 @@ void HistServerUser::InitUser()
 				Form("X6_det%02d_Position;istrip;Position",ix6),
 				Nstrip,0,Nstrip, 1024,-1.2,1.2
 				);
+		for (int istrip=0; istrip<Nstrip; istrip++)
+		{
+			h2_X6_ADC_ADC[ix6][istrip] = MakeH2(
+					Form("X6/det%02d/strip%d",ix6,istrip),
+					Form("X6_det%02d_strip%d_ADC_ADC",ix6,istrip),
+					Form("X6_det%02d_strip%d_ADC_ADC;ADC U;ADC D",ix6,istrip),
+					500,0,20e3, 500,0,20e3
+					);
+
+		}
 	}
 
 
@@ -252,11 +262,22 @@ void HistServerUser::ProcessToHistUser()
 		{
 			h2_X6_Energy_idx[iX6->idx]->Fill(iStrip->idx, iStrip->Energy);
 			h2_X6_Pos_idx[iX6->idx]->Fill(iStrip->idx, iStrip->position);
+			h2_X6_ADC_ADC[iX6->idx][iStrip->idx]->Fill(iStrip->sigStripU.ADC,iStrip->sigStripD.ADC);
 		}
 		for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
 		{
 			h2_X6_Energy_idx[iX6->idx]->Fill(Nstrip + iPad->idx, iPad->Energy);
 		}
+	}
+
+	bool flag_backward=0;
+	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
+	{
+		if (iX6->idx<6) flag_backward=1;
+	}
+	if (flag_backward)
+	{
+
 	}
 
 

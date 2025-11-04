@@ -51,7 +51,9 @@ class HitStrip : public Hit
 		void ProcessHit()
 		{
 			Energy = (sigStripU.Energy + sigStripD.Energy);
-			position = (sigStripU.Energy - sigStripD.Energy)/(sigStripU.Energy + sigStripD.Energy);
+			//position = (sigStripU.Energy - sigStripD.Energy)/(sigStripU.Energy + sigStripD.Energy);
+			if (sigStripU.ADC+sigStripD.ADC>0)
+				position = float(sigStripU.ADC - sigStripD.ADC)/(sigStripU.ADC + sigStripD.ADC);
 			
 		}
 		bool isValid()
