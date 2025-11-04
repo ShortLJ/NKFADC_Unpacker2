@@ -4,7 +4,7 @@
 #define __GLOBAL__
 
 //#define WAVEFORM 1
-#define NBUFF_SORTER 10000
+#define NBUFF_SORTER 20000
 
 #define PEND_READING_ON_FULL 1
 #ifdef PEND_READING_ON_FULL
