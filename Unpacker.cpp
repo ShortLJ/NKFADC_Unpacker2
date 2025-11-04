@@ -35,7 +35,7 @@ void sig_handler(int signal)
 		flag_reading=0;
 		return;
 	}
-	if (!flag_reading)
+	if (!flag_reading && !flag_force_quit)
 	{
 		fprintf(stdout,"force quit\n");
 		flag_force_quit=1;
