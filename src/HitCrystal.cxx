@@ -93,7 +93,7 @@ void HitCrystal::Process_Primary()
 	primary = -1;
 	if (vSigAnaSeg.size()==0)
 	{
-		fprintf(stderr,"void HitCrystal::Process_Primary(): vSigAnaSeg.size()==0 at detID %u\n",detID);
+		fprintf(stderr,"void HitCrystal::Process_Primary(): vSigAnaSeg.size()==0 at detID %u (%u %u)\n",detID,cloverID,idx);
 		return;
 	}
 	vector<SigAna>::iterator iseg,pseg;
