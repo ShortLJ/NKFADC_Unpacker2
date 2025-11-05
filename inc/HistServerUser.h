@@ -54,7 +54,7 @@ class HistServerUser : public HistServer
 		TH2 *h2_X6_ADC_ADC_byPad[Nx6][Nstrip][Npad];
 		TH2 *h2_X6_ADCstrip_ADCpad[Nx6][Nstrip][Npad];
 
-		TH2 *h2_X6_Energy_theta;
+		TH2 *h2_X6_theta_Energy;
 
 
 		double inner_product_spherical(float r1, float t1, float p1, float r2, float t2, float p2)

@@ -227,10 +227,10 @@ void HistServerUser::InitUser()
 		}
 	}
 
-	h2_X6_Energy_theta = MakeH2(
+	h2_X6_theta_Energy = MakeH2(
 		"asdf",
-		"h2_X6_Energy_theta",
-		"h2_X6_Energy_theta; ADCsum;theta",
+		"h2_X6_theta_Energy",
+		"h2_X6_theta_Energy;theta;ADCsum",
 		180,0,180, 1000,0,30e3
 		);
 
@@ -322,7 +322,7 @@ void HistServerUser::ProcessToHistUser()
 			};
 			double cosi = coor[2]/sqrt(coor[0]*coor[0]+coor[1]*coor[1]+coor[2]*coor[2]);
 			double theta = acos(cosi);
-			h2_X6_Energy_theta->Fill(theta/3.1415*180, iStrip->sigStripU.ADC+iStrip->sigStripD.ADC);
+			h2_X6_theta_Energy->Fill(theta/3.1415*180, iStrip->sigStripU.ADC+iStrip->sigStripD.ADC);
 		}
 	}
 
