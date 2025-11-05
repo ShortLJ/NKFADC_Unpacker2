@@ -155,6 +155,46 @@ void Config::ReadSegPosFile(string filename)
 	}
 }
 
+void Config::ReadStripPosFile(string filename)
+{
+	string fullpath = configdir+"/"+filename;
+	fprintf(stdout, "Strip Position file: %s\n",fullpath.c_str());
+
+	FILE *fr;
+	fr = fopen(fullpath.c_str(),"r");
+	if(fr==NULL)
+	{
+		fprintf(stderr,"Strip Position file is not opened.\n");
+		exit(-6);
+	}
+	char line[100];
+
+	uint8_t ix6,istrip;
+	float param[3];
+	while (fgets(line, sizeof line, fr))
+	{
+		if (*line == '#') continue;
+		switch (sscanf(line, "%hhu,%hhu,%f,%f,%f",
+			&ix6,&istrip,&param[0],&param[1],&param[2]))
+		{
+			case 5:
+			{
+				fprintf(stdout,"strip pos %u %u %f %f %f\n", ix6,istrip, param[0],param[1],param[2] );
+				strip_pos_cart	[ix6][istrip][0] = param[0];
+				strip_pos_cart	[ix6][istrip][1] = param[1];
+				strip_pos_cart	[ix6][istrip][2] = param[2];
+				break;
+			}
+			default:
+			{
+				fprintf(stderr,"failed to read strip pos file\n");
+				exit(-7);
+			}
+		}
+	}
+}
+
+
 
 void Config::InitializeGlobalVariables()
 {
@@ -172,6 +212,12 @@ void Config::InitializeGlobalVariables()
 		seg_pos_cart	[iclov][icrys][iseg][0] = 0;
 		seg_pos_cart	[iclov][icrys][iseg][1] = 0;
 		seg_pos_cart	[iclov][icrys][iseg][2] = 0;
+	}
+	for (uint8_t ix6=0; ix6<Nx6; ix6++) for (uint8_t istrip=0; istrip<Nstrip; istrip++)
+	{
+		strip_pos_cart[ix6][istrip][0] = 0;
+		strip_pos_cart[ix6][istrip][1] = 0;
+		strip_pos_cart[ix6][istrip][2] = 0;
 	}
 
 

@@ -1,5 +1,6 @@
 
 #include "HistServerUser.h"
+#include <cmath>
 
 //HistServerUser::HistServerUser()
 //{
@@ -189,6 +190,16 @@ void HistServerUser::InitUser()
 				Form("X6_det%02d_Position;istrip;Position",ix6),
 				Nstrip,0,Nstrip, 1024,-1.2,1.2
 				);
+		for (int ipad=0; ipad<Npad; ipad++)
+		{
+			h2_X6_Pos_idx_byPad[ix6][ipad] = MakeH2(
+					Form("X6/det%02d",ix6),
+					Form("X6_det%02d_Position_pad%d",ix6,ipad),
+					Form("X6_det%02d_Position_pad%d;istrip;Position",ix6,ipad),
+					Nstrip,0,Nstrip, 1024,-1.2,1.2
+					);
+
+		}
 		for (int istrip=0; istrip<Nstrip; istrip++)
 		{
 			h2_X6_ADC_ADC[ix6][istrip] = MakeH2(
@@ -197,9 +208,31 @@ void HistServerUser::InitUser()
 					Form("X6_det%02d_strip%d_ADC_ADC;ADC U;ADC D",ix6,istrip),
 					500,0,20e3, 500,0,20e3
 					);
+			for (int ipad=0; ipad<Npad; ipad++)
+			{
+				h2_X6_ADC_ADC_byPad[ix6][istrip][ipad] = MakeH2(
+						Form("X6/det%02d/strip%d",ix6,istrip),
+						Form("X6_det%02d_strip%d_ADC_ADC_pad%d",ix6,istrip,ipad),
+						Form("X6_det%02d_strip%d_ADC_ADC_pad%d;ADC U;ADC D",ix6,istrip,ipad),
+						500,0,20e3, 500,0,20e3
+						);
+				h2_X6_ADCstrip_ADCpad[ix6][istrip][ipad] = MakeH2(
+						Form("X6/det%02d/strip%d",ix6,istrip),
+						Form("X6_det%02d_ADCstrip%d_ADCpad%d",ix6,istrip,ipad),
+						Form("X6_det%02d_ADCstrip%d_ADCpad%d;ADC strip;ADC pad",ix6,istrip,ipad),
+						500,0,20e3, 500,0,20e3
+						);
 
+			}
 		}
 	}
+
+	h2_X6_Energy_theta = MakeH2(
+		"asdf",
+		"h2_X6_Energy_theta",
+		"h2_X6_Energy_theta; ADCsum;theta",
+		180,0,180, 1000,0,30e3
+		);
 
 
 
@@ -262,13 +295,38 @@ void HistServerUser::ProcessToHistUser()
 		{
 			h2_X6_Energy_idx[iX6->idx]->Fill(iStrip->idx, iStrip->Energy);
 			h2_X6_Pos_idx[iX6->idx]->Fill(iStrip->idx, iStrip->position);
+			for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
+			{
+				h2_X6_Pos_idx_byPad[iX6->idx][iPad->idx]->Fill(iStrip->idx, iStrip->position);
+			}
 			h2_X6_ADC_ADC[iX6->idx][iStrip->idx]->Fill(iStrip->sigStripU.ADC,iStrip->sigStripD.ADC);
+			for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
+			{
+				h2_X6_ADC_ADC_byPad[iX6->idx][iStrip->idx][iPad->idx]->Fill(iStrip->sigStripU.ADC,iStrip->sigStripD.ADC);
+				h2_X6_ADCstrip_ADCpad[iX6->idx][iStrip->idx][iPad->idx]->Fill(iStrip->sigStripU.ADC+iStrip->sigStripD.ADC, iPad->sigPad.ADC);
+			}
 		}
 		for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
 		{
 			h2_X6_Energy_idx[iX6->idx]->Fill(Nstrip + iPad->idx, iPad->Energy);
 		}
 	}
+	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
+	{
+		for (iStrip=iX6->vHitStrip.begin(); iStrip!=iX6->vHitStrip.end(); iStrip++)
+		{
+			float coor[3] = {
+				strip_pos_cart[iX6->idx][iStrip->idx][0],
+				strip_pos_cart[iX6->idx][iStrip->idx][1],
+				strip_pos_cart[iX6->idx][iStrip->idx][2] - iStrip->position * 75/2
+			};
+			double cosi = coor[2]/sqrt(coor[0]*coor[0]+coor[1]*coor[1]+coor[2]*coor[2]);
+			double theta = acos(cosi);
+			h2_X6_Energy_theta->Fill(theta/3.1415*180, iStrip->sigStripU.ADC+iStrip->sigStripD.ADC);
+		}
+	}
+
+
 
 	bool flag_backward=0;
 	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)

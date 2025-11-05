@@ -62,6 +62,7 @@ extern float Ecal_par1		[N_SID][N_BRD][N_CHA];
 extern float Ecal_par2		[N_SID][N_BRD][N_CHA];
 
 extern float seg_pos_cart [Nclover][Ncrystal][Nseg][3];
+extern float strip_pos_cart [Nx6][Nstrip][3];
 ///
 
 

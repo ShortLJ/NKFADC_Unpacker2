@@ -17,6 +17,9 @@ float Ecal_par1		[N_SID][N_BRD][N_CHA];
 float Ecal_par2		[N_SID][N_BRD][N_CHA];
 
 float seg_pos_cart [Nclover][Ncrystal][Nseg][3];
+float strip_pos_cart [Nx6][Nstrip][3];
+
+
 
 using namespace std;
 
@@ -30,6 +33,7 @@ class Config
 		void ReadDetMapFile(string filename="det_map.csv");
 		void ReadErgCalFile(string filename="erg_cal.csv");
 		void ReadSegPosFile(string filename="seg_pos.csv");
+		void ReadStripPosFile(string filename="strip_pos.csv");
 
 	private:
 		void InitializeGlobalVariables();
