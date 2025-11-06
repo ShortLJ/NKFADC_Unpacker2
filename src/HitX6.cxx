@@ -113,6 +113,15 @@ const float pos_cal[Nx6][Nstrip][3] = {
 {0.000000,1.000000,0.000000},
 {0.000000,1.000000,0.000000}}};
 
+
+HitPad::HitPad(SigAna &sigana)
+	 : Hit(sigana.idx), sigPad(sigana) 
+{
+	Energy = sigana.Energy;
+	coarse_time = sigana.coarse_time;
+	fine_time = sigana.fine_time;
+}
+
 void HitStrip::ProcessHit()
 {
 	Energy = (sigStripU.Energy + sigStripD.Energy);

@@ -22,7 +22,7 @@ class HitPad : public Hit
 		SigAna sigPad;
 
 		HitPad(){	}
-		HitPad(SigAna &sigana) : Hit(sigana.idx), sigPad(sigana) {	}
+		HitPad(SigAna &sigana);
 };
 
 #endif //__HITPAD__
