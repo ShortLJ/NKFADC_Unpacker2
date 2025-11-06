@@ -69,7 +69,7 @@ void HistServerUser::InitRaw()
 				"Raw/ADC",
 				Form("ADC_sid%02d",isid),
 				Form("ADC by channel %02d;cha+%d*brd;ADC",isid,Ncha),
-				Nbrd*Ncha, 0, Nbrd*Ncha, 1<<12, 0, double(1<<15)
+				Nbrd*Ncha, 0, Nbrd*Ncha, 1<<12, 0, double(1<<16)
 				);
 	}
 }
@@ -214,7 +214,7 @@ void HistServerUser::InitUser()
 					Form("X6/det%02d/strip%d",ix6,istrip),
 					Form("X6_det%02d_strip%d_ADC_ADC",ix6,istrip),
 					Form("X6_det%02d_strip%d_ADC_ADC;ADC U;ADC D",ix6,istrip),
-					500,0,20e3, 500,0,20e3
+					1024,0,65536, 1024,0,65536
 					);
 			for (int ipad=0; ipad<Npad; ipad++)
 			{
@@ -222,13 +222,13 @@ void HistServerUser::InitUser()
 						Form("X6/det%02d/strip%d",ix6,istrip),
 						Form("X6_det%02d_strip%d_ADC_ADC_pad%d",ix6,istrip,ipad),
 						Form("X6_det%02d_strip%d_ADC_ADC_pad%d;ADC U;ADC D",ix6,istrip,ipad),
-						500,0,20e3, 500,0,20e3
+					1024,0,65536, 1024,0,65536
 						);
 				h2_X6_ADCstrip_ADCpad[ix6][istrip][ipad] = MakeH2(
 						Form("X6/det%02d/strip%d",ix6,istrip),
 						Form("X6_det%02d_ADCstrip%d_ADCpad%d",ix6,istrip,ipad),
 						Form("X6_det%02d_ADCstrip%d_ADCpad%d;ADC strip;ADC pad",ix6,istrip,ipad),
-						500,0,20e3, 500,0,20e3
+					1024,0,65536, 1024,0,65536
 						);
 
 			}
@@ -238,12 +238,20 @@ void HistServerUser::InitUser()
 	h2_X6_theta_Energy = MakeH2(
 		"asdf",
 		"h2_X6_theta_Energy",
-		"h2_X6_theta_Energy;theta;ADCsum",
+		"h2_X6_theta_Energy;theta;pad energy",
 		180,0,180, 1000,0,30e3
 		);
 
-
-
+	for (int i=0; i<6;i++)
+	{
+		h2_X6_BB10[i] = MakeH2(
+			"asdf",
+			Form("h2_X6_BB10_%d",i),
+			Form("h2_X6_BB10_%d;X6;BB10",i),
+			1<<10,0,double(1<<16),
+			1<<10,0,double(1<<16)
+			);
+	}
 ///////////// User Area bottom  /////////////////
 }
 void HistServerUser::ProcessToHistUser()
@@ -319,8 +327,7 @@ void HistServerUser::ProcessToHistUser()
 			h2_X6_Energy_idx[iX6->idx]->Fill(Nstrip + iPad->idx, iPad->Energy);
 		}
 	}
-	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
-		if (iX6->idx<6)
+	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)	if (iX6->idx<6)
 	{
 		for (iStrip=iX6->vHitStrip.begin(); iStrip!=iX6->vHitStrip.end(); iStrip++)
 		{
@@ -339,6 +346,18 @@ void HistServerUser::ProcessToHistUser()
 
 		}
 	}
+
+	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)	if (iX6->idx>=6)
+	{
+		for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++) if (iX6->idx-6 == iSig->det)
+		{
+			for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
+			{
+				h2_X6_BB10[iSig->det]->Fill(iPad->Energy, iSig->ADC);
+			}
+		}
+	}
+
 
 
 
