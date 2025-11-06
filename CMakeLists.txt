@@ -97,6 +97,7 @@ set(CONFIG_CSV
 		config/det_map.csv
 		config/erg_cal.csv
 		config/seg_pos.csv
+		config/strip_pos.csv
 )
 
 
