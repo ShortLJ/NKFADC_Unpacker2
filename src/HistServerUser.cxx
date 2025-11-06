@@ -173,6 +173,14 @@ void HistServerUser::InitUser()
 			Form("Energy_clov_FV_all; Energy [keV]; count"),
 			3000,0,3000
 			);
+	h1_Clover_Energy_fv_all_backward = MakeH1(
+			"Clover",
+			Form("h1_Clover_Energy_fv_all_backward"),
+			Form("Energy_clov_FV_all; Energy [keV]; count"),
+			3000,0,3000
+			);
+
+
 
 
 
@@ -312,6 +320,7 @@ void HistServerUser::ProcessToHistUser()
 		}
 	}
 	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
+		if (iX6->idx<6)
 	{
 		for (iStrip=iX6->vHitStrip.begin(); iStrip!=iX6->vHitStrip.end(); iStrip++)
 		{
@@ -321,8 +330,13 @@ void HistServerUser::ProcessToHistUser()
 				strip_pos_cart[iX6->idx][iStrip->idx][2] - iStrip->position * 75/2
 			};
 			double cosi = coor[2]/sqrt(coor[0]*coor[0]+coor[1]*coor[1]+coor[2]*coor[2]);
-			double theta = acos(cosi);
-			h2_X6_theta_Energy->Fill(theta/3.1415*180, iStrip->sigStripU.ADC+iStrip->sigStripD.ADC);
+			double theta_deg = acos(cosi)/3.1415*180;
+			//h2_X6_theta_Energy->Fill(theta_deg, iStrip->sigStripU.ADC+iStrip->sigStripD.ADC);
+			for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
+			{
+				h2_X6_theta_Energy->Fill(theta_deg, iPad->Energy);
+			}
+
 		}
 	}
 
@@ -335,8 +349,18 @@ void HistServerUser::ProcessToHistUser()
 	}
 	if (flag_backward)
 	{
-
+		for (iClover=evtASGARD->vHitClover.begin(); iClover!=evtASGARD->vHitClover.end(); iClover++)
+		{
+			for (iCrystal=iClover->vHitCrystal.begin(); iCrystal!=iClover->vHitCrystal.end(); iCrystal++)
+			{
+				for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++)
+				{
+					h1_Clover_Energy_fv_all->Fill(iFV->Energy);
+				}
+			}
+		}
 	}
+
 
 
 }
