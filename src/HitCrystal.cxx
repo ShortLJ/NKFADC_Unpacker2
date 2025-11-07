@@ -100,7 +100,8 @@ void HitCrystal::Process_Primary()
 	for (iseg=vSigAnaSeg.begin(); iseg!=vSigAnaSeg.end(); iseg++)
 	{
 		if (iseg==vSigAnaSeg.begin()) pseg = iseg;
-		else pseg = (pseg->Energy > iseg->Energy) ? pseg : iseg;
+		else pseg = (pseg->ADC > iseg->ADC) ? pseg : iseg;
+		//else pseg = (pseg->Energy > iseg->Energy) ? pseg : iseg;
 	}
 	primary = pseg->idx;
 }
