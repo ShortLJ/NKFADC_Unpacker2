@@ -173,19 +173,31 @@ void HistServerUser::InitUser()
 			Form("Energy_clov_FV_all; Energy [keV]; count"),
 			3000,0,3000
 			);
+	h1_Clover_Energy_fv_all_forward = MakeH1(
+			"Clover",
+			Form("h1_Clover_Energy_fv_all_forward"),
+			Form("Energy_clov_FV_all; Energy [keV]; count"),
+			3000,0,3000
+			);
+	h1_Clover_dcEnergy_fv_all_forward = MakeH1(
+			"Clover",
+			Form("h1_Clover_dcEnergy_fv_all_forward"),
+			Form("dcEnergy_clov_FV_all; dcEnergy [keV]; count"),
+			1000,0,4000
+			);
 	h1_Clover_Energy_fv_all_backward = MakeH1(
 			"Clover",
 			Form("h1_Clover_Energy_fv_all_backward"),
 			Form("Energy_clov_FV_all; Energy [keV]; count"),
 			3000,0,3000
 			);
-
 	h1_Clover_dcEnergy_fv_all_backward = MakeH1(
 			"Clover",
 			Form("h1_Clover_dcEnergy_fv_all_backward"),
 			Form("dcEnergy_clov_FV_all; dcEnergy [keV]; count"),
 			1000,0,4000
 			);
+
 
 
 
@@ -429,10 +441,12 @@ void HistServerUser::ProcessToHistUser()
 
 
 
+	bool flag_forward=0;
 	bool flag_backward=0;
 	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
 	{
 		if (iX6->idx<6) flag_backward=1;
+		if (iX6->idx>=6) flag_forward=1;
 	}
 	if (flag_backward)
 	{
@@ -448,6 +462,22 @@ void HistServerUser::ProcessToHistUser()
 			}
 		}
 	}
+	if (flag_forward)
+	{
+		for (iClover=evtASGARD->vHitClover.begin(); iClover!=evtASGARD->vHitClover.end(); iClover++)
+		{
+			for (iCrystal=iClover->vHitCrystal.begin(); iCrystal!=iClover->vHitCrystal.end(); iCrystal++)
+			{
+				for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++)
+				{
+					h1_Clover_Energy_fv_all_forward->Fill(iFV->Energy);
+				}
+				h1_Clover_dcEnergy_fv_all_forward->Fill(iCrystal->dcEnergy);
+			}
+		}
+	}
+
+
 
 
 
