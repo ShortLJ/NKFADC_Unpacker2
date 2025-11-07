@@ -3,6 +3,8 @@
 
 #include "HistServer.h"
 
+#include "TStyle.h"
+
 HistServer::HistServer()
 {
 	fprintf(stdout,"HistServer::HistServer()\n");
@@ -22,6 +24,7 @@ HistServer::HistServer(string opt_)
 		fprintf(stdout,"THttpServer : %s\n",opt_http.c_str());
 		srv_http = new THttpServer(opt_http.c_str());
 	}
+	gStyle->SetPalette(kRainbow);
 
 
 }

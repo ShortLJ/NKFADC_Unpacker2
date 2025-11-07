@@ -55,6 +55,9 @@ class HistServerUser : public HistServer
 		TH2 *h2_X6_ADC_ADC_byPad[Nx6][Nstrip][Npad];
 		TH2 *h2_X6_ADCstrip_ADCpad[Nx6][Nstrip][Npad];
 
+		TH2* h2_X6_pos_ADCpad[Nx6][Nstrip][Npad];
+		TH2* h2_X6_pos_ADCpad_all[Nx6][Nstrip];
+
 		TH2 *h2_X6_theta_Energy;
 
 		TH2 *h2_X6_BB10[6];
