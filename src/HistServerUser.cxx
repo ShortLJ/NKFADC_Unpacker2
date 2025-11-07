@@ -180,6 +180,14 @@ void HistServerUser::InitUser()
 			3000,0,3000
 			);
 
+	h1_Clover_dcEnergy_fv_all_backward = MakeH1(
+			"Clover",
+			Form("h1_Clover_dcEnergy_fv_all_backward"),
+			Form("dcEnergy_clov_FV_all; dcEnergy [keV]; count"),
+			1000,0,4000
+			);
+
+
 
 
 
@@ -253,15 +261,26 @@ void HistServerUser::InitUser()
 		"asdf",
 		"h2_X6_theta_Energy_backward",
 		"h2_X6_theta_Energy_backward;theta;pad energy",
-		180,0,180, 1000,0,30e3
+		180,0,180, 1000,0,60e3
 		);
 	h2_X6_theta_Energy_forward = MakeH2(
 		"asdf",
 		"h2_X6_theta_Energy_forward",
 		"h2_X6_theta_Energy_forward;theta;pad energy",
-		180,0,180, 1000,0,30e3
+		180,0,180, 1000,0,160e3
 		);
-
+	h2_X6_theta_Energy_forward_high = MakeH2(
+		"asdf",
+		"h2_X6_theta_Energy_forward_high",
+		"h2_X6_theta_Energy_forward_high;theta;pad energy",
+		180,0,180, 1000,0,160e3
+		);
+	h2_X6_theta_Energy_forward_low = MakeH2(
+		"asdf",
+		"h2_X6_theta_Energy_forward_low",
+		"h2_X6_theta_Energy_forward_low;theta;pad energy",
+		180,0,180, 1000,0,160e3
+		);
 
 
 	for (int i=0; i<6;i++)
@@ -270,10 +289,19 @@ void HistServerUser::InitUser()
 			"asdf",
 			Form("h2_X6_BB10_%d",i),
 			Form("h2_X6_BB10_%d;X6;BB10",i),
-			1<<10,0,double(1<<16),
-			1<<10,0,double(1<<16)
+			1<< 8,0,double(1<<16),
+			1<< 8,0,double(1<<16)
 			);
 	}
+	h2_X6_BB10_all = MakeH2(
+			"asdf",
+			Form("h2_X6_BB10_all"),
+			Form("h2_X6_BB10_all;X6;BB10"),
+			1<< 8,0,double(1<<16),
+			1<< 8,0,double(1<<16)
+			);
+
+
 ///////////// User Area bottom  /////////////////
 }
 void HistServerUser::ProcessToHistUser()
@@ -367,9 +395,20 @@ void HistServerUser::ProcessToHistUser()
 			for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
 			{
 				if (iX6->idx<6)
+				{
 					h2_X6_theta_Energy_backward->Fill(theta_deg, iPad->Energy);
+				}
 				if (iX6->idx>=6)
-					h2_X6_theta_Energy_forward->Fill(theta_deg, iPad->Energy);
+				{
+					for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++) if (iX6->idx-6 == iSig->det)
+					{
+						h2_X6_theta_Energy_forward->Fill(theta_deg, iPad->Energy + iSig->ADC);
+						if (iSig->ADC>12e3) 
+							h2_X6_theta_Energy_forward_high->Fill(theta_deg, iPad->Energy + iSig->ADC);
+						if (iSig->ADC<12e3) 
+							h2_X6_theta_Energy_forward_low->Fill(theta_deg, iPad->Energy + iSig->ADC);
+					}
+				}
 			}
 
 		}
@@ -382,6 +421,7 @@ void HistServerUser::ProcessToHistUser()
 			for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
 			{
 				h2_X6_BB10[iSig->det]->Fill(iPad->Energy, iSig->ADC);
+				h2_X6_BB10_all->Fill(iPad->Energy, iSig->ADC);
 			}
 		}
 	}
@@ -402,8 +442,9 @@ void HistServerUser::ProcessToHistUser()
 			{
 				for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++)
 				{
-					h1_Clover_Energy_fv_all->Fill(iFV->Energy);
+					h1_Clover_Energy_fv_all_backward->Fill(iFV->Energy);
 				}
+				h1_Clover_dcEnergy_fv_all_backward->Fill(iCrystal->dcEnergy);
 			}
 		}
 	}

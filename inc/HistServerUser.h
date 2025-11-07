@@ -46,6 +46,7 @@ class HistServerUser : public HistServer
 		TH1 *h1_Clover_Energy_fv[Nclover][Ncrystal][Nfv];
 		TH1 *h1_Clover_Energy_fv_all;
 		TH1 *h1_Clover_Energy_fv_all_backward;
+		TH1 *h1_Clover_dcEnergy_fv_all_backward;
 
 		TH2 *h2_X6_Energy_idx[Nx6];
 		TH2 *h2_X6_Pos_idx[Nx6];
@@ -60,8 +61,11 @@ class HistServerUser : public HistServer
 
 		TH2 *h2_X6_theta_Energy_backward;
 		TH2 *h2_X6_theta_Energy_forward;
+		TH2 *h2_X6_theta_Energy_forward_high;
+		TH2 *h2_X6_theta_Energy_forward_low;
 
 		TH2 *h2_X6_BB10[6];
+		TH2 *h2_X6_BB10_all;
 
 
 		double inner_product_spherical(float r1, float t1, float p1, float r2, float t2, float p2)
