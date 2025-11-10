@@ -46,8 +46,8 @@ uint8_t* NKFileReader::GetNextPacket()
 	if ((data_read & 0xfffff)==0)
 	{
 		//fprintf(stdout, "\r");
-		fprintf(stdout, "data_read to= %ld/%ld\t", data_read, file_size);
-		fprintf(stdout,"sig_processed %d", sig_processed);
+		fprintf(stdout, "data_read to= %ld/%ld (%.02f%%)\t", data_read, file_size,float(data_read)/file_size*100);
+		fprintf(stdout,"sig_processed %d\t", sig_processed);
 		fprintf(stdout,"packet_size %d",packet_size);
 		fprintf(stdout, "\n");
 		fflush(stdout);
