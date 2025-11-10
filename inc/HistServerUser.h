@@ -35,6 +35,7 @@ class HistServerUser : public HistServer
 		TH2 *h2_timestamp_structure_Energy_avg;
 
 		TH2 *h2_ADC_cha[Nsid];
+		TH2 *h2_Energy_cha[Nsid];
 
 ///////////// User Area top /////////////////
 	private:
