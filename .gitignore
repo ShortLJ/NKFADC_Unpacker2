@@ -1,6 +1,5 @@
 
-build
-build2
+build*
 install
 data
 NKFADC_Unpacker
