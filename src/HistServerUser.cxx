@@ -144,12 +144,19 @@ void HistServerUser::ProcessToHistRaw()
 
 void HistServerUser::InitUser()
 {
-	h2_FVEnergy_cha = MakeH2(
+	h2_FVEnergy_cha[0] = MakeH2(
 			"Clover",
-			"FV_Energy_cha",
-			Form("FV Energy; 2*(brd+%02d*sid); Energy [keV]",Nbrd),
-			Nsid*Nbrd*2, 0,Nsid*Nbrd*2, 3000,0,3000
+			"FV_Energy_cha_1",
+			Form("FV Energy_1; icrystal+%d*iclover; Energy [keV]",Ncrystal),
+			Nclover*Ncrystal, 0,Nclover*Ncrystal, 4000,0,4000
 			);
+	h2_FVEnergy_cha[1] = MakeH2(
+			"Clover",
+			"FV_Energy_cha_2",
+			Form("FV Energy_2; icrystal+%d*iclover; Energy [keV]",Ncrystal),
+			Nclover*Ncrystal, 0,Nclover*Ncrystal, 4000,0,4000
+			);
+
 	h2_Eg_Eg = MakeH2(
 			"Clover",
 			"Eg_Eg",
@@ -335,14 +342,14 @@ void HistServerUser::ProcessToHistUser()
 	EvtSimple *evtSimple = &(event.Simple);
 	vector<SigAna>::iterator iSig, jSig;
 
-	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
+	/*for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++)
 	{
 		if (iSig->cha==8 || iSig->cha==9)
 		{
 			h2_FVEnergy_cha->Fill((iSig->cha-8) + 2*(iSig->brd + Nbrd*iSig->sid), iSig->Energy);
 			h1_Clover_Energy_fv_all->Fill(iSig->Energy);
 		}
-	}
+	}*/
 
 	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++) if (iSig->cha==8)
 		for (jSig = evtSimple->vSigAna.begin(); jSig != evtSimple->vSigAna.end(); jSig++) if (jSig->cha==8) if (iSig!=jSig)
@@ -362,9 +369,10 @@ void HistServerUser::ProcessToHistUser()
 			for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++)
 			{
 				//h1_ADC_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->ADC);
-				h2_FVEnergy_cha->Fill(iFV->idx + Nfv*(iCrystal->idx + Ncrystal*iClover->idx), iFV->Energy);
+				h2_FVEnergy_cha[iFV->idx]->Fill(iCrystal->idx + Ncrystal*iClover->idx, iFV->Energy);
 				h1_Clover_Energy_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->Energy);
-				h1_Clover_Energy_fv_all->Fill(iFV->Energy);
+				if (iFV->idx==0)
+					h1_Clover_Energy_fv_all->Fill(iFV->Energy);
 			}
 			for (iSeg=iCrystal->vSigAnaSeg.begin(); iSeg!=iCrystal->vSigAnaSeg.end(); iSeg++)
 			{

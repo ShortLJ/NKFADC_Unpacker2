@@ -40,7 +40,7 @@ class HistServerUser : public HistServer
 ///////////// User Area top /////////////////
 	private:
 
-		TH2 *h2_FVEnergy_cha;
+		TH2 *h2_FVEnergy_cha[2];
 		TH2 *h2_Eg_Eg;
 	
 		TH1 *h1_Clover_Energy_seg[Nclover][Ncrystal][Nseg];
