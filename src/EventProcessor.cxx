@@ -46,7 +46,12 @@ void EventProcessor::Run()
 		//fprintf(stdout,"ref_lgt %lu size %ld\n",ref_lgt, v_sig.size());
 		timesorter->fmutex_output.unlock();
 
-		Event event = ProcessEvent(v_sig);
+		Event event = ProcessEvent(v_sig,ref_lgt);
+		n_eventprocessed++;
+		if ((n_eventprocessed & 0x7ff)==0)
+		{
+			fprintf(stdout,"%ld event processed with %lu \n",n_eventprocessed,ref_lgt);
+		}
 
 		if (treewriter)
 		{
@@ -77,10 +82,11 @@ void EventProcessor::Quit()
 	fmutex.unlock();
 }
 
-Event EventProcessor::ProcessEvent(vector<Sig> v_sig)
+Event EventProcessor::ProcessEvent(vector<Sig> v_sig, uint64_t ref_lgt=0)
 {
 	Event evt;
 	evt.Clear();
+	evt.ref_lgt = ref_lgt;
 
 	vector<SigAna> v_sigana_sort[Ntype][Ndet];
 	bool flag_det[Ntype][Ndet]={0};

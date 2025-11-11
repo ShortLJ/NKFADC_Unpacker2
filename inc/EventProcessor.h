@@ -35,10 +35,12 @@ class EventProcessor
 		TreeWriter *treewriter;
 		HistServer *histserver;
 
-		Event ProcessEvent(vector<Sig> v_sig);
+		Event ProcessEvent(vector<Sig> v_sig, uint64_t ref_lgt);
 
 		bool processorEnd;
 		bool processorQuit;
+
+		int64_t n_eventprocessed=0;
 
 
 };

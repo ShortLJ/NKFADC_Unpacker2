@@ -13,6 +13,8 @@ class Event
 		Event();
 		~Event();
 
+		uint64_t ref_lgt=0;
+
 		vector<SigAna> vSigAna_RAW;
 		EvtSimple Simple;
 		EvtASGARD ASGARD;
