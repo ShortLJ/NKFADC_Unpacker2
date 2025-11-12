@@ -269,19 +269,19 @@ void HistServerUser::InitUser()
 			for (int ipad=0; ipad<Npad; ipad++)
 			{
 				h2_X6_ADC_ADC_byPad[ix6][istrip][ipad] = MakeH2(
-						Form("X6/det%02d/strip%d",ix6,istrip),
+						Form("X6/det%02d/strip%d/ADC_ADC",ix6,istrip),
 						Form("X6_det%02d_strip%d_ADC_ADC_pad%d",ix6,istrip,ipad),
 						Form("X6_det%02d_strip%d_ADC_ADC_pad%d;ADC U;ADC D",ix6,istrip,ipad),
 					1024,0,65536, 1024,0,65536
 						);
 				h2_X6_ADCstrip_ADCpad[ix6][istrip][ipad] = MakeH2(
-						Form("X6/det%02d/strip%d",ix6,istrip),
+						Form("X6/det%02d/strip%d/ADCstrip_ADCpad",ix6,istrip),
 						Form("X6_det%02d_ADCstrip%d_ADCpad%d",ix6,istrip,ipad),
 						Form("X6_det%02d_ADCstrip%d_ADCpad%d;ADC strip;ADC pad",ix6,istrip,ipad),
 					1024,0,65536, 1024,0,65536
 						);
 				h2_X6_pos_ADCpad[ix6][istrip][ipad] = MakeH2(
-						Form("X6/det%02d/strip%d",ix6,istrip),
+						Form("X6/det%02d/strip%d/pos_ADCpad",ix6,istrip),
 						Form("X6_det%02d_posstrip%d_Energypad%d",ix6,istrip,ipad),
 						Form("X6_det%02d_posstrip%d_Energypad%d;pos strip;Energy pad",ix6,istrip,ipad),
 						120,-1.2,1.2, 600,0,30e3);
