@@ -68,19 +68,19 @@ void HistServerUser::InitRaw()
 		h2_ADC_cha[isid] = MakeH2(
 				"Raw/ADC",
 				Form("ADC_sid%02d",isid),
-				Form("ADC by channel %02d;cha+%d*brd;ADC",isid,Ncha),
+				Form("ADC by channel, sid%02d;cha+%d*brd;ADC",isid,Ncha),
 				Nbrd*Ncha, 0, Nbrd*Ncha, 1<<12, 0, double(1<<16)
 				);
 		if (isid<3) h2_Energy_cha[isid] = MakeH2(
 				"Raw/Energy",
 				Form("Energy_sid%02d",isid),
-				Form("Energy by channel %02d;cha+%d*brd;Energy [keV]",isid,Ncha),
+				Form("Energy by channel, sid%02d;cha+%d*brd;Energy [keV]",isid,Ncha),
 				Nbrd*Ncha, 0, Nbrd*Ncha, 2000,0,40000
 				);
 		if (isid>=3) h2_Energy_cha[isid] = MakeH2(
 				"Raw/Energy",
 				Form("Energy_sid%02d",isid),
-				Form("Energy by channel %02d;cha+%d*brd;Energy [keV]",isid,Ncha),
+				Form("Energy by channel, sid%02d;cha+%d*brd;Energy [keV]",isid,Ncha),
 				Nbrd*Ncha, 0, Nbrd*Ncha, 2000,0,4000
 				);
 
