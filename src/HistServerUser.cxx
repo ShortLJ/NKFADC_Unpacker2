@@ -420,7 +420,7 @@ void HistServerUser::ProcessToHistUser()
 				strip_pos_cart[iX6->idx][iStrip->idx][2] 
 			};
 			if (iX6->idx<6) coor[2] -= iStrip->position * 75/2;
-			if (iX6->idx>=6) coor[2] += iStrip->position *2  * 75/2;
+			if (iX6->idx>=6) coor[2] += iStrip->position  * 75/2;
 			double cosi = coor[2]/sqrt(coor[0]*coor[0]+coor[1]*coor[1]+coor[2]*coor[2]);
 			double theta_deg = acos(cosi)/3.1415*180;
 			for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
@@ -435,9 +435,9 @@ void HistServerUser::ProcessToHistUser()
 					{
 						h2_X6_theta_Energy_forward->Fill(theta_deg, iPad->Energy + iSig->ADC);
 						if (iSig->ADC>12e3) 
-							h2_X6_theta_Energy_forward_high->Fill(theta_deg, iPad->Energy + iSig->ADC);
+							h2_X6_theta_Energy_forward_high->Fill(theta_deg, iPad->Energy + iSig->Energy);
 						if (iSig->ADC<12e3) 
-							h2_X6_theta_Energy_forward_low->Fill(theta_deg, iPad->Energy + iSig->ADC);
+							h2_X6_theta_Energy_forward_low->Fill(theta_deg, iPad->Energy + iSig->Energy);
 					}
 				}
 			}
