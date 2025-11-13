@@ -83,7 +83,12 @@ void HistServerUser::InitRaw()
 				Form("Energy by channel, sid%02d;cha+%d*brd;Energy [keV]",isid,Ncha),
 				Nbrd*Ncha, 0, Nbrd*Ncha, 2000,0,4000
 				);
-
+		h2_lgtdiffref_cha[isid] = MakeH2(
+				"Raw/Time_Ref",
+				Form("Time_Ref_sid%02d",isid),
+				Form("TS-TSref by channel, sid%02d;TS-TSref;cha+%d*brd",isid,Ncha),
+				1000,0,8000, Nbrd*Ncha, 0, Nbrd*Ncha
+				);
 	}
 }
 
@@ -138,6 +143,7 @@ void HistServerUser::ProcessToHistRaw()
 	{
 		h2_ADC_cha[iSig->sid]->Fill(iSig->cha + Ncha*iSig->brd, iSig->ADC);
 		h2_Energy_cha[iSig->sid]->Fill(iSig->cha + Ncha*iSig->brd, iSig->Energy);
+		h2_lgtdiffref_cha[iSig->sid]->Fill(iSig->coarse_time - event.ref_lgt,iSig->cha + Ncha*iSig->brd);
 	}
 }
 
@@ -224,7 +230,7 @@ void HistServerUser::InitUser()
 			"Clover",
 			Form("h2_Time_Energy_fv_hemi"),
 			Form("Time_Energy_fv_hemi;Time [s];Energy [keV]; count"),
-			100,0,100,3000,0,3000
+			300,0,300,3000,0,3000
 			);
 
 
