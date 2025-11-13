@@ -51,6 +51,9 @@ class HistServerUser : public HistServer
 		TH1 *h1_Clover_Energy_fv_all_backward;
 		TH1 *h1_Clover_dcEnergy_fv_all_backward;
 
+		uint64_t time0=0;
+		TH2 *h2_Time_Energy_fv_hemi;
+
 		TH2 *h2_X6_Energy_idx[Nx6];
 		TH2 *h2_X6_Pos_idx[Nx6];
 		TH2 *h2_X6_ADC_ADC[Nx6][Nstrip];

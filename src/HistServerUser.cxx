@@ -220,6 +220,12 @@ void HistServerUser::InitUser()
 			);
 
 
+	h2_Time_Energy_fv_hemi = MakeH2(
+			"Clover",
+			Form("h2_Time_Energy_fv_hemi"),
+			Form("Time_Energy_fv_hemi;Time [s];Energy [keV]; count"),
+			100,0,100,3000,0,3000
+			);
 
 
 
@@ -372,7 +378,15 @@ void HistServerUser::ProcessToHistUser()
 				h2_FVEnergy_cha[iFV->idx]->Fill(iCrystal->idx + Ncrystal*iClover->idx, iFV->Energy);
 				h1_Clover_Energy_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->Energy);
 				if (iFV->idx==0)
+				{
 					h1_Clover_Energy_fv_all->Fill(iFV->Energy);
+					if (iClover->idx>=5)
+					{
+						if (time0==0) time0 = iFV->coarse_time;
+						float time = float(iFV->coarse_time - time0)/1'000'000'000;
+						h2_Time_Energy_fv_hemi->Fill(time,iFV->Energy);
+					}
+				}
 			}
 			for (iSeg=iCrystal->vSigAnaSeg.begin(); iSeg!=iCrystal->vSigAnaSeg.end(); iSeg++)
 			{
@@ -433,7 +447,7 @@ void HistServerUser::ProcessToHistUser()
 				{
 					for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++) if (iX6->idx-6 == iSig->det)
 					{
-						h2_X6_theta_Energy_forward->Fill(theta_deg, iPad->Energy + iSig->ADC);
+						h2_X6_theta_Energy_forward->Fill(theta_deg, iPad->Energy + iSig->Energy);
 						if (iSig->ADC>12e3) 
 							h2_X6_theta_Energy_forward_high->Fill(theta_deg, iPad->Energy + iSig->Energy);
 						if (iSig->ADC<12e3) 
