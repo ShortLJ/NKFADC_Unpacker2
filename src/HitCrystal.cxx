@@ -38,7 +38,7 @@ void HitCrystal::ProcessHit()
 	Process_Esum();
 	Energy = E_fv_avg;
 	Process_Primary();
-	DopplerCorrE(0.1,0,0);
+	DopplerCorrE(0.04,0,0);
 }
 
 float HitCrystal::DopplerCorrE(double beta_r, double beta_theta, double beta_phi)
