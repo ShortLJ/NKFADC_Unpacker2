@@ -23,4 +23,10 @@ lgd->AddEntry(h1_bl,"Blank 6");
 lgd->AddEntry(h1_st,"Stopper 2");
 
 lgd->Draw();
+
+TF1 *f1 = new TF1("f1_gaus","[0]*TMath::Gaus(x,[1],[2],1)+[3]+[4]*(x-[1])");
+
+
+
+
 }
