@@ -69,8 +69,6 @@ class HistServerUser : public HistServer
 
 		TH2 *h2_X6_theta_Energy_backward;
 		TH2 *h2_X6_theta_Energy_forward;
-		TH2 *h2_X6_theta_Energy_forward_high;
-		TH2 *h2_X6_theta_Energy_forward_low;
 
 		TH2 *h2_X6_BB10[6];
 		TH2 *h2_X6_BB10_all;

@@ -314,19 +314,6 @@ void HistServerUser::InitUser()
 		"h2_X6_theta_Energy_forward;theta;pad energy",
 		180,0,180, 1000,0,160e3
 		);
-	h2_X6_theta_Energy_forward_high = MakeH2(
-		"asdf",
-		"h2_X6_theta_Energy_forward_high",
-		"h2_X6_theta_Energy_forward_high;theta;pad energy",
-		180,0,180, 1000,0,160e3
-		);
-	h2_X6_theta_Energy_forward_low = MakeH2(
-		"asdf",
-		"h2_X6_theta_Energy_forward_low",
-		"h2_X6_theta_Energy_forward_low;theta;pad energy",
-		180,0,180, 1000,0,160e3
-		);
-
 
 	for (int i=0; i<6;i++)
 	{
@@ -443,22 +430,17 @@ void HistServerUser::ProcessToHistUser()
 			if (iX6->idx>=6) coor[2] += iStrip->position  * 75/2;
 			double cosi = coor[2]/sqrt(coor[0]*coor[0]+coor[1]*coor[1]+coor[2]*coor[2]);
 			double theta_deg = acos(cosi)/3.1415*180;
-			for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
+			//for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
 			{
 				if (iX6->idx<6)
 				{
-					h2_X6_theta_Energy_backward->Fill(theta_deg, iPad->Energy);
+					//h2_X6_theta_Energy_backward->Fill(theta_deg, iPad->Energy);
+					h2_X6_theta_Energy_backward->Fill(theta_deg, iStrip->Energy);
 				}
 				if (iX6->idx>=6)
 				{
-					for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++) if (iX6->idx-6 == iSig->det)
-					{
-						h2_X6_theta_Energy_forward->Fill(theta_deg, iPad->Energy + iSig->Energy);
-						if (iSig->ADC>12e3) 
-							h2_X6_theta_Energy_forward_high->Fill(theta_deg, iPad->Energy + iSig->Energy);
-						if (iSig->ADC<12e3) 
-							h2_X6_theta_Energy_forward_low->Fill(theta_deg, iPad->Energy + iSig->Energy);
-					}
+					//h2_X6_theta_Energy_forward->Fill(theta_deg, iPad->Energy);
+					h2_X6_theta_Energy_forward->Fill(theta_deg, iStrip->Energy);
 				}
 			}
 
@@ -474,6 +456,7 @@ void HistServerUser::ProcessToHistUser()
 				h2_X6_BB10[iSig->det]->Fill(iPad->Energy, iSig->ADC);
 				h2_X6_BB10_all->Fill(iPad->Energy, iSig->ADC);
 			}
+
 		}
 	}
 
