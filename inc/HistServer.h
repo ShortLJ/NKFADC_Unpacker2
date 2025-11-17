@@ -60,6 +60,7 @@ class HistServer
 		bool FolderParser(const char *name, string &obj, string &folder);
 
 		queue<Event> q_event;
+		uint32_t event_precessed=0;
 
 		bool histerEnd;
 };

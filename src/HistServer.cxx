@@ -82,6 +82,11 @@ void HistServer::Run()
 		ProcessToHistRaw();
 		ProcessToHistUser();
 		//if (flag_httpServer) srv_http->ProcessRequests();
+		event_precessed++;
+		if ((event_precessed&0x3ff)==0)
+		{
+			fprintf(stdout,"HistServer: event_precessed %u, enqued %ld\n", event_precessed, q_event.size());
+		}
 	}
 }
 void HistServer::Stop()
@@ -93,6 +98,12 @@ void HistServer::Stop()
 
 void HistServer::Enque(Event *evt)
 {
+	while (!histerEnd && q_event.size()>256)
+	{
+		fmutex.unlock();
+		usleep(100);
+		fmutex.lock();
+	}
 	//fmutex.lock();
 	q_event.push(*evt);
 	//fmutex.unlock();
