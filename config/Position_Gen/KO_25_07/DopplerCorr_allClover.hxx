@@ -88,7 +88,7 @@ Coord GetSegmentPosition(int det_num, int Crystal, int Segment) {
     vector<double> Clover_phi   = {67.5, -22.5, 22.5, -22.5, 22.5, 157.5, 157.5, 202.5, 112.5, 202.5};
     //vector<double> Clover_dis   = {132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5, 132.5};//ARUNITA EXP
     //vector<double> Clover_dis   = {195, 195, 195, 195, 195 , 195, 195 , 195, 195, 195};//SUSO EXP
-    vector<double> Clover_dis   = {16.778032, 16.599542, 8.7459954, 8.6567506, 16.956522, 18.205950, 8.3890160, 8.3890160, 18.027460, 18.205950};//Watanabe EXP
+    vector<double> Clover_dis   = {167.78032, 165.99542, 87.459954, 86.567506, 169.56522, 182.05950, 83.890160, 83.890160, 180.27460, 182.05950};//Watanabe EXP
 
 
     double theta = Clover_theta[det_num];
