@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
 
 	Config config(configdir);
 	config.ReadDetMapFile();
+	config.ReadRefPartiFile();
 	config.ReadErgCalFile();
 	config.ReadSegPosFile();
 	config.ReadStripPosFile();

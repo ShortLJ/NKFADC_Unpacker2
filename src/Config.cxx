@@ -78,6 +78,65 @@ void Config::ReadDetMapFile(string filename)
 	}
 
 }
+void Config::ReadRefPartiFile(string filename)
+{
+	string fullpath = configdir+"/"+filename;
+	fprintf(stdout, "Ref parti file: %s\n",fullpath.c_str());
+
+	FILE *fr;
+	fr = fopen(fullpath.c_str(),"r");
+	if(fr==NULL)
+	{
+		fprintf(stderr,"ref_parti file is not opened.\n");
+		exit(-6);
+	}
+	char line[100];
+
+	uint8_t param[3];
+	while (fgets(line, sizeof line, fr))
+	{
+		if (*line == '#') continue;
+		switch (sscanf(line, "%hhu,%hhu,%hhu,%hhu,%hhu,%hhu",
+			&isid,&ibrd,&icha,&param[0],&param[1],&param[2]))
+		{
+			case 4:
+			{
+				fprintf(stdout,"ref parti %u %u %u %u\n", isid,ibrd,icha, param[0]);
+				uint8_t parti=param[0];
+				if (parti==1) participate_ref[isid][ibrd][icha] = 1;
+				else if (parti==0) participate_ref[isid][ibrd][icha] = 0;
+				else
+					{
+						fprintf(stderr,"failed to ref parti cal file. 0 or 1\n");
+						exit(-7);
+					}
+			}
+			case 6:
+			{
+				fprintf(stdout,"ref parti %u %u %u %u %u %u\n", isid,ibrd,icha, param[0],param[1],param[2] );
+				uint8_t chL=icha, chU=param[0], granul=param[1], parti=param[2];
+				for (icha=chL; icha<=chU; icha+=granul)
+				{
+					if (parti==1) participate_ref[isid][ibrd][icha] = 1;
+					else if (parti==0) participate_ref[isid][ibrd][icha] = 0;
+					else
+					{
+						fprintf(stderr,"failed to ref parti cal file. 0 or 1\n");
+						exit(-7);
+					}
+				}
+				break;
+			}
+			default:
+			{
+				fprintf(stderr,"failed to ref parti cal file\n");
+				exit(-7);
+			}
+		}
+	}
+}
+
+
 void Config::ReadErgCalFile(string filename)
 {
 	string fullpath = configdir+"/"+filename;
@@ -201,6 +260,7 @@ void Config::InitializeGlobalVariables()
 	for (isid=0; isid<N_SID; isid++) for (ibrd=0; ibrd<N_BRD; ibrd++) for (icha=0; icha<N_CHA; icha++)
 	{
 		enabled [isid][ibrd][icha] = 0;
+		participate_ref[isid][ibrd][icha] = 0;
 		map_type[isid][ibrd][icha] = 0xFF;
 		map_det [isid][ibrd][icha] = 0xFF;
 		map_idx [isid][ibrd][icha] = 0xFF;

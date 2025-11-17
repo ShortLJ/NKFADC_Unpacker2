@@ -10,6 +10,7 @@
 #define __TIMESORTER__
 
 extern bool enabled [N_SID][N_BRD][N_CHA];
+extern bool participate_ref [N_SID][N_BRD][N_CHA];
 extern uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 extern uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 extern uint8_t	map_idx		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
@@ -44,6 +45,7 @@ class TimeSorter
 		queue<Sig> q_sig_input;
 		uint16_t pq_size;
 		vector<priority_queue<Sig>> vpq_sig;
+		vector<priority_queue<Sig>*> vpqptr_sig_refs;
 		//priority_queue<Sig> q_sig[Nsid][Nbrd][Ncha];
 		vector<Sig> v_sig_coin;
 
