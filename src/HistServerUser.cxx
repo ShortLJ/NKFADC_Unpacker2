@@ -209,15 +209,22 @@ void HistServerUser::InitUser()
 	h1_Clover_dcEnergy_fv_all_forward = MakeH1(
 			"Clover",
 			Form("h1_Clover_dcEnergy_fv_all_forward"),
-			Form("dcEnergy_clov_FV_all; dcEnergy [keV]; count"),
+			Form("dcEnergy_clov_FV_all_forward; dcEnergy [keV]; count"),
+			1500,0,3000
+			);
+	h1_Clover_Energy_fv_all_forward_proton = MakeH1(
+			"Clover",
+			Form("h1_Clover_Energy_fv_all_forward_proton"),
+			Form("Energy_clov_FV_all_forward_proton; Energy [keV]; count"),
 			1500,0,3000
 			);
 	h1_Clover_dcEnergy_fv_all_forward_proton = MakeH1(
 			"Clover",
 			Form("h1_Clover_dcEnergy_fv_all_forward_proton"),
-			Form("dcEnergy_clov_FV_all; dcEnergy [keV]; count"),
+			Form("dcEnergy_clov_FV_all_forward_proton; dcEnergy [keV]; count"),
 			1500,0,3000
 			);
+
 
 	h1_Clover_Energy_fv_all_backward = MakeH1(
 			"Clover",
@@ -505,7 +512,11 @@ void HistServerUser::ProcessToHistUser()
 					h1_Clover_Energy_fv_all_forward->Fill(iFV->Energy);
 				}
 				h1_Clover_dcEnergy_fv_all_forward->Fill(iCrystal->dcEnergy);
-				if (flag_proton) h1_Clover_dcEnergy_fv_all_forward_proton->Fill(iCrystal->dcEnergy);
+				if (flag_proton) 
+				{
+					h1_Clover_Energy_fv_all_forward_proton->Fill(iCrystal->Energy);
+					h1_Clover_dcEnergy_fv_all_forward_proton->Fill(iCrystal->dcEnergy);
+				}
 			}
 		}
 	}
