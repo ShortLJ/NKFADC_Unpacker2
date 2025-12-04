@@ -9,6 +9,7 @@
 TimeSorter::TimeSorter()
 {
 	pq_size=0;
+	fprintf(stdout,"TimeSorter::TimeSorter(): Create priority_queue\n");
 	for (uint8_t isid=0; isid<N_SID; isid++)
 	for (uint8_t ibrd=0; ibrd<N_BRD; ibrd++)
 	for (uint8_t icha=0; icha<N_CHA; icha++)
@@ -28,9 +29,11 @@ TimeSorter::TimeSorter()
 			TimeSorter_map[isid][ibrd][icha]=-1;
 		}
 	}
+	fprintf(stdout,"TimeSorter::TimeSorter(): Selecting participate_ref\n");
 	for (uint8_t isid=0; isid<N_SID; isid++)
 	for (uint8_t ibrd=0; ibrd<N_BRD; ibrd++)
-	for (uint8_t icha=0; icha<N_CHA; icha++)
+	for (uint8_t icha=0; icha<N_CHA; icha++) 
+	if (enabled[isid][ibrd][icha])
 	{
 		if (participate_ref[isid][ibrd][icha])
 		{
