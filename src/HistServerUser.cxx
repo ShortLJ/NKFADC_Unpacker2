@@ -87,7 +87,7 @@ void HistServerUser::InitRaw()
 				"Raw/Time_Ref",
 				Form("Time_Ref_sid%02d",isid),
 				Form("TS-TSref by channel, sid%02d;TS-TSref;cha+%d*brd",isid,Ncha),
-				1000,-500,500, Nbrd*Ncha, 0, Nbrd*Ncha
+				1000/8,-500,500, Nbrd*Ncha, 0, Nbrd*Ncha
 				//1000,-4000,4000, Nbrd*Ncha, 0, Nbrd*Ncha
 				);
 	}
