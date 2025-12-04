@@ -105,22 +105,13 @@ void Config::ReadRefPartiFile(string filename)
 				fprintf(stdout,"ref parti %u %u %u %u\n", isid,ibrd,icha, param[0]);
 				chL=icha; chU=icha; granul=1;
 				parti=param[0];
-				[[fallthrough]];
+				break;
 			}
 			case 6:
 			{
 				fprintf(stdout,"ref parti %u %u %u %u %u %u\n", isid,ibrd,icha, param[0],param[1],param[2] );
-				chL=icha, chU=param[0], granul=param[1], parti=param[2];
-				for (icha=chL; icha<=chU; icha+=granul)
-				{
-					if (parti==1) participate_ref[isid][ibrd][icha] = 1;
-					else if (parti==0) participate_ref[isid][ibrd][icha] = 0;
-					else
-					{
-						fprintf(stderr,"failed to ref parti cal file. 0 or 1\n");
-						exit(-7);
-					}
-				}
+				chL=icha, chU=param[0], granul=param[1];
+				parti=param[2];
 				break;
 			}
 			default:
@@ -128,6 +119,29 @@ void Config::ReadRefPartiFile(string filename)
 				fprintf(stderr,"failed to ref parti cal file\n");
 				exit(-7);
 			}
+		}
+		if (granul==0)
+		{
+				fprintf(stderr,"failed to ref parti cal file: granul==0\n");
+				exit(-7);
+		}
+		for (icha=chL; icha<=chU; icha+=granul)
+		{
+			fprintf(stdout, "%u %u %u %u\n",isid,ibrd,icha,parti);
+			for (int s = (isid == (uint8_t)-1 ? 0 : isid); s < (isid == (uint8_t)-1 ? N_SID : isid + 1); s++)
+			for (int b = (ibrd == (uint8_t)-1 ? 0 : ibrd); b < (ibrd == (uint8_t)-1 ? N_BRD : ibrd + 1); b++)
+			for (int c = (icha == (uint8_t)-1 ? 0 : icha); c < (icha == (uint8_t)-1 ? N_CHA : icha + 1); c++)
+			{
+				fprintf(stdout, "%d %d %d %u\n",s,b,c,parti);
+				if (parti==1) participate_ref[s][b][c] = 1;
+				else if (parti==0) participate_ref[s][b][c] = 0;
+				else
+				{
+					fprintf(stderr,"failed to ref parti cal file. 0 or 1\n");
+					exit(-7);
+				}
+			}
+			if (icha == (uint8_t)-1) break;
 		}
 	}
 }
