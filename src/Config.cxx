@@ -106,10 +106,11 @@ void Config::ReadRefPartiFile(string filename)
 				if (parti==1) participate_ref[isid][ibrd][icha] = 1;
 				else if (parti==0) participate_ref[isid][ibrd][icha] = 0;
 				else
-					{
-						fprintf(stderr,"failed to ref parti cal file. 0 or 1\n");
-						exit(-7);
-					}
+				{
+					fprintf(stderr,"failed to ref parti cal file. 0 or 1\n");
+					exit(-7);
+				}
+				break;
 			}
 			case 6:
 			{
