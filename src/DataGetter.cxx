@@ -40,6 +40,7 @@ int DataGetter::ProcessPacket(uint8_t *packet)
 		if ( Interpret(tmp,sig_tmp)==1)
 		{
 			if (sig_tmp.sid<3) if (sig_tmp.ADC<3000) continue;
+			sig_tmp.coarse_time -= time_offset[sig_tmp.sid][sig_tmp.brd][sig_tmp.cha];
 			timesorter->fmutex_input.lock();
 			timesorter->Push(sig_tmp);
 			timesorter->fmutex_input.unlock();

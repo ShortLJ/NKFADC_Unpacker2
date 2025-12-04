@@ -137,6 +137,59 @@ void Config::ReadRefPartiFile(string filename)
 }
 
 
+void Config::ReadTimeOffsetFile(string filename)
+{
+	string fullpath = configdir+"/"+filename;
+	fprintf(stdout, "time offset file: %s\n",fullpath.c_str());
+
+	FILE *fr;
+	fr = fopen(fullpath.c_str(),"r");
+	if(fr==NULL)
+	{
+		fprintf(stderr,"time offset file is not opened.\n");
+		exit(-6);
+	}
+	char line[100];
+
+	int64_t param[0];
+	int overwrite=0;
+	while (fgets(line, sizeof line, fr))
+	{
+		if (*line == '#') continue;
+		switch (sscanf(line, "%hhu,%hhu,%hhu,%ld,%d",
+			&isid,&ibrd,&icha,&param[0],&overwrite))
+		{
+			case 4:
+			{
+				overwrite=0;
+				[[fallthrough]];
+			}
+			case 5:
+			{
+				fprintf(stdout,"reading %s: %u %u %u %ld,%d\n",fullpath.c_str(),isid,ibrd,icha,param[0],overwrite);
+				for (int s = (isid == (uint8_t)-1 ? 0 : isid); s < (isid == (uint8_t)-1 ? N_SID : isid + 1); s++)
+				for (int b = (ibrd == (uint8_t)-1 ? 0 : ibrd); b < (ibrd == (uint8_t)-1 ? N_BRD : ibrd + 1); b++)
+				for (int c = (icha == (uint8_t)-1 ? 0 : icha); c < (icha == (uint8_t)-1 ? N_CHA : icha + 1); c++)
+				{
+					fprintf(stdout,"%d %d %d %ld,%d\n",s,b,c,param[0],overwrite);
+					if (overwrite)	time_offset[s][b][c] = param[0];
+					else 			time_offset[s][b][c] += param[0];
+				}
+				break;
+			}
+			default:
+			{
+				fprintf(stderr,"failed to read time offset file\n");
+				exit(-7);
+			}
+		}
+	}
+	for (isid=0; isid<N_SID; isid++) for (ibrd=0; ibrd<N_BRD; ibrd++) for (icha=0; icha<N_CHA; icha++) if (enabled[isid][ibrd][icha])
+	{
+		fprintf(stdout, "%u %u %u / time_offset %ld\n",isid,ibrd,icha,time_offset[isid][ibrd][icha]);
+	}
+}
+
 void Config::ReadErgCalFile(string filename)
 {
 	string fullpath = configdir+"/"+filename;
@@ -261,6 +314,7 @@ void Config::InitializeGlobalVariables()
 	{
 		enabled [isid][ibrd][icha] = 0;
 		participate_ref[isid][ibrd][icha] = 0;
+		time_offset[isid][ibrd][icha] = 0;
 		map_type[isid][ibrd][icha] = 0xFF;
 		map_det [isid][ibrd][icha] = 0xFF;
 		map_idx [isid][ibrd][icha] = 0xFF;

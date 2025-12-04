@@ -10,6 +10,8 @@
 
 bool enabled [N_SID][N_BRD][N_CHA];
 bool participate_ref [N_SID][N_BRD][N_CHA];
+int64_t time_offset [N_SID][N_BRD][N_CHA];
+
 uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 uint8_t	map_idx		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
@@ -33,6 +35,7 @@ class Config
 
 		void ReadDetMapFile(string filename="det_map.csv");
 		void ReadRefPartiFile(string filename="ref_parti.csv");
+		void ReadTimeOffsetFile(string filename="time_offset.csv");
 		void ReadErgCalFile(string filename="erg_cal.csv");
 		void ReadSegPosFile(string filename="seg_pos.csv");
 		void ReadStripPosFile(string filename="strip_pos.csv");

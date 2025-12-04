@@ -54,6 +54,8 @@
 
 /// parameters to configure from .csv
 extern bool enabled [N_SID][N_BRD][N_CHA];
+extern bool participate_ref [N_SID][N_BRD][N_CHA];
+extern int64_t time_offset [N_SID][N_BRD][N_CHA];
 extern uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 extern uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
 extern uint8_t	map_idx		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
