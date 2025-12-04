@@ -96,26 +96,21 @@ void Config::ReadRefPartiFile(string filename)
 	while (fgets(line, sizeof line, fr))
 	{
 		if (*line == '#') continue;
+		uint8_t chL, chU, granul, parti;
 		switch (sscanf(line, "%hhu,%hhu,%hhu,%hhu,%hhu,%hhu",
 			&isid,&ibrd,&icha,&param[0],&param[1],&param[2]))
 		{
 			case 4:
 			{
 				fprintf(stdout,"ref parti %u %u %u %u\n", isid,ibrd,icha, param[0]);
-				uint8_t parti=param[0];
-				if (parti==1) participate_ref[isid][ibrd][icha] = 1;
-				else if (parti==0) participate_ref[isid][ibrd][icha] = 0;
-				else
-				{
-					fprintf(stderr,"failed to ref parti cal file. 0 or 1\n");
-					exit(-7);
-				}
-				break;
+				chL=icha; chU=icha; granul=1;
+				parti=param[0];
+				[[fallthrough]];
 			}
 			case 6:
 			{
 				fprintf(stdout,"ref parti %u %u %u %u %u %u\n", isid,ibrd,icha, param[0],param[1],param[2] );
-				uint8_t chL=icha, chU=param[0], granul=param[1], parti=param[2];
+				chL=icha, chU=param[0], granul=param[1], parti=param[2];
 				for (icha=chL; icha<=chU; icha+=granul)
 				{
 					if (parti==1) participate_ref[isid][ibrd][icha] = 1;
