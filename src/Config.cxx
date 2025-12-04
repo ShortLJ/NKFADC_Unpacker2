@@ -128,9 +128,9 @@ void Config::ReadRefPartiFile(string filename)
 		for (icha=chL; icha<=chU; icha+=granul)
 		{
 			fprintf(stdout, "%u %u %u %u\n",isid,ibrd,icha,parti);
-			for (int s = (isid == (uint8_t)-1 ? 0 : isid); s < (isid == (uint8_t)-1 ? N_SID : isid + 1); s++)
-			for (int b = (ibrd == (uint8_t)-1 ? 0 : ibrd); b < (ibrd == (uint8_t)-1 ? N_BRD : ibrd + 1); b++)
-			for (int c = (icha == (uint8_t)-1 ? 0 : icha); c < (icha == (uint8_t)-1 ? N_CHA : icha + 1); c++)
+			for (int s = (isid == uint8_t(-1) ? 0 : isid); s < (isid == uint8_t(-1) ? N_SID : isid + 1); s++)
+			for (int b = (ibrd == uint8_t(-1) ? 0 : ibrd); b < (ibrd == uint8_t(-1) ? N_BRD : ibrd + 1); b++)
+			for (int c = (icha == uint8_t(-1) ? 0 : icha); c < (icha == uint8_t(-1) ? N_CHA : icha + 1); c++)
 			{
 				fprintf(stdout, "%d %d %d %u\n",s,b,c,parti);
 				if (parti==1) participate_ref[s][b][c] = 1;
@@ -141,7 +141,7 @@ void Config::ReadRefPartiFile(string filename)
 					exit(-7);
 				}
 			}
-			if (icha == (uint8_t)-1) break;
+			if (icha == uint8_t(-1)) break;
 		}
 	}
 }
@@ -177,9 +177,9 @@ void Config::ReadTimeOffsetFile(string filename)
 			case 5:
 			{
 				fprintf(stdout,"reading %s: %u %u %u %ld,%d\n",fullpath.c_str(),isid,ibrd,icha,param[0],overwrite);
-				for (int s = (isid == (uint8_t)-1 ? 0 : isid); s < (isid == (uint8_t)-1 ? N_SID : isid + 1); s++)
-				for (int b = (ibrd == (uint8_t)-1 ? 0 : ibrd); b < (ibrd == (uint8_t)-1 ? N_BRD : ibrd + 1); b++)
-				for (int c = (icha == (uint8_t)-1 ? 0 : icha); c < (icha == (uint8_t)-1 ? N_CHA : icha + 1); c++)
+				for (int s = (isid == uint8_t(-1) ? 0 : isid); s < (isid == uint8_t(-1) ? N_SID : isid + 1); s++)
+				for (int b = (ibrd == uint8_t(-1) ? 0 : ibrd); b < (ibrd == uint8_t(-1) ? N_BRD : ibrd + 1); b++)
+				for (int c = (icha == uint8_t(-1) ? 0 : icha); c < (icha == uint8_t(-1) ? N_CHA : icha + 1); c++)
 				{
 					fprintf(stdout,"%d %d %d %ld,%d\n",s,b,c,param[0],overwrite);
 					if (overwrite)	time_offset[s][b][c] = param[0];
