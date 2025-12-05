@@ -34,7 +34,13 @@ class HitCrystal : public Hit
 		HitCrystal(uint8_t iclover, uint8_t icrystal, vector<SigAna> &v_sigana_fv, vector<SigAna> &v_sigana_seg);
 		~HitCrystal();
 
-		float DopplerCorrE(double beta_r, double beta_theta=0, double beta_phi=0);
+		float DopplerCorrE(float beta_r, float beta_theta=0, float beta_phi=0);
+		float DopplerCorrE(float beta_r, float *coor);
+		//float DopplerCorrE(float *mom_nucl_cart);
+
+		float GetTheta(float *ref_coor_cart);
+		float seg_coor[3];
+		float radi_seg;
 
 	private:
 		bool isValid();

@@ -41,7 +41,7 @@ void HitCrystal::ProcessHit()
 	DopplerCorrE(0.04,0,0);
 }
 
-float HitCrystal::DopplerCorrE(double beta_r, double beta_theta, double beta_phi)
+/*float HitCrystal::DopplerCorrE(double beta_r, double beta_theta, double beta_phi)
 {
 	double pos_det[3] = {
 		seg_pos_cart [cloverID][idx][primary][0],
@@ -53,7 +53,7 @@ float HitCrystal::DopplerCorrE(double beta_r, double beta_theta, double beta_phi
 		beta_r * sin(beta_theta) * sin(beta_phi),
 		beta_r * cos(beta_theta)
 	};
-	//Energy = Energy / (1-beta*cos(theta/*rad*/)) * sqrt(1-beta*beta);
+	//Energy = Energy / (1-beta*cos(theta)) * sqrt(1-beta*beta);
 	//Energy = Energy / (1-inner_product(vec_c, vec_beta)/abs(vec_c)) * sqrt(1-beta*beta);
 	double inner_product = 
 			(pos_det[0]*mom_nucl[0] + pos_det[1]*mom_nucl[1] + pos_det[2]*mom_nucl[2]) 
@@ -61,6 +61,42 @@ float HitCrystal::DopplerCorrE(double beta_r, double beta_theta, double beta_phi
 	dcEnergy = Energy / (1-inner_product) * sqrt(1-beta_r*beta_r);
 
 	return dcEnergy;
+}*/
+
+float HitCrystal::GetTheta(float *ref_coor)
+{
+	if (primary==-1) return -9999999999;
+	double radi_ref = sqrt(ref_coor[0]*ref_coor[0]+ref_coor[1]*ref_coor[1]+ref_coor[2]*ref_coor[2]);
+
+	double inner_product = (seg_coor[0]*ref_coor[0]+seg_coor[1]*ref_coor[1]+seg_coor[2]*ref_coor[2]);
+	double costheta = inner_product /radi_ref/radi_seg;
+	return acos(costheta)*180/3.1415;
+}
+
+float HitCrystal::DopplerCorrE(float beta_r, float *ref_coor)
+{
+	double radi_ref = sqrt(ref_coor[0]*ref_coor[0]+ref_coor[1]*ref_coor[1]+ref_coor[2]*ref_coor[2]);
+
+	double inner_product = (seg_coor[0]*ref_coor[0]+seg_coor[1]*ref_coor[1]+seg_coor[2]*ref_coor[2]);
+
+	dcEnergy = Energy * (1-beta_r*inner_product/radi_ref/radi_seg) / sqrt(1-beta_r*beta_r);
+	//fprintf(stdout, "Energy %f\t",Energy);
+	//fprintf(stdout, "pos_det %f %f %f\t",pos_det[0],pos_det[1],pos_det[2]);
+	//fprintf(stdout, "beta %f\t",beta_r);
+	//fprintf(stdout, "dcEnergy %f\n",dcEnergy);
+
+	return dcEnergy;
+}
+
+float HitCrystal::DopplerCorrE(float beta_r, float beta_theta, float beta_phi)
+{
+	if (primary==-1) return -9999999999;
+	float mom_nucl[3] = {
+		beta_r * sin(beta_theta) * cos(beta_phi),
+		beta_r * sin(beta_theta) * sin(beta_phi),
+		beta_r * cos(beta_theta)
+	};
+	return DopplerCorrE(beta_r,mom_nucl);
 }
 
 bool HitCrystal::isValid()
@@ -79,13 +115,16 @@ void HitCrystal::Process_Esum()
 	E_fv_avg = 0;
 	int nhit=0;
 	vector<SigAna>::iterator fv;
-	for (fv=vSigAnaFV.begin(); fv!=vSigAnaFV.end(); fv++)
+	/*for (fv=vSigAnaFV.begin(); fv!=vSigAnaFV.end(); fv++)
 	{
 		E_fv_avg+=fv->Energy;
 		nhit++;
 	}
 	if (nhit) E_fv_avg /= nhit;
-	else E_fv_avg = -1;
+	else E_fv_avg = -1;*/
+	E_fv_avg = -1;
+	for (fv=vSigAnaFV.begin(); fv!=vSigAnaFV.end(); fv++) if (fv->idx==0)
+		E_fv_avg = fv->Energy;
 }
 
 void HitCrystal::Process_Primary()
@@ -94,6 +133,10 @@ void HitCrystal::Process_Primary()
 	if (vSigAnaSeg.size()==0)
 	{
 		//fprintf(stderr,"void HitCrystal::Process_Primary(): vSigAnaSeg.size()==0 at detID %u (%u %u)\n",detID,cloverID,idx);
+		seg_coor[0]=0;
+		seg_coor[1]=0;
+		seg_coor[2]=0;
+		radi_seg=0;
 		return;
 	}
 	vector<SigAna>::iterator iseg,pseg;
@@ -104,4 +147,9 @@ void HitCrystal::Process_Primary()
 		else pseg = (pseg->Energy > iseg->Energy) ? pseg : iseg;
 	}
 	primary = pseg->idx;
+
+	seg_coor[0]=seg_pos_cart [cloverID][idx][primary][0];
+	seg_coor[1]=seg_pos_cart [cloverID][idx][primary][1];
+	seg_coor[2]=seg_pos_cart [cloverID][idx][primary][2];
+	radi_seg = sqrt(seg_coor[0]*seg_coor[0]+seg_coor[1]*seg_coor[1]+seg_coor[2]*seg_coor[2]);
 }
