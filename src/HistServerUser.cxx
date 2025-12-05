@@ -200,31 +200,31 @@ void HistServerUser::InitUser()
 			"Clover",
 			Form("h1_Clover_Energy_allfv"),
 			Form("Energy_clov_allFV; Energy [keV]; count"),
-			1500,0,3000
+			2000,0,4000
 			);
 	h1_Clover_Energy_allfv_forward = MakeH1(
 			"Clover",
 			Form("h1_Clover_Energy_allfv_forward"),
-			Form("Energy_clov_allFV; Energy [keV]; count"),
-			1500,0,3000
+			Form("Energy_clov_allFV_forward; Energy [keV]; count"),
+			2000,0,4000
 			);
 	h1_Clover_dcEnergy_allfv_forward = MakeH1(
 			"Clover",
 			Form("h1_Clover_dcEnergy_allfv_forward"),
 			Form("dcEnergy_clov_allFV_forward; dcEnergy [keV]; count"),
-			1500,0,3000
+			2000,0,4000
 			);
 	h1_Clover_Energy_allfv_forward_proton = MakeH1(
 			"Clover",
 			Form("h1_Clover_Energy_allfv_forward_proton"),
 			Form("Energy_clov_allFV_forward_proton; Energy [keV]; count"),
-			1500,0,3000
+			2000,0,4000
 			);
 	h1_Clover_dcEnergy_allfv_forward_proton = MakeH1(
 			"Clover",
 			Form("h1_Clover_dcEnergy_allfv_forward_proton"),
 			Form("dcEnergy_clov_allFV_forward_proton; dcEnergy [keV]; count"),
-			1500,0,3000
+			2000,0,4000
 			);
 
 
@@ -232,13 +232,13 @@ void HistServerUser::InitUser()
 			"Clover",
 			Form("h1_Clover_Energy_allfv_backward"),
 			Form("Energy_clov_allFV; Energy [keV]; count"),
-			1500,0,3000
+			2000,0,4000
 			);
 	h1_Clover_dcEnergy_allfv_backward = MakeH1(
 			"Clover",
 			Form("h1_Clover_dcEnergy_allfv_backward"),
 			Form("dcEnergy_clov_allFV; dcEnergy [keV]; count"),
-			1500,0,3000
+			2000,0,4000
 			);
 
 
