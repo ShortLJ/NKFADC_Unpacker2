@@ -47,13 +47,13 @@ class HistServerUser : public HistServer
 	
 		TH1 *h1_Clover_Energy_seg[Nclover][Ncrystal][Nseg];
 		TH1 *h1_Clover_Energy_fv[Nclover][Ncrystal][Nfv];
-		TH1 *h1_Clover_Energy_fv_all;
-		TH1 *h1_Clover_Energy_fv_all_forward;
-		TH1 *h1_Clover_dcEnergy_fv_all_forward;
-		TH1 *h1_Clover_Energy_fv_all_forward_proton;
-		TH1 *h1_Clover_dcEnergy_fv_all_forward_proton;
-		TH1 *h1_Clover_Energy_fv_all_backward;
-		TH1 *h1_Clover_dcEnergy_fv_all_backward;
+		TH1 *h1_Clover_Energy_allfv;
+		TH1 *h1_Clover_Energy_allfv_forward;
+		TH1 *h1_Clover_dcEnergy_allfv_forward;
+		TH1 *h1_Clover_Energy_allfv_forward_proton;
+		TH1 *h1_Clover_dcEnergy_allfv_forward_proton;
+		TH1 *h1_Clover_Energy_allfv_backward;
+		TH1 *h1_Clover_dcEnergy_allfv_backward;
 
 		uint64_t time0=0;
 		TH2 *h2_Time_Energy_fv_hemi;

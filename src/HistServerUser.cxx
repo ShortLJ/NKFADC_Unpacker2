@@ -196,47 +196,47 @@ void HistServerUser::InitUser()
 			}
 		}
 	}
-	h1_Clover_Energy_fv_all = MakeH1(
+	h1_Clover_Energy_allfv = MakeH1(
 			"Clover",
-			Form("h1_Clover_Energy_fv_all"),
+			Form("h1_Clover_Energy_allfv"),
 			Form("Energy_clov_FV_all; Energy [keV]; count"),
 			1500,0,3000
 			);
-	h1_Clover_Energy_fv_all_forward = MakeH1(
+	h1_Clover_Energy_allfv_forward = MakeH1(
 			"Clover",
-			Form("h1_Clover_Energy_fv_all_forward"),
+			Form("h1_Clover_Energy_allfv_forward"),
 			Form("Energy_clov_FV_all; Energy [keV]; count"),
 			1500,0,3000
 			);
-	h1_Clover_dcEnergy_fv_all_forward = MakeH1(
+	h1_Clover_dcEnergy_allfv_forward = MakeH1(
 			"Clover",
-			Form("h1_Clover_dcEnergy_fv_all_forward"),
+			Form("h1_Clover_dcEnergy_allfv_forward"),
 			Form("dcEnergy_clov_FV_all_forward; dcEnergy [keV]; count"),
 			1500,0,3000
 			);
-	h1_Clover_Energy_fv_all_forward_proton = MakeH1(
+	h1_Clover_Energy_allfv_forward_proton = MakeH1(
 			"Clover",
-			Form("h1_Clover_Energy_fv_all_forward_proton"),
+			Form("h1_Clover_Energy_allfv_forward_proton"),
 			Form("Energy_clov_FV_all_forward_proton; Energy [keV]; count"),
 			1500,0,3000
 			);
-	h1_Clover_dcEnergy_fv_all_forward_proton = MakeH1(
+	h1_Clover_dcEnergy_allfv_forward_proton = MakeH1(
 			"Clover",
-			Form("h1_Clover_dcEnergy_fv_all_forward_proton"),
+			Form("h1_Clover_dcEnergy_allfv_forward_proton"),
 			Form("dcEnergy_clov_FV_all_forward_proton; dcEnergy [keV]; count"),
 			1500,0,3000
 			);
 
 
-	h1_Clover_Energy_fv_all_backward = MakeH1(
+	h1_Clover_Energy_allfv_backward = MakeH1(
 			"Clover",
-			Form("h1_Clover_Energy_fv_all_backward"),
+			Form("h1_Clover_Energy_allfv_backward"),
 			Form("Energy_clov_FV_all; Energy [keV]; count"),
 			1500,0,3000
 			);
-	h1_Clover_dcEnergy_fv_all_backward = MakeH1(
+	h1_Clover_dcEnergy_allfv_backward = MakeH1(
 			"Clover",
-			Form("h1_Clover_dcEnergy_fv_all_backward"),
+			Form("h1_Clover_dcEnergy_allfv_backward"),
 			Form("dcEnergy_clov_FV_all; dcEnergy [keV]; count"),
 			1500,0,3000
 			);
@@ -362,7 +362,7 @@ void HistServerUser::ProcessToHistUser()
 		if (iSig->cha==8 || iSig->cha==9)
 		{
 			h2_FVEnergy_cha->Fill((iSig->cha-8) + 2*(iSig->brd + Nbrd*iSig->sid), iSig->Energy);
-			h1_Clover_Energy_fv_all->Fill(iSig->Energy);
+			h1_Clover_Energy_allfv->Fill(iSig->Energy);
 		}
 	}*/
 
@@ -388,7 +388,7 @@ void HistServerUser::ProcessToHistUser()
 				h1_Clover_Energy_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->Energy);
 				if (iFV->idx==0)
 				{
-					h1_Clover_Energy_fv_all->Fill(iFV->Energy);
+					h1_Clover_Energy_allfv->Fill(iFV->Energy);
 					if (iClover->idx>=5)
 					{
 						if (time0==0) time0 = iFV->coarse_time;
@@ -497,9 +497,9 @@ void HistServerUser::ProcessToHistUser()
 			{
 				for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++) if (iFV->idx==0)
 				{
-					h1_Clover_Energy_fv_all_backward->Fill(iFV->Energy);
+					h1_Clover_Energy_allfv_backward->Fill(iFV->Energy);
 				}
-				h1_Clover_dcEnergy_fv_all_backward->Fill(iCrystal->dcEnergy);
+				h1_Clover_dcEnergy_allfv_backward->Fill(iCrystal->dcEnergy);
 			}
 		}
 	}
@@ -511,13 +511,13 @@ void HistServerUser::ProcessToHistUser()
 			{
 				for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++) if (iFV->idx==0)
 				{
-					h1_Clover_Energy_fv_all_forward->Fill(iFV->Energy);
+					h1_Clover_Energy_allfv_forward->Fill(iFV->Energy);
 				}
-				h1_Clover_dcEnergy_fv_all_forward->Fill(iCrystal->dcEnergy);
+				h1_Clover_dcEnergy_allfv_forward->Fill(iCrystal->dcEnergy);
 				if (flag_proton) 
 				{
-					h1_Clover_Energy_fv_all_forward_proton->Fill(iCrystal->Energy);
-					h1_Clover_dcEnergy_fv_all_forward_proton->Fill(iCrystal->dcEnergy);
+					h1_Clover_Energy_allfv_forward_proton->Fill(iCrystal->Energy);
+					h1_Clover_dcEnergy_allfv_forward_proton->Fill(iCrystal->dcEnergy);
 				}
 			}
 		}
