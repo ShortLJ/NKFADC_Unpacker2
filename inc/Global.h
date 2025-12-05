@@ -52,20 +52,6 @@
 
 
 
-/// parameters to configure from .csv
-extern bool enabled [N_SID][N_BRD][N_CHA];
-extern bool participate_ref [N_SID][N_BRD][N_CHA];
-extern int64_t time_offset [N_SID][N_BRD][N_CHA];
-extern uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
-extern uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
-extern uint8_t	map_idx		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
-extern float Ecal_par0		[N_SID][N_BRD][N_CHA];
-extern float Ecal_par1		[N_SID][N_BRD][N_CHA];
-extern float Ecal_par2		[N_SID][N_BRD][N_CHA];
-
-extern float seg_pos_cart [Nclover][Ncrystal][Nseg][3];
-extern float strip_pos_cart [Nx6][Nstrip][3];
-///
 
 
 

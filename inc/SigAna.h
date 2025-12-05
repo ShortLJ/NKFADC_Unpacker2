@@ -4,6 +4,14 @@
 #ifndef __SIGANA__
 #define __SIGANA__
 
+extern uint8_t	map_type	[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
+extern uint8_t	map_det		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
+extern uint8_t	map_idx		[N_SID][N_BRD][N_CHA];// = {{{0xFF}}};
+
+extern float Ecal_par0		[N_SID][N_BRD][N_CHA];
+extern float Ecal_par1		[N_SID][N_BRD][N_CHA];
+extern float Ecal_par2		[N_SID][N_BRD][N_CHA];
+
 using namespace std;
 
 class SigAna : public Sig

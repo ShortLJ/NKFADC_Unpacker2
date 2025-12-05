@@ -7,6 +7,8 @@
 #ifndef __HITCRYSTAL__
 #define __HITCRYSTAL__
 
+extern float seg_pos_cart [Nclover][Ncrystal][Nseg][3];
+
 using namespace std;
 
 class HitCrystal : public Hit

@@ -10,6 +10,8 @@
 #ifndef __DATAGETTER__
 #define __DATAGETTER__
 
+extern int64_t time_offset [N_SID][N_BRD][N_CHA];
+
 using namespace std;
 
 class DataGetter

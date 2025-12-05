@@ -95,16 +95,13 @@ Event EventProcessor::ProcessEvent(vector<Sig> v_sig, uint64_t ref_lgt=0)
 	for (it_sig=v_sig.begin(); it_sig!=v_sig.end(); it_sig++)
 	{
 		//it_sig->PrintSummary();
-		uint8_t isid = (*it_sig).sid;
-		uint8_t ibrd = (*it_sig).brd;
-		uint8_t icha = (*it_sig).cha;
-		uint8_t itype = map_type  [isid][ibrd][icha]; if (itype==255) continue;
-		uint8_t idet  = map_det   [isid][ibrd][icha]; if (idet>Ndet) {fprintf(stderr,"EventProcessor::ProcessEvent(vector<Sig> v_sig): idet %u>Ndet%u\n",idet,Ndet);continue;}
-		uint8_t iidx  = map_idx	  [isid][ibrd][icha];
+		evt.vSigAna_RAW.emplace_back(*it_sig);
+		SigAna *this_sigana = &(evt.vSigAna_RAW.back());
 
-		evt.vSigAna_RAW.emplace_back(itype,idet,iidx,*it_sig);
-		v_sigana_sort[itype][idet].emplace_back(itype,idet,iidx,*it_sig);
-		flag_det[itype][idet]=1;
+		if (this_sigana->type==255) continue;
+		if (this_sigana->det>Ndet) {fprintf(stderr,"EventProcessor::ProcessEvent(vector<Sig> v_sig): idet %u>Ndet%u\n",this_sigana->det,Ndet);continue;}
+		v_sigana_sort[this_sigana->type][this_sigana->det].push_back(*this_sigana);
+		flag_det[this_sigana->type][this_sigana->det]=1;
 	}
 	////////// Simple //////////
 	evt.Simple = EvtSimple(v_sigana_sort[0]);

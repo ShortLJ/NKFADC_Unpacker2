@@ -11,6 +11,8 @@
 #ifndef __HITPAD__
 #define __HITPAD__
 
+extern float strip_pos_cart [Nx6][Nstrip][3];
+
 class HitPad : public Hit
 {
 	public:
