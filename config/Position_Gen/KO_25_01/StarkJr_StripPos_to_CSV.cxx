@@ -34,7 +34,7 @@ void StarkJr_StripPos_to_CSV(){
 	for (int ix6=0; ix6=12; ix6++)
 	{
 
-
+	}
 
 	const char *filename = "strip_pos.csv";
 	ifstream checkFile(filename);

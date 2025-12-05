@@ -96,9 +96,9 @@ Coord GetSegmentPosition(int det_num, int Crystal, int Segment) {
 	if( phi > 90 )
 	{
 		if( Crystal == 0 ) Crystal = 2;
-		if( Crystal == 1 ) Crystal = 3;
-		if( Crystal == 2 ) Crystal = 0;
-		if( Crystal == 3 ) Crystal = 1;
+		else if( Crystal == 1 ) Crystal = 3;
+		else if( Crystal == 2 ) Crystal = 0;
+		else if( Crystal == 3 ) Crystal = 1;
 	}
 
     // 로컬 세그먼트 좌표
