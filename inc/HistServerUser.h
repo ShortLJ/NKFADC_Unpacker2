@@ -43,7 +43,6 @@ class HistServerUser : public HistServer
 	private:
 
 		TH2 *h2_FVEnergy_cha[2];
-		TH2 *h2_Eg_Eg;
 	
 		TH1 *h1_Clover_Energy_seg[Nclover][Ncrystal][Nseg];
 		TH1 *h1_Clover_Energy_fv[Nclover][Ncrystal][Nfv];
@@ -68,9 +67,33 @@ class HistServerUser : public HistServer
 
 		TH2* h2_X6_pos_ADCpad[Nx6][Nstrip][Npad];
 		TH2* h2_X6_pos_ADCpad_all[Nx6][Nstrip];
+		TH2* h2_X6_pos_Energy[Nx6][Nstrip];
 
 		TH2 *h2_X6_theta_Energy_backward;
+		TH2 *h2_X6_theta_Energy_backward_gamma;
 		TH2 *h2_X6_theta_Energy_forward;
+		TH2 *h2_X6_theta_Energy_forward_Esel;
+		TH2 *h2_X6_theta_Energy_forward_Esel_bg;
+
+		TH2 *h2_X6_theta_Energy_forward_gamma;
+
+		TH2 *h2_theta_Egamma;
+		TH2 *h2_theta_Egamma_backward;
+		TH2 *h2_theta_Egamma_forward;
+		TH2 *h2_theta_dcEgamma;
+		TH2 *h2_theta_dcEgamma_forward;
+		TH2 *h2_theta_dcEgamma_backward;
+
+		TH2 *h2_phi_theta_asgard[10];
+		TH2 *h2_phi_theta_starkjr;
+
+		TH2 *h2_Eg_Eg;
+		TH2 *h2_Eg_Eg_forward;
+		TH2 *h2_Eg_Eg_backward;
+
+		TH2 *h2_dcEg_dcEg;
+		TH2 *h2_dcEg_dcEg_forward;
+		TH2 *h2_dcEg_dcEg_backward;
 
 		TH2 *h2_X6_BB10[6];
 		TH2 *h2_X6_BB10_all;

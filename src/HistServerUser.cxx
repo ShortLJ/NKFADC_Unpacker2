@@ -165,13 +165,6 @@ void HistServerUser::InitUser()
 			Nclover*Ncrystal, 0,Nclover*Ncrystal, 4000,0,4000
 			);
 
-	h2_Eg_Eg = MakeH2(
-			"Clover",
-			"Eg_Eg",
-			"g-g coincidence;Energy;Energy",
-			1500,0,3000, 1500,0,3000
-			);
-
 	for (int iclov=0; iclov<Nclover; iclov++)
 	{
 		for (int icrys=0;  icrys<Ncrystal; icrys++)
@@ -279,6 +272,14 @@ void HistServerUser::InitUser()
 		}
 		for (int istrip=0; istrip<Nstrip; istrip++)
 		{
+			h2_X6_pos_Energy[ix6][istrip] = MakeH2(
+					Form("X6/det%02d/pos_Energy",ix6),
+					Form("X6_det%02d_strip%d_pos_Energy",ix6,istrip),
+					Form("X6_det%02d_strip%d_pos_Energy;pos; Energy strip sum",ix6,istrip),
+					120,-1.2,1.2, 1000,0,60e3);
+		}
+		for (int istrip=0; istrip<Nstrip; istrip++)
+		{
 			h2_X6_ADC_ADC[ix6][istrip] = MakeH2(
 					Form("X6/det%02d/strip%d",ix6,istrip),
 					Form("X6_det%02d_strip%d_ADC_ADC",ix6,istrip),
@@ -290,9 +291,6 @@ void HistServerUser::InitUser()
 					Form("X6_det%02d_posstrip%d_Energypad",ix6,istrip),
 					Form("X6_det%02d_posstrip%d_Energypad;pos strip;Energy pad",ix6,istrip),
 					120,-1.2,1.2, 600,0,30e3);
-
-
-
 
 			for (int ipad=0; ipad<Npad; ipad++)
 			{
@@ -324,12 +322,127 @@ void HistServerUser::InitUser()
 		"h2_X6_theta_Energy_backward;theta;pad energy",
 		180,0,180, 1000,0,60e3
 		);
+	h2_X6_theta_Energy_backward_gamma = MakeH2(
+		"asdf",
+		"h2_X6_theta_Energy_backward_gamma",
+		"h2_X6_theta_Energy_backward_gamma;theta;pad energy",
+		180,0,180, 1000,0,60e3
+		);
+
 	h2_X6_theta_Energy_forward = MakeH2(
 		"asdf",
 		"h2_X6_theta_Energy_forward",
 		"h2_X6_theta_Energy_forward;theta;pad energy",
 		180,0,180, 1000,0,160e3
 		);
+	h2_X6_theta_Energy_forward_Esel = MakeH2(
+		"asdf",
+		"h2_X6_theta_Energy_forward_Esel",
+		"h2_X6_theta_Energy_forward_Esel;theta;pad energy",
+		180,0,180, 1000,0,160e3
+		);
+	h2_X6_theta_Energy_forward_Esel_bg = MakeH2(
+		"asdf",
+		"h2_X6_theta_Energy_forward_Esel_bg",
+		"h2_X6_theta_Energy_forward_Esel_bg;theta;pad energy",
+		180,0,180, 1000,0,160e3
+		);
+
+	h2_X6_theta_Energy_forward_gamma = MakeH2(
+		"asdf",
+		"h2_X6_theta_Energy_forward_gamma",
+		"h2_X6_theta_Energy_forward_gamma;theta;pad energy",
+		180,0,180, 1000,0,160e3
+		);
+	h2_theta_Egamma = MakeH2(
+		"asdf",
+		"h2_theta_Egamma",
+		"h2_theta_Egamma;#theta_{p,g}; Energy gamma",
+		180/2,0,180, 2000/2,0,4000);
+	h2_theta_Egamma_forward = MakeH2(
+		"asdf",
+		"h2_theta_Egamma_forward",
+		"h2_theta_Egamma_forward;#theta_{p,g}; Energy gamma",
+		180/2,0,180, 2000/2,0,4000);
+	h2_theta_Egamma_backward = MakeH2(
+		"asdf",
+		"h2_theta_Egamma_backward",
+		"h2_theta_Egamma_backward;#theta_{p,g}; Energy gamma",
+		180/2,0,180, 2000/2,0,4000);
+
+	h2_theta_dcEgamma = MakeH2(
+		"asdf",
+		"h2_theta_dcEgamma",
+		"h2_theta_dcEgamma;#theta_{p,g}; dcEnergy gamma",
+		180/2,0,180, 2000/2,0,4000);
+	h2_theta_dcEgamma_forward = MakeH2(
+		"asdf",
+		"h2_theta_dcEgamma_forward",
+		"h2_theta_dcEgamma_forward;#theta_{p,g}; dcEnergy gamma",
+		180/2,0,180, 2000/2,0,4000);
+	h2_theta_dcEgamma_backward = MakeH2(
+		"asdf",
+		"h2_theta_dcEgamma_backward",
+		"h2_theta_dcEgamma_backward;#theta_{p,g}; dcEnergy gamma",
+		180/2,0,180, 2000/2,0,4000);
+
+	h2_Eg_Eg = MakeH2(
+		"asdf",
+		"h2_Eg_Eg",
+		"h2_Eg_Eg;Eg [keV];Eg [keV]",
+		2000/4,0,2000, 2000/4,0,2000
+		);
+	h2_Eg_Eg_forward = MakeH2(
+		"asdf",
+		"h2_Eg_Eg_forward",
+		"h2_Eg_Eg_forward;Eg [keV];Eg [keV]",
+		2000/4,0,2000, 2000/4,0,2000
+		);
+	h2_Eg_Eg_backward = MakeH2(
+		"asdf",
+		"h2_Eg_Eg_backward",
+		"h2_Eg_Eg_backward;Eg [keV];Eg [keV]",
+		2000/4,0,2000, 2000/4,0,2000
+		);
+
+	h2_dcEg_dcEg = MakeH2(
+		"asdf",
+		"h2_dcEg_dcEg",
+		"h2_dcEg_dcEg;dcEg [keV];dcEg [keV]",
+		2000/4,0,2000, 2000/4,0,2000
+		);
+	h2_dcEg_dcEg_forward = MakeH2(
+		"asdf",
+		"h2_dcEg_dcEg_forward",
+		"h2_dcEg_dcEg_forward;dcEg [keV];dcEg [keV]",
+		2000/4,0,2000, 2000/4,0,2000
+		);
+	h2_dcEg_dcEg_backward = MakeH2(
+		"asdf",
+		"h2_dcEg_dcEg_backward",
+		"h2_dcEg_dcEg_backward;dcEg [keV];dcEg [keV]",
+		2000/4,0,2000, 2000/4,0,2000
+		);
+
+
+
+
+
+
+	/*for (int i=0; i<10; i++)
+	h2_phi_theta_asgard[i] = MakeH2(
+		"asdf",
+		Form("h2_phi_theta_asgard_%d",i),
+		Form("h2_phi_theta_asgard_%d;phi;theta",i),
+		360*2,-180,180, 180*2,0,180);*/
+	h2_phi_theta_starkjr= MakeH2(
+		"asdf",
+		"h2_phi_theta_starkjr",
+		"h2_phi_theta_starkjr;phi;theta",
+		360,-180,180, 180,0,180);
+
+
+
 
 	for (int i=0; i<6;i++)
 	{
@@ -366,11 +479,6 @@ void HistServerUser::ProcessToHistUser()
 		}
 	}*/
 
-	for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++) if (iSig->cha==8)
-		for (jSig = evtSimple->vSigAna.begin(); jSig != evtSimple->vSigAna.end(); jSig++) if (jSig->cha==8) if (iSig!=jSig)
-		{
-			h2_Eg_Eg->Fill(iSig->Energy, jSig->Energy);
-		}
 
 	EvtASGARD *evtASGARD = &(event.ASGARD);
 	vector<HitClover>::iterator iClover, jClover;
@@ -389,12 +497,12 @@ void HistServerUser::ProcessToHistUser()
 				if (iFV->idx==0)
 				{
 					h1_Clover_Energy_allfv->Fill(iFV->Energy);
-					if (iClover->idx>=5)
+					/*if (iClover->idx>=5)
 					{
 						if (time0==0) time0 = iFV->coarse_time;
 						float time = float(iFV->coarse_time - time0)/1'000'000'000;
 						h2_Time_Energy_fv_hemi->Fill(time,iFV->Energy);
-					}
+					}*/
 				}
 			}
 			for (iSeg=iCrystal->vSigAnaSeg.begin(); iSeg!=iCrystal->vSigAnaSeg.end(); iSeg++)
@@ -409,7 +517,7 @@ void HistServerUser::ProcessToHistUser()
 	vector<HitStrip>::iterator iStrip, jStrip;
 	vector<HitPad>::iterator iPad, jPad;
 
-	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
+	/*for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
 	{
 		for (iStrip=iX6->vHitStrip.begin(); iStrip!=iX6->vHitStrip.end(); iStrip++)
 		{
@@ -432,99 +540,133 @@ void HistServerUser::ProcessToHistUser()
 		{
 			h2_X6_Energy_idx[iX6->idx]->Fill(Nstrip + iPad->idx, iPad->Energy);
 		}
-	}
-	bool flag_proton=0;
+	}*/
+
+	bool flag_gamma_Au=0;
+	bool flag_gamma_Au_bg=0;
+	for (iClover=evtASGARD->vHitClover.begin(); iClover!=evtASGARD->vHitClover.end(); iClover++)
+		for (iCrystal=iClover->vHitCrystal.begin(); iCrystal!=iClover->vHitCrystal.end(); iCrystal++)
+		{
+			//h2_phi_theta_asgard[iClover->idx]->Fill(iCrystal->hit_phi,iCrystal->hit_theta);
+			for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++) if (iFV->idx==0)
+			{
+				if (iFV->Energy>540 && iFV->Energy<556) flag_gamma_Au=1;
+				if (iFV->Energy>560 && iFV->Energy<578) flag_gamma_Au_bg=1;
+			}
+		}
+
 	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
 	{
 		for (iStrip=iX6->vHitStrip.begin(); iStrip!=iX6->vHitStrip.end(); iStrip++)
 		{
+			bool flag_forward=0;
+			bool flag_backward=0;
+			bool flag_Ar=0;
+
+			flag_backward = iX6->idx<6 ? 1 : 0;
+			flag_forward = iX6->idx>=6 ? 1 : 0;
+			if (flag_forward) flag_Ar = iStrip->Energy>20000 ? 1 : 0;
+			else if (flag_backward) flag_Ar = (iStrip->Energy>9000 && iStrip->Energy<20000) ? 1 : 0;
+			else flag_Ar=0;
+
 			float coor[3] = {
 				strip_pos_cart[iX6->idx][iStrip->idx][0],
 				strip_pos_cart[iX6->idx][iStrip->idx][1],
-				strip_pos_cart[iX6->idx][iStrip->idx][2] 
+				strip_pos_cart[iX6->idx][iStrip->idx][2]
 			};
-			if (iX6->idx<6) coor[2] -= iStrip->position * 75/2;
-			if (iX6->idx>=6) coor[2] += iStrip->position  * 75/2;
+			if (flag_backward) coor[2] -= iStrip->position * 75/2;
+			if (flag_forward) coor[2] += iStrip->position  * 75/2;
 			double cosi = coor[2]/sqrt(coor[0]*coor[0]+coor[1]*coor[1]+coor[2]*coor[2]);
-			double theta_deg = acos(cosi)/3.1415*180;
-			if (iX6->idx>=6) if (theta_deg/48.7+iStrip->Energy/35000<1) flag_proton=1;
-			//for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
+			double theta_particle = acos(cosi)/3.1415*180;
+			double phi_particle = atan2(coor[1],coor[0])/3.1415*180;
+			h2_phi_theta_starkjr->Fill(phi_particle, theta_particle);
+
+			double particleEnergy = iStrip->Energy;
+			// g-1 = particleEnergy / (39.96 * 931.494 MeV)
+			// 1/sqrt(1-beta*beta)  = particleEnergy / (39.96 * 931.494 MeV) + 1
+			// 1-beta*beta = 
+			double rel_gamma = particleEnergy*5/1000 / (39.96 * 931.494) + 1; // MeV/MeV
+			double rel_beta = sqrt(1-1/(rel_gamma*rel_gamma));
+			//double beta = sqrt(particleEnergy*5/1000*2 / (39.96 * 931.494));
+			//fprintf(stdout,"particleEnergy %f rel_gamma %f rel_beta %f beta %f\n",particleEnergy*5/1000,rel_gamma,rel_beta,beta);
+
+			h2_X6_pos_Energy[iX6->idx][iStrip->idx]->Fill(iStrip->position,iStrip->Energy);
+
+			if (flag_backward)
+				h2_X6_theta_Energy_backward->Fill(theta_particle, particleEnergy);
+			if (flag_forward)
 			{
-				if (iX6->idx<6)
-				{
-					//h2_X6_theta_Energy_backward->Fill(theta_deg, iPad->Energy);
-					h2_X6_theta_Energy_backward->Fill(theta_deg, iStrip->Energy);
-				}
-				if (iX6->idx>=6)
-				{
-					//h2_X6_theta_Energy_forward->Fill(theta_deg, iPad->Energy);
-					h2_X6_theta_Energy_forward->Fill(theta_deg, iStrip->Energy);
-				}
+				h2_X6_theta_Energy_forward->Fill(theta_particle, particleEnergy);
+				if (flag_gamma_Au) h2_X6_theta_Energy_forward_Esel->Fill(theta_particle, particleEnergy);
+				if (flag_gamma_Au_bg) h2_X6_theta_Energy_forward_Esel_bg->Fill(theta_particle, particleEnergy);
 			}
 
-		}
-	}
-
-	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++) if (iX6->idx>=6)
-	{
-		for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++) if (iX6->idx-6 == iSig->det)
-		{
-			for (iPad=iX6->vHitPad.begin(); iPad!=iX6->vHitPad.end(); iPad++)
+			for (iSig = evtSimple->vSigAna.begin(); iSig != evtSimple->vSigAna.end(); iSig++) if (iX6->idx-6 == iSig->det)
 			{
-				h2_X6_BB10[iSig->det]->Fill(iPad->Energy, iSig->ADC);
+				h2_X6_BB10[iSig->det]->Fill(iStrip->Energy, iSig->ADC);
 				h2_X6_BB10_all->Fill(iPad->Energy, iSig->ADC);
 			}
-
-		}
-	}
-
-
-
-
-	bool flag_forward=0;
-	bool flag_backward=0;
-	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
-			for (iStrip=iX6->vHitStrip.begin(); iStrip!=iX6->vHitStrip.end(); iStrip++) if (iStrip->Energy>1800)
-	{
-		if (iX6->idx<6) flag_backward=1;
-		if (iX6->idx>=6) flag_forward=1;
-	}
-	if (flag_backward)
-	{
-		for (iClover=evtASGARD->vHitClover.begin(); iClover!=evtASGARD->vHitClover.end(); iClover++)
-		{
-			for (iCrystal=iClover->vHitCrystal.begin(); iCrystal!=iClover->vHitCrystal.end(); iCrystal++)
+			for (iClover=evtASGARD->vHitClover.begin(); iClover!=evtASGARD->vHitClover.end(); iClover++)
 			{
-				for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++) if (iFV->idx==0)
+				for (iCrystal=iClover->vHitCrystal.begin(); iCrystal!=iClover->vHitCrystal.end(); iCrystal++)
 				{
-					h1_Clover_Energy_allfv_backward->Fill(iFV->Energy);
+					iCrystal->DopplerCorrE(rel_beta,coor);
 				}
-				h1_Clover_dcEnergy_allfv_backward->Fill(iCrystal->dcEnergy);
+			}
+
+
+			for (iClover=evtASGARD->vHitClover.begin(); iClover!=evtASGARD->vHitClover.end(); iClover++)
+			{
+				for (iCrystal=iClover->vHitCrystal.begin(); iCrystal!=iClover->vHitCrystal.end(); iCrystal++)
+				{
+					//iCrystal->DopplerCorrE(rel_beta,coor); // moved to upper
+					//iCrystal->DopplerCorrE(0.09528,coor);
+					for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++) if (iFV->idx==0)
+					{
+						if (flag_backward)
+							h1_Clover_Energy_allfv_backward->Fill(iFV->Energy);
+						if (flag_forward)
+							h1_Clover_Energy_allfv_forward->Fill(iFV->Energy);
+					}
+					if (flag_backward)
+					{
+						h1_Clover_dcEnergy_allfv_backward->Fill(iCrystal->dcEnergy);
+					}
+					if (flag_forward)
+					{
+						h1_Clover_dcEnergy_allfv_forward->Fill(iCrystal->dcEnergy);
+					}
+					if (flag_Ar)
+					{
+						h1_Clover_Energy_allfv_forward_proton->Fill(iCrystal->Energy);
+						h1_Clover_dcEnergy_allfv_forward_proton->Fill(iCrystal->dcEnergy);
+						float thetapg = iCrystal->GetTheta(coor);
+						h2_theta_Egamma->Fill(thetapg, iCrystal->Energy);
+						h2_theta_dcEgamma->Fill(thetapg, iCrystal->dcEnergy);
+						if(flag_forward)
+						{
+							h2_theta_Egamma_forward->Fill(thetapg, iCrystal->Energy);
+							h2_theta_dcEgamma_forward->Fill(thetapg, iCrystal->dcEnergy);
+						}
+						if(flag_backward)
+						{
+							h2_theta_Egamma_backward->Fill(thetapg, iCrystal->Energy);
+							h2_theta_dcEgamma_backward->Fill(thetapg, iCrystal->dcEnergy);
+						}
+
+						for (jClover=evtASGARD->vHitClover.begin(); jClover!=evtASGARD->vHitClover.end(); jClover++) for (jCrystal=jClover->vHitCrystal.begin(); jCrystal!=jClover->vHitCrystal.end(); jCrystal++) if (iCrystal!=jCrystal)
+						{
+							h2_dcEg_dcEg->Fill(iCrystal->dcEnergy, jCrystal->dcEnergy);
+							if (flag_forward) h2_dcEg_dcEg_forward->Fill(iCrystal->dcEnergy, jCrystal->dcEnergy);
+							if (flag_backward) h2_dcEg_dcEg_backward->Fill(iCrystal->dcEnergy, jCrystal->dcEnergy);
+							h2_Eg_Eg->Fill(iCrystal->Energy, jCrystal->Energy);
+							if (flag_forward) h2_Eg_Eg_forward->Fill(iCrystal->Energy, jCrystal->Energy);
+							if (flag_backward) h2_Eg_Eg_backward->Fill(iCrystal->Energy, jCrystal->Energy);
+
+						}
+					}
+				}
 			}
 		}
 	}
-	if (flag_forward)
-	{
-		for (iClover=evtASGARD->vHitClover.begin(); iClover!=evtASGARD->vHitClover.end(); iClover++)
-		{
-			for (iCrystal=iClover->vHitCrystal.begin(); iCrystal!=iClover->vHitCrystal.end(); iCrystal++)
-			{
-				for (iFV=iCrystal->vSigAnaFV.begin(); iFV!=iCrystal->vSigAnaFV.end(); iFV++) if (iFV->idx==0)
-				{
-					h1_Clover_Energy_allfv_forward->Fill(iFV->Energy);
-				}
-				h1_Clover_dcEnergy_allfv_forward->Fill(iCrystal->dcEnergy);
-				if (flag_proton) 
-				{
-					h1_Clover_Energy_allfv_forward_proton->Fill(iCrystal->Energy);
-					h1_Clover_dcEnergy_allfv_forward_proton->Fill(iCrystal->dcEnergy);
-				}
-			}
-		}
-	}
-
-
-
-
-
 }
