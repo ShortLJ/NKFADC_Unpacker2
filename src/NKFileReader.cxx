@@ -1,5 +1,5 @@
 
-//#define SMALL_FILE 1
+//#define SMALL_FILE 16
 
 
 #include "NKFileReader.h"
@@ -162,7 +162,7 @@ int NKFileReader::InitFile(vector<string>::iterator iter)
 	fprintf(stdout, "Opened input File: \"%s\" (%ld Bytes)\n",iter->c_str(), file_size);
 #ifdef SMALL_FILE
 	fprintf(stderr,"\n\n\n File size set to be small\n\n\n");
-	file_size = file_size /16;
+	file_size = file_size /SMALL_FILE;
 #endif //SMALL_FILE
 
 	if (file_size<0)
