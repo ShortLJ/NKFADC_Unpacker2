@@ -196,6 +196,15 @@ int main(int argc, char *argv[])
 		{
 			break;
 		}
+		if (!flag_online) if ( flag_reading)
+		{
+			bool check=1;
+			for (int i=0; i<v_datagetter.size(); i++)
+			{
+				if (!v_datagetter.at(i)->isEnd()) check=0;
+			}
+			if (check) flag_reading=0;
+		}
 		if ( flag_reading)
 		{
 			fprintf(stdout,"Reading\n");
