@@ -24,6 +24,7 @@ class DataGetter
         void Loop();
 		void Stop();
 		void print_binary(uint8_t *&tmp,long N);
+		bool isEnd(){return getterEnd;}
 
 	protected:
         virtual uint8_t *GetNextPacket() = 0;
