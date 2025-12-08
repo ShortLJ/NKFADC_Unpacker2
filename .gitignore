@@ -4,3 +4,4 @@ install
 data
 NKFADC_Unpacker
 FADC_Unpacker_IDATEN
+*.root
