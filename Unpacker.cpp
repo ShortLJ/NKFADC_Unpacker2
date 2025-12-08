@@ -207,10 +207,8 @@ int main(int argc, char *argv[])
 		}
 		if ( flag_reading)
 		{
-			fprintf(stdout,"Reading\n");
-			timesorter.fmutex_output.lock();
-			fprintf(stdout,"%lu %lu, %lu\n",timesorter.GetNenque(),timesorter.GetNSorted(),timesorter.GetPrevRef());
-			timesorter.fmutex_output.unlock();
+			fprintf(stdout,"\nReading\n");
+			fprintf(stdout,"TimeSorter: %lu %lu, %lu\n",timesorter.GetNenque(),timesorter.GetNSorted(),timesorter.GetPrevRef()); fflush(stdout);
 			usleep(refresh_rate);
 			continue;
 		}
@@ -232,6 +230,7 @@ int main(int argc, char *argv[])
 
 			flag_closing=1;
 			eventprocessor.Stop();
+			fflush(stdout);
 			continue;
 		}
 		if ( flag_force_quit)
@@ -240,17 +239,17 @@ int main(int argc, char *argv[])
 		}
 		if ( flag_closing && !flag_force_quit)
 		{
-			fprintf(stdout,"Processing\n");
-			/*timesorter.fmutex_output.lock();*/ fprintf(stdout,"%lu %lu\n",timesorter.GetNenque(),timesorter.GetNSorted()); /*timesorter.fmutex_output.unlock();*/
 			if ( timesorter.GetNSorted())
 			{
-				fprintf(stdout,"emptying timesorter. %lu\n",timesorter.GetNSorted());
+				fprintf(stdout,"\nemptying timesorter\n");
+				fprintf(stdout,"TimeSorter: %lu %lu, %lu\n",timesorter.GetNenque(),timesorter.GetNSorted(),timesorter.GetPrevRef()); fflush(stdout);
 				usleep(refresh_rate);
 				continue;
 			}
 			else
 			{
 				fprintf(stdout,"emptyed timesorter. Finalizing\n");
+				fflush(stdout);
 				eventprocessor.Quit();
 			}
 		}
