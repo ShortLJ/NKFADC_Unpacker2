@@ -14,3 +14,9 @@ SUBSTITUTE:
 A user need to modify `INPUT_DATA_PATH`, and `OUTPUT_BASE` in the script.
 Output `ROOT` files will be stored in directory `OUTPUT_BASE/batchname`.
 Then, use `hadd`.
+
+## Reading output tree
+```bash
+source <build_dir>/setup_nkunpacker.sh
+```
+for `LD_LIBRARY_PATH` and `ROOT_INCLUDE_PATH`. This script is configured by cmake.
