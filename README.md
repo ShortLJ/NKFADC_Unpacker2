@@ -13,3 +13,4 @@ SUBSTITUTE:
 ```
 A user need to modify `INPUT_DATA_PATH`, and `OUTPUT_BASE` in the script.
 Output `ROOT` files will be stored in directory `OUTPUT_BASE/batchname`.
+Then, use `hadd`.
