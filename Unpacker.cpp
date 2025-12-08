@@ -208,7 +208,9 @@ int main(int argc, char *argv[])
 		if ( flag_reading)
 		{
 			fprintf(stdout,"Reading\n");
-			timesorter.fmutex_output.lock(); fprintf(stdout,"%lu %lu\n",timesorter.GetNenque(),timesorter.GetNSorted()); timesorter.fmutex_output.unlock();
+			timesorter.fmutex_output.lock();
+			fprintf(stdout,"%lu %lu, %lu\n",timesorter.GetNenque(),timesorter.GetNSorted(),timesorter.GetPrevRef());
+			timesorter.fmutex_output.unlock();
 			usleep(refresh_rate);
 			continue;
 		}

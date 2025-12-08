@@ -43,7 +43,7 @@ uint8_t* NKFileReader::GetNextPacket()
 	packet_size= fread(NKPacket, 1, 8192, fp);
 	data_read += packet_size;
 
-	if ((data_read & 0xfffff)==0)
+	if ((data_read & 0x3fffff)==0)
 	{
 		//fprintf(stdout, "\r");
 		fprintf(stdout, "data_read to= %ld/%ld (%.02f%%)\t", data_read, file_size,float(data_read)/file_size*100);

@@ -34,6 +34,8 @@ class TimeSorter
 		uint64_t GetLGT(uint8_t sid, uint8_t brd, uint8_t cha);
 		vector<Sig> GetCoinvSig(uint64_t ct);
 
+		uint64_t GetPrevRef(){return prev_min_lgt;}
+
 
 	private:
 		queue<Sig> q_sig_input;
@@ -59,6 +61,8 @@ class TimeSorter
 
 		//bool Empty(uint8_t sid, uint8_t brd, uint8_t cha);
 		bool checker(uint8_t sid, uint8_t brd, uint8_t cha);
+
+		uint64_t prev_min_lgt=0;
 
 };
 

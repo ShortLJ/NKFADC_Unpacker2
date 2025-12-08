@@ -142,7 +142,14 @@ uint64_t TimeSorter::GetMinLGT()
 	{
 		fprintf(stderr,"TimeSorter::GetMinLGT(): all q is empty\n");
 		//exit (-11);
+		return ret;
 	}
+	if (prev_min_lgt>ret)
+	{
+		fprintf(stderr,"TimeSorter::GetMinLGT(): prev_min_lgt %lu > ret %lu\n",prev_min_lgt,ret);
+		exit(-13);
+	}
+	prev_min_lgt = ret;
 	return ret;
 }
 uint64_t TimeSorter::GetLGT(uint8_t isid, uint8_t ibrd, uint8_t icha)
