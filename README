@@ -1,4 +1,6 @@
+# NKFADC_Unpacker2
 
+## Unpacking from a list
 
 ```
 ./NKFADC_Unpacker -i list.txt
