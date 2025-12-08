@@ -1,7 +1,7 @@
 # NKFADC_Unpacker2
 
 ## Unpacking from a list
-
+DEPRECIATED:
 ```
 ./NKFADC_Unpacker -i list.txt
 ```
