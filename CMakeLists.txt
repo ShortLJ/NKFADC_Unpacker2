@@ -112,4 +112,9 @@ foreach(_script ${CONFIG_CSV})
 endforeach()
 
 
+configure_file(${CMAKE_SOURCE_DIR}/setup_nkunpacker.sh.in
+    ${PROJECT_BINARY_DIR}/setup_nkunpacker.sh
+    @ONLY
+)
+
 
