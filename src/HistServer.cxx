@@ -99,7 +99,7 @@ void HistServer::Stop()
 
 void HistServer::Enque(Event *evt)
 {
-	while (!histerEnd && q_event.size()>256)
+	while (!histerEnd && q_event.size()>2048)
 	{
 		fmutex.unlock();
 		usleep(100);
