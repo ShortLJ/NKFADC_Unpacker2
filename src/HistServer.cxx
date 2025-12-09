@@ -3,6 +3,7 @@
 
 #include "HistServer.h"
 
+#include "TSystem.h"
 #include "TStyle.h"
 
 HistServer::HistServer()
@@ -81,7 +82,7 @@ void HistServer::Run()
 
 		ProcessToHistRaw();
 		ProcessToHistUser();
-		//if (flag_httpServer) srv_http->ProcessRequests();
+		if (flag_httpServer) gSystem->ProcessEvents();
 		event_precessed++;
 		if ((event_precessed&0x3ff)==0)
 		{
@@ -188,7 +189,7 @@ void HistServer::Init()
 	InitRaw();
 	InitUser();
 
-	srv_http->SetTimer(100, kFALSE);
+	srv_http->SetTimer(100, kTRUE);
 }
 
 
