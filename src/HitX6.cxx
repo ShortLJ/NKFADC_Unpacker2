@@ -131,10 +131,11 @@ void HitStrip::ProcessHit()
 	{
 		position = float(diff)/(sum);
 		//fprintf(stdout,"%d %d -> %d %d -> %f\n", sigStripU.ADC,sigStripD.ADC, diff,sum, position);
+		uint8_t ix6 = sigStripU.det;
+		position = pos_cal[ix6][idx][0]
+			+ pos_cal[ix6][idx][1] * position
+			+ pos_cal[ix6][idx][2] * position * position;
 	}
-	position = pos_cal[sigStripU.det][idx][0]
-			+ pos_cal[sigStripU.det][idx][1] * position
-			+ pos_cal[sigStripU.det][idx][2] * position * position;
 }
 
 
