@@ -135,6 +135,12 @@ void HitStrip::ProcessHit()
 		position = pos_cal[ix6][idx][0]
 			+ pos_cal[ix6][idx][1] * position
 			+ pos_cal[ix6][idx][2] * position * position;
+		hit_coor[0] = strip_pos_cart[ix6][idx][0];
+		hit_coor[1] = strip_pos_cart[ix6][idx][1];
+		hit_coor[2] = strip_pos_cart[ix6][idx][2];
+
+		if (ix6<6) 	hit_coor[2] -= position * 75/2;
+		else		hit_coor[2] += position * 75/2;
 	}
 }
 

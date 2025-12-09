@@ -41,6 +41,7 @@ class HitStrip : public Hit
 		//uint16_t fine_time;
 
 		float position;
+		float hit_coor[3];
 
 		SigAna sigStripU;
 		SigAna sigStripD;

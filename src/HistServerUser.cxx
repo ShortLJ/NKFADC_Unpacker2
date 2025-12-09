@@ -570,12 +570,10 @@ void HistServerUser::ProcessToHistUser()
 			else flag_Ar=0;
 
 			float coor[3] = {
-				strip_pos_cart[iX6->idx][iStrip->idx][0],
-				strip_pos_cart[iX6->idx][iStrip->idx][1],
-				strip_pos_cart[iX6->idx][iStrip->idx][2]
+				iStrip->hit_coor[0],
+				iStrip->hit_coor[1],
+				iStrip->hit_coor[2]
 			};
-			if (flag_backward) coor[2] -= iStrip->position * 75/2;
-			if (flag_forward) coor[2] += iStrip->position  * 75/2;
 			double cosi = coor[2]/sqrt(coor[0]*coor[0]+coor[1]*coor[1]+coor[2]*coor[2]);
 			double theta_particle = acos(cosi)/3.1415*180;
 			double phi_particle = atan2(coor[1],coor[0])/3.1415*180;
