@@ -41,6 +41,7 @@ class HitStrip : public Hit
 		//uint16_t fine_time;
 
 		float position;
+		float hit_coor[3];
 
 		SigAna sigStripU;
 		SigAna sigStripD;
@@ -48,6 +49,7 @@ class HitStrip : public Hit
 		HitStrip(){	}
 		HitStrip(SigAna &siganaU, SigAna &siganaD) : Hit(siganaU.idx), sigStripU(siganaU), sigStripD(siganaD)
 		{	
+			position=-999999;
 			ProcessHit();
 		}
 		void ProcessHit();
