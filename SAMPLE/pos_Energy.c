@@ -4,7 +4,7 @@
 void pos_Energy()
 {
 	TChain *ch = new TChain("tree");
-	ch->Add("Tree_0015.root");
+	ch->Add("../build/OUTPUT/KO_25_07_beam/Tree_0021.root");
 	Test *t = new Test(ch);
 	Long64_t nent = t->fChain->GetEntries();
 
@@ -74,6 +74,10 @@ void pos_Energy()
 		// for add-back doppler-correction // soon to be implemented.
 		for (iClover=evtASGARD->vHitClover.begin(); iClover!=evtASGARD->vHitClover.end(); iClover++)
 		{
+			float beam[3] = {0,0,0.04};
+			iClover->DopplerCorrE(beam[2],beam);
+
+			h1_dcabEgamma->Fill(iClover->dcEnergy);
 		}
 
 		for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)

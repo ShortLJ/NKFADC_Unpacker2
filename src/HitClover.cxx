@@ -1,5 +1,6 @@
 
 #include <stdlib.h>
+#include <cmath>
 
 #include "HitClover.h"
 
@@ -69,15 +70,42 @@ void HitClover::ProcessHit()
 	Energy = AddBack();
 }
 
+float HitClover::DopplerCorrE(float beta_r, float *ref_coor)
+{
+	if (GetPrimaryCrystal()==0) return -9999999;
+	if (GetPrimaryCrystal()->GetPrimarySeg()==0) return -999999999;
+	float (&seg_coor)[3] = GetPrimaryCrystal()->seg_coor;
+	float &radi_seg = GetPrimaryCrystal()->radi_seg;
+
+	double radi_ref = sqrt(ref_coor[0]*ref_coor[0]+ref_coor[1]*ref_coor[1]+ref_coor[2]*ref_coor[2]);
+
+	double inner_product = (seg_coor[0]*ref_coor[0]+seg_coor[1]*ref_coor[1]+seg_coor[2]*ref_coor[2]);
+	dcEnergy = Energy * (1-beta_r*inner_product/radi_ref/radi_seg) / sqrt(1-beta_r*beta_r);
+	return dcEnergy;
+}
+
 float HitClover::AddBack()
 {
-	float ret=0;
-	vector<HitCrystal>::iterator it_hitcrystal;
+	float Esum=0;
+	vector<HitCrystal>::iterator it_hitcrystal, pCrystal;
 	for (it_hitcrystal=vHitCrystal.begin(); it_hitcrystal!=vHitCrystal.end(); it_hitcrystal++)
 	{
-		ret += it_hitcrystal->Energy;
+		Esum += it_hitcrystal->Energy;
+		if (it_hitcrystal==vHitCrystal.begin()) pCrystal = it_hitcrystal;
+		else
+		{
+			if (pCrystal->GetPrimarySeg()!=0 && it_hitcrystal->GetPrimarySeg()!=0)
+				pCrystal = (pCrystal->GetPrimarySeg()->Energy > it_hitcrystal->GetPrimarySeg()->Energy) ? pCrystal : it_hitcrystal;
+		}
 	}
-	return ret;
+	ipCrystal = pCrystal - vHitCrystal.begin();
+	return Esum;
+}
+
+HitCrystal* HitClover::GetPrimaryCrystal()
+{
+	if (ipCrystal==-1) return 0;
+	return &vHitCrystal.at(ipCrystal);
 }
 
 bool HitClover::isValid()

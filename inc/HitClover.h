@@ -18,6 +18,8 @@ class HitClover : public Hit
 		//uint64_t coarse_time;
 		//uint16_t fine_time;
 
+		float dcEnergy=-1;
+
 		vector<HitCrystal> vHitCrystal;
 
 		HitClover();
@@ -28,6 +30,9 @@ class HitClover : public Hit
 
 		void ProcessHit();
 
+		HitCrystal* GetPrimaryCrystal();
+		float DopplerCorrE(float beta_r, float *coor);
+
 	protected:
 		void Clear();
 
@@ -35,6 +40,7 @@ class HitClover : public Hit
 		bool isValid();
 
 		float AddBack();
+		long ipCrystal=-1; // primary = vHitCrystal.at(ipCrystal)->idx
 };
 
 #endif // __HITCLOVER__
