@@ -9,9 +9,10 @@ is not suggested. It has problem when processing timestamp RESET (maximum hit, o
 
 SUBSTITUTE:
 ```bash
-./Offline_list.sh <batchname>.txt <N>
+./Offline_list.sh <batchname>.txt '<Options>' <N>
 ```
 A user need to modify `INPUT_DATA_PATH`, and `OUTPUT_BASE` in the script.
+`Options` argument is passed to `NKFADC_Unpacker2`.
 Output `ROOT` files will be stored in directory `OUTPUT_BASE/batchname`.
 Then, use `hadd`.
 
