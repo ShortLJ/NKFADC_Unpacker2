@@ -252,6 +252,7 @@ int main(int argc, char *argv[])
 				fflush(stdout);
 				eventprocessor.Quit();
 			}
+			fflush(stdout);
 		}
 		histserver.Stop();
 #ifdef WriteTree
