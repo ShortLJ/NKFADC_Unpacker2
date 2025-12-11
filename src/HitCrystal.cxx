@@ -9,7 +9,7 @@ HitCrystal::HitCrystal()
 {
 }
 HitCrystal::HitCrystal(uint8_t idx_, vector<SigAna> &v_sigana_fv, vector<SigAna> &v_sigana_seg)
-	: Hit(idx_), vSigAnaFV(v_sigana_fv), vSigAnaSeg(v_sigana_seg), primary(-1)
+	: Hit(idx_), vSigAnaFV(v_sigana_fv), vSigAnaSeg(v_sigana_seg), ipseg(-1)
 {
 	if(vSigAnaFV.size()) detID = vSigAnaFV.begin()->det;
 	else if (v_sigana_seg.size()) detID = v_sigana_seg.begin()->det;
@@ -23,7 +23,7 @@ HitCrystal::HitCrystal(uint8_t idx_, vector<SigAna> &v_sigana_fv, vector<SigAna>
 	ProcessHit();
 }
 HitCrystal::HitCrystal(uint8_t iclover, uint8_t icrystal, vector<SigAna> &v_sigana_fv, vector<SigAna> &v_sigana_seg)
-	: cloverID(iclover), Hit(icrystal), vSigAnaFV(v_sigana_fv), vSigAnaSeg(v_sigana_seg),primary(-1)
+	: cloverID(iclover), Hit(icrystal), vSigAnaFV(v_sigana_fv), vSigAnaSeg(v_sigana_seg),ipseg(-1)
 {
 	detID = (cloverID<<2) | icrystal ; 
 
@@ -43,6 +43,7 @@ void HitCrystal::ProcessHit()
 
 /*float HitCrystal::DopplerCorrE(double beta_r, double beta_theta, double beta_phi)
 {
+	uint8_t primary = vSigAnaSeg.at(ipseg).idx;
 	double pos_det[3] = {
 		seg_pos_cart [cloverID][idx][primary][0],
 		seg_pos_cart [cloverID][idx][primary][1],
@@ -65,7 +66,7 @@ void HitCrystal::ProcessHit()
 
 float HitCrystal::GetTheta(float *ref_coor)
 {
-	if (primary==-1) return -9999999999;
+	if (ipseg==-1) return -9999999999;
 	double radi_ref = sqrt(ref_coor[0]*ref_coor[0]+ref_coor[1]*ref_coor[1]+ref_coor[2]*ref_coor[2]);
 
 	double inner_product = (seg_coor[0]*ref_coor[0]+seg_coor[1]*ref_coor[1]+seg_coor[2]*ref_coor[2]);
@@ -90,7 +91,7 @@ float HitCrystal::DopplerCorrE(float beta_r, float *ref_coor)
 
 float HitCrystal::DopplerCorrE(float beta_r, float beta_theta, float beta_phi)
 {
-	if (primary==-1) return -9999999999;
+	if (ipseg==-1) return -9999999999;
 	float mom_nucl[3] = {
 		beta_r * sin(beta_theta) * cos(beta_phi),
 		beta_r * sin(beta_theta) * sin(beta_phi),
@@ -129,7 +130,7 @@ void HitCrystal::Process_Esum()
 
 void HitCrystal::Process_Primary()
 {
-	primary = -1;
+	ipseg = -1;
 	if (vSigAnaSeg.size()==0)
 	{
 		//fprintf(stderr,"void HitCrystal::Process_Primary(): vSigAnaSeg.size()==0 at detID %u (%u %u)\n",detID,cloverID,idx);
@@ -146,10 +147,17 @@ void HitCrystal::Process_Primary()
 		//else pseg = (pseg->ADC > iseg->ADC) ? pseg : iseg;
 		else pseg = (pseg->Energy > iseg->Energy) ? pseg : iseg;
 	}
-	primary = pseg->idx;
+	uint8_t primary = pseg->idx;
+	ipseg = pseg - vSigAnaSeg.begin();
 
 	seg_coor[0]=seg_pos_cart [cloverID][idx][primary][0];
 	seg_coor[1]=seg_pos_cart [cloverID][idx][primary][1];
 	seg_coor[2]=seg_pos_cart [cloverID][idx][primary][2];
 	radi_seg = sqrt(seg_coor[0]*seg_coor[0]+seg_coor[1]*seg_coor[1]+seg_coor[2]*seg_coor[2]);
+}
+
+SigAna* HitCrystal::GetPrimarySeg()
+{
+	if (ipseg==-1) return 0;
+	return &vSigAnaSeg.at(ipseg);
 }
