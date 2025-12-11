@@ -11,7 +11,8 @@ if [[ $# -lt 1 ]]; then
 fi
 
 RUNLIST_FILE=$1
-JOBS=$2   # optional argument for parallel jobs
+OPTS=$2
+JOBS=$3   # optional argument for parallel jobs
 
 # Extract batch name: remove everything after the first dot
 BATCH_NAME=$(basename "$RUNLIST_FILE" | sed -E 's/\..*$//')
@@ -36,6 +37,7 @@ process_run() {
     echo "Processing ${BATCH_NAME} Run ${RUNNUMBER}..."
     ./NKFADC_Unpacker -tw 150 -i "$INPUT_FILE" -hp 8181 \
         -ho "$HIST_FILE" -to "$TREE_FILE" \
+		$OPTS \
         2>&1 | tee "$LOG_FILE"
 
     # If unpacker failed, record run number in failed list
