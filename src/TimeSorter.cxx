@@ -80,6 +80,12 @@ void TimeSorter::Sort(Sig sig)
 		vpq_sig[TimeSorter_map[isid][ibrd][icha]].push(sig);
 		nsorted++;
 	}
+	else
+	{
+#ifdef STORE_BINARY
+		sig.print_binary();
+#endif
+	}
 }
 
 
