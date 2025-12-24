@@ -43,9 +43,10 @@ class HistServerUser : public HistServer
 	private:
 
 		TH2 *h2_FVEnergy_cha[2];
+		TH2 *h2_Clover_Energy[Nclover][Ncrystal];
 	
-		TH1 *h1_Clover_Energy_seg[Nclover][Ncrystal][Nseg];
-		TH1 *h1_Clover_Energy_fv[Nclover][Ncrystal][Nfv];
+		//TH1 *h1_Clover_Energy_seg[Nclover][Ncrystal][Nseg];
+		//TH1 *h1_Clover_Energy_fv[Nclover][Ncrystal][Nfv];
 		TH1 *h1_Clover_Energy_allfv;
 		TH1 *h1_Clover_Energy_allfv_forward;
 		TH1 *h1_Clover_dcEnergy_allfv_forward;

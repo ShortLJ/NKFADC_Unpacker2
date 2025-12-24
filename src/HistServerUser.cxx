@@ -169,7 +169,13 @@ void HistServerUser::InitUser()
 	{
 		for (int icrys=0;  icrys<Ncrystal; icrys++)
 		{
-			for (int iseg=0; iseg<Nseg; iseg++)
+			h2_Clover_Energy[iclov][icrys] = MakeH2(
+				Form("Clover/Energy/clov%02d",iclov),
+				Form("Energy_clov%02d_crys%d",iclov,icrys),
+				Form("Energy_clov%02d_crys%d;idx;Energy",iclov,icrys),
+				10,0,10, 4000,0,4000
+				);
+			/*for (int iseg=0; iseg<Nseg; iseg++)
 			{
 				h1_Clover_Energy_seg[iclov][icrys][iseg] = MakeH1(
 						Form("Clover/Energy/clov%02d/crys%d",iclov,icrys),
@@ -186,7 +192,7 @@ void HistServerUser::InitUser()
 						Form("Energy_clov%02d_crys%d_fv%d; Energy [keV]; count",iclov,icrys,ifv),
 						1000,0,4000
 						);
-			}
+			}*/
 		}
 	}
 	h1_Clover_Energy_allfv = MakeH1(
@@ -493,7 +499,8 @@ void HistServerUser::ProcessToHistUser()
 			{
 				//h1_ADC_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->ADC);
 				h2_FVEnergy_cha[iFV->idx]->Fill(iCrystal->idx + Ncrystal*iClover->idx, iFV->Energy);
-				h1_Clover_Energy_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->Energy);
+				//h1_Clover_Energy_fv[iClover->idx][iCrystal->idx][iFV->idx]->Fill(iFV->Energy);
+				h2_Clover_Energy[iClover->idx][iCrystal->idx]->Fill(8+iFV->idx, iFV->Energy);
 				if (iFV->idx==0)
 				{
 					h1_Clover_Energy_allfv->Fill(iFV->Energy);
@@ -507,7 +514,8 @@ void HistServerUser::ProcessToHistUser()
 			}
 			for (iSeg=iCrystal->vSigAnaSeg.begin(); iSeg!=iCrystal->vSigAnaSeg.end(); iSeg++)
 			{
-				h1_Clover_Energy_seg[iClover->idx][iCrystal->idx][iSeg->idx]->Fill(iSeg->Energy);
+				//h1_Clover_Energy_seg[iClover->idx][iCrystal->idx][iSeg->idx]->Fill(iSeg->Energy);
+				h2_Clover_Energy[iClover->idx][iCrystal->idx]->Fill(iSeg->idx, iSeg->Energy);
 			}
 		}
 	}
