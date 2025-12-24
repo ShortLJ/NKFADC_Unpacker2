@@ -1,3 +1,0 @@
-
-export LD_LIBRARY_PATH=../build:$LD_LIBRARY_PATH
-export ROOT_INCLUDE_PATH=../inc:$ROOT_INCLUDE_PATH
