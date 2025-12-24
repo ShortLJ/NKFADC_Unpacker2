@@ -46,7 +46,7 @@ for `LD_LIBRARY_PATH` and `ROOT_INCLUDE_PATH`. This script is configured by cmak
 Test.C
 Test.h
 ```
-header files created by <MakeClass> function in <ROOT>.
+header files created by `MakeClass` function in `ROOT`.
 
 ```
 Sample.c
