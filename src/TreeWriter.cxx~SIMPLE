@@ -1,0 +1,119 @@
+
+#include <unistd.h>
+
+#include "TreeWriter.h"
+
+TreeWriter::TreeWriter()
+{
+}
+
+TreeWriter::TreeWriter(string outfilename, string treename)
+	: OutputFileName(outfilename), TreeName(treename)
+{
+	fprintf(stdout, "TreeWriter::TreeWriter(string outfilename, string treename)\n");
+	Init();
+}
+TreeWriter::~TreeWriter()
+{
+	if ( outfile->IsOpen()) outfile->Close();
+}
+
+void TreeWriter::Init()
+{
+	if (outfile!=0)	if ( outfile->IsOpen())
+	{
+		fprintf(stdout,"TreeWriter::Init(): output file is already open: %s\n",outfile->GetName());
+		fprintf(stdout,"TreeWriter::Init(): closing previous file\n");
+		outfile->Close();
+	}
+	outfile = new TFile(OutputFileName.c_str(),"recreate");
+	tree = new TTree(TreeName.c_str(),TreeName.c_str());
+	tree->Branch("ref_lgt", &(event.ref_lgt));
+	tree->Branch("EvtSimple", &(event.Simple),32000,0);
+	tree->Branch("ASGARD", &(event.ASGARD),32000,0);
+	tree->Branch("StarkJr", &(event.StarkJr),32000,0);
+
+}
+
+void TreeWriter::Run()
+{
+	writerEnd=0;
+	while(1)
+	{
+		fmutex.lock();
+		if (q_event.size()==0)
+		{
+			if (!writerEnd)	
+			{
+				fmutex.unlock();
+				usleep(100000);
+				continue;
+			}
+			else //if ( writerEnd)
+			{
+				fprintf(stdout,"TreeWriter::Run() : Finished\n");
+				fmutex.unlock();
+				break;
+			}
+		}
+
+		event = q_event.front();
+		q_event.pop();
+		fmutex.unlock();
+
+		Process_and_Fill();
+	}
+}
+void TreeWriter::Stop()
+{
+	fmutex.lock();
+	writerEnd=1;
+	fmutex.unlock();
+}
+
+void TreeWriter::Enque(Event *evt)
+{
+	//fmutex.lock();
+	q_event.push(*evt);
+	//fmutex.unlock();
+}
+
+void TreeWriter::Process_and_Fill()
+{
+	EvtASGARD *evtASGARD = &(event.ASGARD);
+	EvtStarkJr *evtStarkJr = &(event.StarkJr);
+
+	for (iX6=evtStarkJr->vHitX6.begin(); iX6!=evtStarkJr->vHitX6.end(); iX6++)
+	{
+		for (iStrip=iX6->vHitStrip.begin(); iStrip!=iX6->vHitStrip.end(); iStrip++)
+		{
+			float (&particle)[3] = iStrip->hit_coor; // x,y,z in lab frame
+			labtheta = acos(
+					particle[2] / sqrt(particle[0]*particle[0]+particle[1]*particle[1]+particle[2]*particle[2])
+					)*180/3.1415;
+			Eparticle = iStrip->Energy * 5; // gain factor 5 for low gain in KO2426
+			double rel_gamma = Eparticle/1000 / (39.96 * 931.494) + 1; // MeV/MeV
+			double rel_beta = sqrt(1-1/(rel_gamma*rel_gamma));
+
+
+			vdcEgamma.clear();
+			vdcabEgamma.clear();
+
+			for (iClover=evtASGARD->vHitClover.begin(); iClover!=evtASGARD->vHitClover.end(); iClover++)
+			{
+				for (iCrystal=iClover->vHitCrystal.begin(); iCrystal!=iClover->vHitCrystal.end(); iCrystal++)
+				{
+					float dcEnergy = iCrystal->DopplerCorrE(rel_beta, particle);
+					vdcEgamma.push_back(iCrystal->dcEnergy);
+				}
+				iClover->DopplerCorrE(rel_beta,particle);
+				h1_dcabEgamma->Fill(iClover->dcEnergy);
+				vdcabEgamma.push_back(iClover->dcEnergy);
+			}
+			tree->Fill();
+		}
+	}
+
+
+
+}
