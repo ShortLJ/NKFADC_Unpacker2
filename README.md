@@ -20,11 +20,7 @@ cmake --build .
 Default values are presented in \<, \> brackets.
 
 ## Unpacking from a list
-DEPRECIATED:
-```
-./NKFADC_Unpacker -i list.txt
-```
-is not suggested. It has problem when processing timestamp RESET (maximum hit, or MTE reboot). 
+DEPRECIATED: ~~`./NKFADC_Unpacker -i list.txt` is not suggested. It has problem when processing timestamp RESET (maximum hit, or MTE reboot).~~
 
 SUBSTITUTE:
 ```bash
