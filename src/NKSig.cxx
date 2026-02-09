@@ -111,7 +111,7 @@ NKSig::NKSig(uint8_t *data)
 
 	fine_time = 0;
 	stmp = data[29] & 0xFF;
-	stmp = stmp << 8;
+	stmp = stmp << 0;
 	fine_time = fine_time + stmp;
 	stmp = data[30] & 0xFF;
 	stmp = stmp << 8;
