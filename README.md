@@ -20,11 +20,7 @@ cmake --build .
 Default values are presented in \<, \> brackets.
 
 ## Unpacking from a list
-DEPRECIATED:
-```
-./NKFADC_Unpacker -i list.txt
-```
-is not suggested. It has problem when processing timestamp RESET (maximum hit, or MTE reboot). 
+DEPRECIATED: ~~`./NKFADC_Unpacker -i list.txt` is not suggested. It has problem when processing timestamp RESET (maximum hit, or MTE reboot).~~
 
 SUBSTITUTE:
 ```bash
@@ -63,6 +59,6 @@ Making a simple tree and drawing gamma-gamma histogram, which is being used for 
 
 
 ## User defined 'SIMPLE tree' (Experimental)
-Change the symbolic links in <src> and <inc> directories, modify them in your favor, and complie again.
+Change the symbolic links in `src` and `inc` directories, modify them in your favor, and complie again.
 These are just examples to show a flexibility.
 It is not suggested to have too complicated processing: there is no pause for the queing, no help in case of bottleneck in the tree writer. Still, if your computer can do it, you can do it.
