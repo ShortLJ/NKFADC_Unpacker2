@@ -115,16 +115,16 @@ NKSig::NKSig(uint8_t *data)
 	fine_time = fine_time + stmp;
 	stmp = data[30] & 0xFF;
 	stmp = stmp << 8;
-	fine_time = fine_time + stmp; // lsb=?ns
+	fine_time = fine_time + stmp; // lsb=1ns // RC-CR2 zero-crossing time from trigger (local_gate_time), with interpolation.
 
 	flag = data[31] & 0xFF;    // pile_up flag @ bit1, hit flag @ bit0
 
 
 	tcb_trigger_time = (uint64_t)tcb_trigger_coarse_time * 1000 + (tcb_trigger_fine_time << 3);
-	local_gate_time = (uint64_t)local_gate_coarse_time * 1000 + (local_gate_fine_time << 3); // lsb=1ns, 8ns resolution
+	local_gate_time = (uint64_t)local_gate_coarse_time * 1000 + (local_gate_fine_time << 3); // lsb=1ns, 8ns resolution // RC-CR leading-edge discrimination time, aka channel trigger time.
 
 	trigger_number = tcb_trigger_number;
-	coarse_time = local_gate_time;
+	coarse_time = local_gate_time+fine_time;
 #ifdef STORE_BINARY
 	//print_binary();
 #endif //STORE_BINARY

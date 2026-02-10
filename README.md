@@ -57,6 +57,15 @@ draw_h2gg_rdataframe.c
 ```
 Making a simple tree and drawing gamma-gamma histogram, which is being used for quick analysis by myself.
 
+## Important notes
+
+### 20260210
+`fine_time` of a `NKSig` was corrected, and merged to `coarse_time`.
+Now `coarse_time` is the timestamp of RC-CR2 zero-crossing.
+Subtracting `fine_time` from `coarse_time` will be 'channel trigger timestamp' which is leading edge discrimination time of RC-CR.
+Coincidence-building is also affected.
+
+cf) `coarse_time` was LED of RC-CR, and `fine_time` was ZC of RC-CR2 from the LED.
 
 ## User defined 'SIMPLE tree' (Experimental)
 Change the symbolic links in `src` and `inc` directories, modify them in your favor, and complie again.
