@@ -47,7 +47,7 @@ process_run() {
 }
 
 export -f process_run
-export INPUT_DATA_PATH OUTPUT_DIR BATCH_NAME FAIL_LOG
+export INPUT_DATA_PATH OUTPUT_DIR BATCH_NAME FAIL_LOG OPTS
 
 if [[ -z "$JOBS" ]]; then
     # Sequential execution
