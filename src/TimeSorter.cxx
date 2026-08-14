@@ -107,6 +107,7 @@ void TimeSorter::Run()
 			fmutex_output.lock();
 			Sort(sig_tmp);
 			fmutex_output.unlock();
+			continue;
 		}
 		if ( q_sig_input.empty() || sorterEnd)
 		{
