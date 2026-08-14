@@ -39,7 +39,7 @@ target_link_libraries(HitClover HitCrystal Hit)
 add_library(EvtASGARD SHARED src/EvtASGARD.cxx inc/EvtASGARD.h)
 target_link_libraries(EvtASGARD HitClover)
 
-add_library(HitX6 SHARED src/HitX6.cxx inc/HitX6.h)
+add_library(HitX6 SHARED src/HitX6.cxx inc/HitX6.h inc/HitX6_pos_corr.h)
 target_link_libraries(HitX6 Hit)
 add_library(EvtStarkJr SHARED src/EvtStarkJr.cxx inc/EvtStarkJr.h)
 target_link_libraries(EvtStarkJr HitX6)
